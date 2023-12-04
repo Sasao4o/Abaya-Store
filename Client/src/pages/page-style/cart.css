@@ -1,0 +1,104 @@
+.cart-view {
+  padding: 20px 150px;
+  margin: 20px auto;
+  min-height: 60vh;
+}
+.cart-view .cart-empty {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.cart-view .cart-empty a {
+  display: block;
+  color: black;
+  font-size: 25px;
+  border: 1px solid black;
+  padding: 15px 30px;
+  transition: 0.3s;
+}
+.cart-view .cart-empty a:hover {
+  background-color: black;
+  color: white;
+}
+.cart-view h1 {
+  text-align: center;
+}
+.cart-view .cart-view-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.cart-view .cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 50px;
+}
+.cart-view .cart-item-data {
+  display: flex;
+  gap: 20px;
+}
+.cart-view .cart-item .cart-item-data img {
+  width: 100px;
+  object-fit: contain;
+}
+.cart-view .cart-item-data .cart-item-data-context .buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+.cart-view .cart-item-data .cart-item-data-context .buttons button {
+  background-color: transparent;
+  color: black;
+  border: black 1px solid;
+  padding: 5px;
+  border-radius: 3px;
+  width: 30px;
+  transition: 0.3s;
+  cursor: pointer;
+}
+.cart-view .cart-item-data .cart-item-data-context .buttons button:hover {
+  background-color: black;
+  color: white;
+  border: black 1px solid;
+  padding: 5px;
+  border-radius: 3px;
+  width: 30px;
+}
+.cart-view
+  .cart-item-data
+  .cart-item-data-context
+  .buttons
+  button.remove-button {
+  border: red 1px solid;
+  color: red;
+}
+.cart-view
+  .cart-item-data
+  .cart-item-data-context
+  .buttons
+  button.remove-button:hover {
+  color: white;
+  background-color: red;
+}
+.cart-view .cart-item-data .cart-item-data-context {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+@media (max-width: 767px) {
+  .cart-view {
+    padding: 20px;
+  }
+  .cart-view .cart-item-data .cart-item-data-context .buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5px;
+  }
+}

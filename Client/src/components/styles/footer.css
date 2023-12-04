@@ -1,0 +1,24 @@
+footer {
+  background-color: #28282c;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 50px;
+}
+footer .contact {
+  color: white;
+  font-size: 17px;
+}
+footer h1 {
+  color: #2dc3bb;
+}
+/* Mobile */
+
+@media (max-width: 767px) {
+  footer {
+    flex-direction: column;
+  }
+  footer .contact {
+    text-align: center;
+  }
+}

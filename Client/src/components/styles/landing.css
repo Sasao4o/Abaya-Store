@@ -1,0 +1,57 @@
+.landing {
+  position: relative;
+  height: calc(100vh - 70.4px);
+  background-image: url("../../assets/images/wallpapertest.jpg");
+  background-size: cover;
+  background-position: center top;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.landing::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.498);
+}
+.landing .content {
+  z-index: 100;
+  line-height: 1;
+  padding-bottom: 200px;
+  color: white;
+  padding-left: 200px;
+}
+.landing .content p {
+  font-size: 45px;
+}
+.landing .content h1 {
+  letter-spacing: -5px;
+  font-family: "cera round";
+  font-size: 180px;
+  font-weight: bold;
+}
+
+@media (max-width: 767px) {
+  .landing {
+    display: flex;
+    justify-content: center;
+    background-position: right;
+    align-items: center;
+    height: 80vh;
+  }
+  .landing .content {
+    line-height: 1;
+    text-align: center;
+    padding: 0;
+  }
+  .landing .content p {
+    font-size: 30px;
+  }
+  .landing .content h1 {
+    letter-spacing: -5px;
+    font-family: "cera round";
+    font-size: 120px;
+    font-weight: bold;
+  }
+}

@@ -1,0 +1,14 @@
+.user-product {
+  border: 1px solid grey;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 500px;
+  margin-bottom: 20px;
+}
+.user-product img {
+  width: 150px;
+  height: 100px;
+  object-fit: cover;
+}

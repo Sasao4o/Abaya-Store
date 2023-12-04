@@ -1,0 +1,29 @@
+.err404 {
+  background-image: url("../../assets/images/background/404error.png");
+  background-size: 600px;
+  background-repeat: no-repeat;
+  background-position: top;
+  height: calc(100vh - 141.6px - 118px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  /* margin-bottom: 50px; */
+}
+.pagenotfound-text {
+  font-weight: normal;
+  font-size: 40px;
+  text-transform: uppercase;
+  padding: 30px;
+  text-align: center;
+}
+@media (max-width: 767px) {
+  .err404 {
+    height: 75vh;
+    background-size: 300px;
+    background-position: center;
+  }
+  .pagenotfound-text {
+    font-size: 30px;
+  }
+}

@@ -1,0 +1,67 @@
+.cart-message-visible {
+  position: absolute;
+  visibility: visible;
+  opacity: 1;
+  visibility: visible;
+  transition: 0.3s ease;
+}
+.cart-message-not-visible {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-20px);
+  transition: 0.3s ease;
+}
+.shopping-cart-message {
+  bottom: 0;
+  right: 50%;
+  transform: translate(50%, 0);
+  position: absolute;
+  background-color: black;
+  width: 600px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.shopping-cart-message .cart-close-button {
+  color: white;
+  font-size: 25px;
+  margin-left: auto;
+}
+.cart-message-header {
+  width: 100%;
+  font-size: 25px;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.cart-message-header p {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.cart-message-header a {
+  color: white;
+  background-color: black;
+  transition: 0.3s;
+  font-size: 20px;
+  padding: 10px;
+}
+.cart-message-header a:hover {
+  color: black;
+  background-color: white;
+}
+
+@media (max-width: 767px) {
+  .shopping-cart-message {
+    width: 300px;
+  }
+  .shopping-cart-message .cart-close-button {
+    font-size: 20px;
+  }
+  .cart-message-header {
+    font-size: 16px;
+  }
+}

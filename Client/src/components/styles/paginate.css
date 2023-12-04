@@ -1,0 +1,51 @@
+.main-paginate {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 100px;
+  margin-bottom: 60px;
+}
+.page-paginate,
+.break-paginate {
+  text-align: center;
+  border-right: 1px rgb(207, 207, 207) solid;
+  border-top: 1px rgb(207, 207, 207) solid;
+  border-bottom: 1px rgb(207, 207, 207) solid;
+}
+.link-paginate {
+  display: block;
+  padding: 5px 10px;
+  color: #2dc3bb;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.next-paginate {
+  text-align: center;
+  padding: 5px 10px;
+  border-right: 1px rgb(207, 207, 207) solid;
+  border-top: 1px rgb(207, 207, 207) solid;
+  border-bottom: 1px rgb(207, 207, 207) solid;
+  border-radius: 0 5px 5px 0;
+}
+.next-link-paginate,
+.prev-link-paginate,
+.break-link-paginate {
+  /* padding: 0; */
+  color: #2dc3bb;
+  cursor: pointer;
+}
+.prev-paginate {
+  text-align: center;
+  padding: 5px 10px;
+  border: 1px rgb(207, 207, 207) solid;
+  border-radius: 5px 0 0 5px;
+}
+.active-page {
+  background-color: #2dc3bb;
+}
+.active-page a {
+  color: white;
+}

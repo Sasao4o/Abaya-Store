@@ -1,0 +1,19 @@
+h1 {
+  text-align: center;
+  font-weight: normal;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 30px;
+  margin-top: 30px;
+}
+@media (max-width: 767px) {
+  h1 {
+    text-align: center;
+    font-weight: normal;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+}
