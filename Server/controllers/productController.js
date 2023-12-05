@@ -5,6 +5,7 @@ const QueryStringBuilder = require("../utilis/QueryStringBuilder");
 const Model = require("../models");
 const test = require("../test");
 const ProductModel = Model.Product;
+const ProductImageModel = Model.ProductImage;
 const catchAsync = require("../utilis/catchAsync");
 
 exports.createProduct = catchAsync(async (req, res, next) => {
@@ -12,26 +13,43 @@ exports.createProduct = catchAsync(async (req, res, next) => {
     name: req.body.name,
     price: req.body.price,
     image: req.body.image,
-    methodOfPay: req.body.methodOfPayment,
-    userId: req.body.userId,
     description: req.body.description,
+    categoryId:req.body.categoryId
   };
-  console.log(req.body);
+ 
   const product = await ProductModel.create(productData);
-  // console.log(filteredUser);
+  const product2 = await ProductModel.findOne({id:1});
+    const category =  await product2.getCategory();
+ 
   res.status(202).json({
     data: productData,
     status: "success",
   });
 });
+exports.addProductImage = catchAsync(async (req, res, next) => {
+  const imageData = {
+    productId: req.body.productId,
+    fileName: req.body.fileName,
+    filePath: req.body.filePath
+ 
+  };
+ 
+ 
+ 
+   res.status(202).json({
+    data: image,
+    status: "success",
+  });
+});
 
-exports.getProduct = catchAsync(async (req, res, next) => {
+exports.getProductById = catchAsync(async (req, res, next) => {
   const productId = req.params.productId;
   const product = await ProductModel.findOne({
     where: {
       id: productId,
     },
   });
+ 
   if (product) {
     res.status(202).json({
       data: product,
@@ -103,17 +121,17 @@ exports.getProductsCount = catchAsync(async (req, res, next) => {
 });
 
 exports.getUserProducts = catchAsync(async (req, res, next) => {
-  const userId = req.params.userId;
-  const products = await ProductModel.findAll({
-    where: {
-      userId: userId,
-    },
-  });
-  const data = {
-    data: products,
-  };
-  res.status(202).json({
-    products: data,
-    status: "success",
-  });
+  // const userId = req.params.userId;
+  // const products = await ProductModel.findAll({
+  //   where: {
+  //     userId: userId,
+  //   },
+  // });
+  // const data = {
+  //   data: products,
+  // };
+  // res.status(202).json({
+  //   products: data,
+  //   status: "success",
+  // });
 });
