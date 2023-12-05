@@ -9,18 +9,14 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-  
-      userId: {
-        type: Sequelize.INTEGER,
-        allowNull:false,
-        references: {
-          model: 'Users',
-          key: 'id' 
-      }
-      },
       orderDate: {
         type: Sequelize.DATE,
         allowNull:false
+      },
+      total_price:{
+        type:Sequelize.FLOAT,
+        defaultValue:0.00,
+        allowNull : false
       },
       createdAt: {
         allowNull: false,
