@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import { useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import "./styles/navbar.css";
 import { menuItemsData } from "../constants/menuItemsData";
 import { MenuItems } from "./MenuItems";
@@ -17,11 +17,17 @@ export default function Navbar() {
   const { cartItemsNumber } = useShoppingCart();
 
   const [toggleMobileMenu, setToggleMobileMenu] = useState(false);
-  // const { register, handleSubmit } = useForm();
+
+  const { register, handleSubmit } = useForm();
+  const { register: registerMobile, handleSubmit: handleSubmitMobile } =
+    useForm();
 
   function mobileMenuClick() {
     setToggleMobileMenu((prevState) => !prevState);
   }
+
+  const onSubmit = (data) => console.log(data);
+
   return (
     <nav>
       {/* This is the sub menu for mobile screens */}
@@ -33,25 +39,41 @@ export default function Navbar() {
         }
       >
         <div className="nav-icons-mobile">
-          <div className="shopping-cart">
-            <TbShoppingBag
-              fontSize={40}
+          <div className="top-level-menu-icons">
+            <div className="shopping-cart">
+              <TbShoppingBag
+                fontSize={40}
+                color="white"
+                cursor={"pointer"}
+                onClick={() => {
+                  mobileMenuClick();
+                  history("/cart");
+                }}
+              />
+              <div>{cartItemsNumber}</div>
+            </div>
+            <IoClose
+              onClick={mobileMenuClick}
               color="white"
+              fontSize={40}
               cursor={"pointer"}
-              onClick={() => {
-                mobileMenuClick();
-                history("/cart");
-              }}
             />
-            <div>{cartItemsNumber}</div>
           </div>
-          <IoClose
-            onClick={mobileMenuClick}
-            color="white"
-            fontSize={40}
-            cursor={"pointer"}
-          />
+          <form
+            className="nav-search-bar-mobile"
+            onSubmit={handleSubmitMobile(onSubmit)}
+          >
+            <input
+              placeholder="Search here..."
+              type="text"
+              {...registerMobile("search")}
+            />
+            <button type="submit">
+              <IoSearch fontSize={25} color="white" cursor={"pointer"} />
+            </button>
+          </form>
         </div>
+
         <ul>
           {menuItemsData.map((menu, index) => {
             return (
@@ -66,6 +88,7 @@ export default function Navbar() {
       </div>
       {/* ================================================== */}
       {/* This is for normal screens */}
+
       <div className="logo">
         <h2>LEVEL</h2>
         {/* <img src="../images/" alt="" /> */}
@@ -84,7 +107,16 @@ export default function Navbar() {
         </li>
       </ul>
       <div className="nav-icons">
-        <IoSearch fontSize={25} color="white" cursor={"pointer"} />
+        <form className="nav-search-bar" onSubmit={handleSubmit(onSubmit)}>
+          <input
+            placeholder="Search here..."
+            type="text"
+            {...register("search")}
+          />
+          <button type="submit">
+            <IoSearch fontSize={25} color="white" cursor={"pointer"} />
+          </button>
+        </form>
         <div className="shopping-cart">
           <TbShoppingBag
             fontSize={25}
