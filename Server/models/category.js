@@ -29,10 +29,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull:false
     },
-    image: {
-      type: DataTypes.STRING,
-      allowNull:false
-    }
+    fileName: {
+      allowNull:false,
+      type: DataTypes.STRING
+    },
+    filePath: {
+      allowNull:false,
+      type: DataTypes.STRING
+    },
   }, {
     sequelize,
     modelName: 'Category',

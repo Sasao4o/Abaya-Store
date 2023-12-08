@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       orderedProduct.belongsTo(models.Product,{allowNull:false, foreignKey:"productId"});
-      orderedProduct.belongsTo(models.order,{allowNull:false, foreignKey:"orderId"});
+      orderedProduct.belongsTo(models.Order,{allowNull:false, foreignKey:"orderId"});
     }
   }
   orderedProduct.init({
@@ -27,14 +27,19 @@ module.exports = (sequelize, DataTypes) => {
     quantity: {
       type: DataTypes.INTEGER,
       allowNull : false
+    } ,
+    length: {
+      type: DataTypes.INTEGER,
+      allowNull:false
     },
-    discount: {
-      type:DataTypes.DECIMAL(10,2),
-      defaultValue:0.00
+    size:{
+      type:DataTypes.STRING(4),
+      allowNull:false
     }
+
   }, {
     sequelize,
-    modelName: 'orderedProduct',
+    modelName: 'OrderedProduct',
   });
   return orderedProduct;
 };

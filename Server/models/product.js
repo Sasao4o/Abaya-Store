@@ -12,8 +12,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Product.belongsTo(models.Category, {allowNull:false, foreignKey:"categoryId"});
-      Product.hasMany(models.ProductImage, {allowNull:false, foreignKey:"productId"});
-      Product.hasMany(models.orderedProduct, {allowNull:false, foreignKey:"productId"});
+      Product.hasMany(models.ProductImage, {allowNull:false, foreignKey:"productId",as:'productImages'});
+      Product.hasMany(models.OrderedProduct, {allowNull:false, foreignKey:"productId"});
     }
   }
   Product.init({
@@ -33,6 +33,10 @@ module.exports = (sequelize, DataTypes) => {
   price: {
     type: DataTypes.FLOAT,
     allowNull: false,
+    },
+    material:{
+      type:DataTypes.STRING(30),
+      allowNull:false
     },
     description: {
       type: DataTypes.STRING,

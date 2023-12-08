@@ -3,29 +3,84 @@
 const QueryStringBuilder = require("../utilis/QueryStringBuilder");
 const Model = require("../models");
 const test = require("../test");
-const orderModel = Model.order;
-const orderProductModel = Model.orderedProduct;
+const OrderModel = Model.Order;
+const ShipmentModel = Model.Shipment;
+const OrderProductModel = Model.OrderedProduct;
+const ProductModel = Model.Product;
+const sequelize = require("../models/index.js").sequelize;
 const catchAsync = require("../utilis/catchAsync");
 
 exports.createOrder = catchAsync(async (req, res, next) => {
-    
-    const orderData ={
-         userId : req.body.userId,
-         orderDate : (new Date(Date.now())).toISOString()
-        };
-      
-        const order = await  orderModel.create(orderData);
-    const orderedProductData = {
-         orderId : order.id,
-         productId : req.body.productId
-    };
-    const orderProduct = await  orderProductModel.create(orderedProductData);
+    const addressInfo = req.body.addressInfo;
+    const shipmentData  = {
 
-            res.status(202).json({
-                    data:orderData,
-                  //  productInfo:orderedProductData.productId,
-                    status:"success"
-                })
+        address:addressInfo.address,
+        city:addressInfo.city,
+        shippingDate:addressInfo.shippingDate,
+        zipCode:addressInfo.zipCode,
+        country:addressInfo.country
+     };
+    const orderedProductsData = [];
+     
+    req.body.productsInfo.forEach(v => {
+        let obj = {};
+        obj.productId = v.productId;
+        obj.quantity = v.quantity;
+        obj.size = v.size;
+        obj.length = v.length;
+        orderedProductsData.push(obj);
+    });
+    const productIds = [1, 2, 3];
+    const totalPrice = await ProductModel.findOne({
+        attributes: [
+          [sequelize.fn('SUM', sequelize.col('price')), 'totalPrice']
+        ],
+        where: {
+          id: productIds
+        }
+      });
+     
+      await sequelize.transaction(async (t) => { 
+     const order =   await OrderModel.create({orderDate:(new Date(Date.now())).toISOString(), totalPrice:totalPrice.dataValues.totalPrice});
+     orderedProductsData.forEach(v => {
+        v.orderId = order.id;
+     });
+     shipmentData.orderId = order.id;
+     const orderedProducts =  OrderProductModel.bulkCreate(orderedProductsData);
+     console.log(shipmentData)
+     const shipment =  ShipmentModel.create(shipmentData);
+     await Promise.all([orderedProducts, shipment]);
+      });
+    // shipmentModel.create({
+    //     orderId:orders[j].id,
+    //     address:faker.commerce.productName() ,
+    //     city:faker.commerce.productName(),
+    //     zipCode:faker.commerce.productName(),
+    //     shippingDate: (new Date(Date.now())).toISOString(),
+    //     country :faker.commerce.productName()
+    // });
+
+
+
+      return;
+
+    // const orderData ={
+    //      userId : req.body.userId,
+    //      orderDate : (new Date(Date.now())).toISOString()
+    //     };
+      
+    //     const order = await  orderModel.create(orderData);
+    // const orderedProductData = {
+    //      orderId : order.id,
+    //      productId : req.body.productId
+    // };
+    // const orderProduct = await  orderProductModel.create(orderedProductData);
+
+    //         res.status(202).json({
+    //                 data:orderData,
+    //               //  productInfo:orderedProductData.productId,
+    //                 status:"success"
+    //             })
  });
  
  exports.deleteOrder = catchAsync(async (req, res, next) => {

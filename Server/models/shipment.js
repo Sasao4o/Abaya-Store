@@ -16,16 +16,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Shipment.init({
-    id: {
+    orderId: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      autoIncrement: true,
-    },
-    orderId:{
-        type: DataTypes.INTEGER,
-        allowNull : false
-    },
-    Address: {
+   },
+    address: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -37,10 +32,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    zip_code: {
+    zipCode: {
       type: DataTypes.STRING
     },
-    shipping_date:{
+    shippingDate:{
       type: DataTypes.DATE,
       allowNull:true
     }

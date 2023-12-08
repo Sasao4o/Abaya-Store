@@ -18,9 +18,13 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull:false
       },
-      image: {
-        type: Sequelize.STRING,
-        allowNull:false
+      fileName: {
+        allowNull:false,
+        type: Sequelize.STRING
+      },
+      filePath: {
+        allowNull:false,
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
