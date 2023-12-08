@@ -11,17 +11,38 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      order.belongsTo(models.User);
-      order.hasMany(models.orderedProduct, {foreignKey:"orderId", allowNull: false});
-      order.hasOne(models.Payment, {foreignKey:"orderId", allowNull:true})
+      //order.belongsTo(models.User);
+      order.hasMany(models.OrderedProduct, {foreignKey:"orderId", allowNull: false});
+      order.hasOne(models.Payment, {foreignKey:"orderId", allowNull:false});
+      order.hasOne(models.Shipment, {foreignKey:"orderId", allowNull: false});
     }
   }
   order.init({
-    userId: DataTypes.INTEGER,
-    orderDate: DataTypes.DATE
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    orderDate: {
+      type: DataTypes.DATE,
+      allowNull : false
+    },
+    totalPrice:{
+      type:DataTypes.FLOAT,
+      allowNull : false
+    },
+    discount:{
+      type:DataTypes.INTEGER,
+      allowNull : false,
+      defaultValue:0
+    }  ,
+    orderStatus:{
+      type:DataTypes.STRING(20),
+      defaultValue:"processing"
+    },
   }, {
     sequelize,
-    modelName: 'order',
+    modelName: 'Order',
   });
   return order;
 };

@@ -1,0 +1,10 @@
+This Text See Each Entity of the project as an object
+
+Product {
+id
+name
+description
+price 
+categoryId
+images
+}

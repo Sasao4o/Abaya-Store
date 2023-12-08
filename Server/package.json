@@ -7,10 +7,12 @@
     "crypto": "^1.0.1",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "faker": "^5.5.3",
     "jsonwebtoken": "^9.0.0",
-    "nodemon": "^2.0.20",
+    "multer": "^1.4.5-lts.1",
+    "nodemon": "^3.0.2",
     "promisify": "^0.0.3",
-    "sequelize": "^6.28.0",
+    "sequelize": "^6.35.1",
     "sqlite3": "^5.1.4"
   },
   "devDependencies": {
@@ -20,7 +22,9 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "populateDb": "npx sequelize-cli db:migrate:undo:all && npx sequelize db:migrate && npx sequelize-cli db:seed:all",
+    "seed": "npx sequelize-cli db:seed:undo:all && npx sequelize-cli db:seed:all"
   },
   "author": "",
   "license": "ISC",

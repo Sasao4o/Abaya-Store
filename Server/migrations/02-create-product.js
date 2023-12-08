@@ -9,6 +9,14 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      categoryId: {
+        allowNull:false,
+        type:Sequelize.INTEGER,
+        references: {
+          model: 'Categories',
+          key: 'id' 
+      }
+      },
       name: {
         type: Sequelize.STRING,
         allowNull:false
@@ -17,24 +25,12 @@ module.exports = {
         type: Sequelize.FLOAT,
         allowNull:false
       },
-      image: {
+      description:{
         type: Sequelize.STRING,
         allowNull:false
       },
-      methodOfPayment:{
-        type: Sequelize.BOOLEAN,
-        defaultValue: false
-      },
-      userId:{
-        type:Sequelize.INTEGER(11),
-        allowNull:false,
-        references: {
-            model: 'Users',
-            key: 'id' 
-        }
-      },
-      description:{
-        type: Sequelize.STRING,
+      material:{
+        type:Sequelize.STRING(30),
         allowNull:false
       },
       createdAt: {
@@ -51,3 +47,8 @@ module.exports = {
     await queryInterface.dropTable('Products');
   }
 };
+
+
+
+
+ 

@@ -2,31 +2,28 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Orders', {
+    await queryInterface.createTable('ProductImages', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      orderDate: {
-        type: Sequelize.DATE,
-        allowNull:false
+      productId: {
+        allowNull:false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Products',
+          key: 'id' 
+      }
       },
-      totalPrice:{
-        type:Sequelize.FLOAT,
-        allowNull : false
+      fileName: {
+        allowNull:false,
+        type: Sequelize.STRING
       },
-      discount:{
-        type:Sequelize.INTEGER,
-        allowNull : false,
-        defaultValue:0
-      },
-
-      orderStatus:{
-        type:Sequelize.STRING(20),
-        allowNull : false
-  
+      filePath: {
+        allowNull:false,
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
@@ -39,6 +36,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Orders');
+    await queryInterface.dropTable('ProductImages');
   }
 };
