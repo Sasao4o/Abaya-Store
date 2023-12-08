@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 
 const AddProduct = () => {
@@ -7,6 +7,7 @@ const AddProduct = () => {
   //     { id: 1, variants: [{ size: "X" }, { length: 45 }], quantity: 2 },
   //   ];
   //   console.log(object);
+
   const [productName, setProductName] = useState("");
   const [productDescription, setProductDescription] = useState("");
   const [productPrice, setProductPrice] = useState("");
@@ -51,11 +52,20 @@ const AddProduct = () => {
     );
   }, []);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    multiple: true,
-    accept: "image/*",
-  });
+  const { getRootProps, getInputProps, isDragActive, fileRejections } =
+    useDropzone({
+      onDrop,
+      multiple: true,
+      accept: "image/*",
+    });
+
+  useEffect(() => {
+    if (fileRejections.length > 0) {
+      alert(
+        "One or more files is not an image. Please select only image files."
+      );
+    }
+  }, [fileRejections]);
 
   const handleSubmit = () => {
     const data = {
@@ -69,7 +79,8 @@ const AddProduct = () => {
   };
 
   return (
-    <div>
+    <div className="add-product container">
+      <h1>Add a product</h1>
       <label>
         Product Name:
         <input
@@ -79,7 +90,7 @@ const AddProduct = () => {
       </label>
       <label>
         Product Description:
-        <input
+        <textarea
           value={productDescription}
           onChange={(e) => setProductDescription(e.target.value)}
         />
@@ -152,7 +163,7 @@ const AddProduct = () => {
         </div>
       ))}
       <button onClick={() => handleAddVariant()}>Add Variant</button>
-      <button onClick={() => handleSubmit()}>Submit</button>
+      <button onClick={() => handleSubmit()}>Add product</button>
     </div>
   );
 };
