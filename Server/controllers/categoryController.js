@@ -1,5 +1,5 @@
 const Model = require("../models");
- 
+const QueryStringBuilder = require("../utilis/QueryStringBuilder");
 const categoryModel = Model.Category;
  
 const catchAsync = require("../utilis/catchAsync");
@@ -28,8 +28,14 @@ exports.createCategory = catchAsync(async (req, res, next) => {
  });
 
 
- exports.getCategories = catchAsync(async (req, res, next) => {  
-        const categories = await  categoryModel.findAll();
+ exports.getCategories = catchAsync(async (req, res, next) => {
+        const response = [];
+        const queryStringBulder = new QueryStringBuilder(req.query).paginate();
+        queryStringResult = queryStringBulder.result;  
+        const categories = await  categoryModel.findAll({
+          limit: queryStringResult.limit,
+          offset: queryStringResult.offset
+        });
             res.status(202).json({
                     data:categories,
                     status:"success"
