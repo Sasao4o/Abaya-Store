@@ -9,7 +9,5 @@ router.post("/register", authController.register);
 router.get("/:userId", userController.getCertainUser);
 router.post("/", authController.logIn);
  
-router.get("/:userId/orders", orderController.getUserOrders);
- 
  
 module.exports = router;
