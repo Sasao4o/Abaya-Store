@@ -38,7 +38,10 @@ module.exports = (sequelize, DataTypes) => {
     }  ,
     orderStatus:{
       type:DataTypes.STRING(20),
-      defaultValue:"processing"
+      defaultValue:"processing",
+      validate:{
+      isIn: [["processing", "on the way", "delivered"]]
+      }
     },
   }, {
     sequelize,

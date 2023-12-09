@@ -13,6 +13,7 @@ const userRoute = require("./routes/userRoute");
 const orderRoute = require("./routes/orderRoute");
 const productRoute = require("./routes/productRoute");
 const categoryRoute = require("./routes/categoryRoute");
+const dashboardRoute = require("./routes/dashboardRoute");
 
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -21,6 +22,7 @@ app.use("/api/v1/user", userRoute);
 app.use("/api/v1/order", orderRoute);
 app.use("/api/v1/product", productRoute);
 app.use("/api/v1/category", categoryRoute);
+app.use("/api/v1/dashboard", dashboardRoute);
 app.use((err, req, res, next) => {
   console.log("I CATCHED IT WHILE EXPECTING");
   console.log(err);

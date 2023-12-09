@@ -13,7 +13,9 @@ const fs = require("fs");
 const AppError = require("../utilis/AppError");
 exports.createProduct = catchAsync(async (req, res, next) => {
   //TODO we need to make a utility where it checks that all fields in req.body are there (LOOK IN PREV PROJECTS)
-  if (!req.files) {
+ 
+  if (!req.files.length) {
+ 
     res.status(404).json({
       status: "failed",
       message: "You must enter an image",
