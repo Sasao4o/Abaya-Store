@@ -189,8 +189,10 @@ exports.getProductsByCategory = catchAsync(async (req,res,next) => {
   const queryStringBulder = new QueryStringBuilder(req.query).paginate();
   queryStringResult = queryStringBulder.result;
   const categoryId = req.params.categoryId;
+ 
   const product = await ProductModel.findAll({
-    
+    limit: queryStringResult.limit,
+    offset: queryStringResult.offset,
     where:{
       categoryId
     },
@@ -200,9 +202,8 @@ exports.getProductsByCategory = catchAsync(async (req,res,next) => {
         attributes: { exclude: ['productId'] },
         as:'productImages'
       }
-    ],
-    limit: queryStringResult.limit,
-    offset: queryStringResult.offset
+    ]
+ 
   });
  
   if (product) {
@@ -222,7 +223,20 @@ exports.getProductsByCategory = catchAsync(async (req,res,next) => {
 
 
 });
-
+exports.getProductsCountInCategory = catchAsync(async (req, res, next) => {
+  const productsCount = await ProductModel.count({
+    where:{
+      categoryId:req.params.categoryId
+    }
+  });
+  const data = {
+    count: productsCount,
+  };
+  res.status(202).json({
+    data,
+    status: "success",
+  });
+});
 
 exports.deleteProductById = catchAsync(async (req,res,next) => {
    
