@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./page-style/products.css";
 import "react-loading-skeleton/dist/skeleton.css";
 import Product from "../components/Product";
@@ -8,7 +8,8 @@ import img from "../assets/images/wallpapertest.jpg";
 import { useParams } from "react-router-dom";
 
 export default function Collection() {
-  const { collectionName } = useParams();
+  const { collectionId } = useParams();
+  const [collectionData, setCollectionData] = useState();
   const [products, setProducts] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const totalNumberPerPage = 8;
@@ -20,6 +21,7 @@ export default function Collection() {
       const res = await fetch(`http://localhost:3006/api/v1/product/count`);
       const data = await res.json();
       setProductCount(data.data.count);
+      console.log(data.data.count);
     };
     getProductsCount();
 
@@ -34,7 +36,18 @@ export default function Collection() {
       setIsLoading(false);
     };
     getProducts();
-  }, []);
+
+    //Get the Collection data products data
+    const getCollectionData = async () => {
+      const res = await fetch(
+        `http://localhost:3006/api/v1/category/${collectionId}`
+      );
+      const data = await res.json();
+      setCollectionData(data.data);
+      console.log(data);
+    };
+    getCollectionData();
+  }, [collectionId]);
 
   const fetchProducts = async (currentPage) => {
     const res = await fetch(
@@ -62,11 +75,8 @@ export default function Collection() {
   return (
     <>
       <div className="intro-pic" style={{ backgroundImage: `url(${img})` }}>
-        <h1>{collectionName}</h1>
-        <p>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Recusandae
-          harum quam voluptatem sed porro reprehenderit eveniet adipisci dolor
-        </p>
+        <h1>{collectionData.name}</h1>
+        <p>{collectionData.description}</p>
       </div>
       {isLoading && (
         <div className="products">

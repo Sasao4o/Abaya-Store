@@ -95,7 +95,7 @@ export default function Navbar() {
       </div>
       <ul className="main-links">
         {menuItemsData.map((menu, index) => {
-          return <MenuItems items={menu} key={index} />;
+          return <MenuItems item={menu} key={index} />;
         })}
         <li id="mobile-menu-toggle">
           <MdMenu
