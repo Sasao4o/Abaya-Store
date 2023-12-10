@@ -35,12 +35,12 @@ module.exports = (sequelize, DataTypes) => {
       type:DataTypes.INTEGER,
       allowNull : false,
       defaultValue:0
-    }  ,
+    },
     orderStatus:{
       type:DataTypes.STRING(20),
       defaultValue:"processing",
       validate:{
-      isIn: [["processing", "on the way", "delivered"]]
+      isIn: [["processing","cancelled", "on the way", "delivered"]]
       }
     },
   }, {

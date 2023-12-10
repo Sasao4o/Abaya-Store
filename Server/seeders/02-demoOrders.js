@@ -24,7 +24,7 @@ module.exports = {
 
                             orderDate:  (new Date(Date.now())).toISOString(),
                             totalPrice: parseInt(faker.commerce.price(10, 1000, 2)) * 100,
-                            orderStatus:"Delivered"
+                            orderStatus:"delivered"
                         }, {transaction: t}));
                     }
                   return   Promise.all(promises)

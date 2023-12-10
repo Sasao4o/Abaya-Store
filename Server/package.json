@@ -13,7 +13,9 @@
     "nodemon": "^3.0.2",
     "promisify": "^0.0.3",
     "sequelize": "^6.35.1",
-    "sqlite3": "^5.1.4"
+    "sqlite3": "^5.1.4",
+    "stripe": "^14.8.0",
+    "stripe.js": "^0.0.1"
   },
   "devDependencies": {
     "sequelize-cli": "^6.6.0"

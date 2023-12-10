@@ -8,13 +8,19 @@ process.on("uncaughtException", (err) => {
   console.log("From the app.js");
   console.log(err);
 });
+
 const app = express();
 const userRoute = require("./routes/userRoute");
 const orderRoute = require("./routes/orderRoute");
 const productRoute = require("./routes/productRoute");
 const categoryRoute = require("./routes/categoryRoute");
 const dashboardRoute = require("./routes/dashboardRoute");
-
+const orderController = require("./controllers/orderController");
+app.post(
+  "/webhook",
+  express.raw({ type: "application/json" }),
+  orderController.stripeWebhookController
+);
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors());

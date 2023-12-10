@@ -57,6 +57,7 @@ exports.createProduct = catchAsync(async (req, res, next) => {
     status: "success",
   });
 });
+
 exports.addProductImage = catchAsync(async (req, res, next) => {
  
   if ( !req.files) {
