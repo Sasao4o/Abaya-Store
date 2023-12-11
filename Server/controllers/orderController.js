@@ -10,7 +10,7 @@ const ProductImageModel = Model.ProductImage;
 const ProductModel = Model.Product;
 const sequelize = require("../models/index.js").sequelize;
 const catchAsync = require("../utilis/catchAsync");
-const stripe  = require('stripe')(process.env.SECRET_TEST_KEY);
+const stripe = require('stripe')(process.env.SECRET_TEST_KEY);
 const endpointSecret = process.env.WEBHOOK_ENDPOINT;
 
 exports.createOrder = catchAsync(async (req, res, next) => {
@@ -32,10 +32,10 @@ exports.createOrder = catchAsync(async (req, res, next) => {
         obj.quantity = v.quantity;
         obj.size = v.size;
         obj.length = v.length;
- 
+
         orderedProductsData.push(obj);
     });
- 
+
     const totalPrice = await ProductModel.findOne({
         attributes: [
             [sequelize.fn('SUM', sequelize.col('price')), 'totalPrice']
@@ -45,14 +45,14 @@ exports.createOrder = catchAsync(async (req, res, next) => {
         }
     });
     // console.log("kkkkkkkk"+totalPrice);
-    if(!totalPrice.dataValues.totalPrice){
+    if (!totalPrice.dataValues.totalPrice) {
         res.status(404).json({
-           data : "Product Not added in the database"
+            data: "Product Not added in the database"
         });
         return;
     }
-   // const cardInfo = req.body.cardInfo;
- 
+    // const cardInfo = req.body.cardInfo;
+
     const createdOrder = await sequelize.transaction(async (t) => {
         const order = await OrderModel.create({
             orderDate: (new Date(Date.now())).toISOString(),
@@ -68,40 +68,38 @@ exports.createOrder = catchAsync(async (req, res, next) => {
         return order;
     });
 
-    const orderId =  createdOrder.dataValues.id.toString();
+    const orderId = createdOrder.dataValues.id.toString();
     const cancel_url_base = "http://localhost:3006/api/v1/order/delete/" + orderId;
     const currentTimestampSeconds = Math.floor(Date.now() / 1000);
     // Calculate the timestamp for 30 minutes from now in seconds
     const thirtyMinutesLaterSeconds = currentTimestampSeconds + 30 * 60;
     const session = await stripe.checkout.sessions.create({
         success_url: 'https://www.google.com',
-        cancel_url: cancel_url_base, 
-        line_items: [
-          {
+        cancel_url: cancel_url_base,
+        line_items: [{
             price_data: {
-                currency : 'aed',
-                product_data : {
-                    name : "order"
+                currency: 'aed',
+                product_data: {
+                    name: "order"
                 },
-                unit_amount : parseInt(totalPrice.dataValues.totalPrice, 10) * 100
+                unit_amount: parseInt(totalPrice.dataValues.totalPrice, 10) * 100
             },
-            quantity : 1
-          }
-        ],
+            quantity: 1
+        }],
         mode: 'payment',
-        metadata: { 
-            orderId : orderId
+        metadata: {
+            orderId: orderId
         },
         expires_at: thirtyMinutesLaterSeconds
-      });
-            res.status(202).json({
-                    data:{
-                    orderId : orderId
-                    ,id : session.id
-                    },
-                    status:"success",
-                    checkOutPage : session.url
-                })
+    });
+    res.status(202).json({
+        data: {
+            orderId: orderId,
+            id: session.id
+        },
+        status: "success",
+        checkOutPage: session.url
+    })
 });
 
 exports.deleteOrder = catchAsync(async (req, res, next) => {
@@ -213,7 +211,7 @@ exports.getAllOrders = catchAsync(async (req, res, next) => {
 });
 
 exports.getOrderById = catchAsync(async (req, res, next) => {
- 
+
     const orderId = req.params.orderId;
 
     const order = await OrderModel.findOne({
@@ -235,7 +233,7 @@ exports.getOrderById = catchAsync(async (req, res, next) => {
             id: orderId
         }
     });
- 
+
 
     if (order) {
         res.status(202).json({
@@ -250,131 +248,135 @@ exports.getOrderById = catchAsync(async (req, res, next) => {
     }
 });
 
-exports.changeOrderStatusById = catchAsync(async (req, res,next) => {
+exports.changeOrderStatusById = catchAsync(async (req, res, next) => {
     const orderId = req.params.orderId;
     console.log(orderId);
     const order = await OrderModel.findOne({
-            where :{
-                id:orderId
-            }
+        where: {
+            id: orderId
+        }
     });
 
- 
-    const updatedOrder = await order.update({orderStatus:req.body.status});
+
+    const updatedOrder = await order.update({
+        orderStatus: req.body.status
+    });
     await order.save();
     res.status(202).json({
-        data:updatedOrder,
+        data: updatedOrder,
 
-        status:"success"
+        status: "success"
     })
-   
+
 });
 
 exports.stripeWebhookController = catchAsync(async (request, response, next) => {
     const sig = request.headers["stripe-signature"];
     let event;
     try {
-      event = stripe.webhooks.constructEvent(
-        request.body,
-        sig,
-        endpointSecret
-      );
+        event = stripe.webhooks.constructEvent(
+            request.body,
+            sig,
+            endpointSecret
+        );
     } catch (err) {
-      response.status(400).send(`Webhook Error: ${err.message}`);
-      return;
+        response.status(400).send(`Webhook Error: ${err.message}`);
+        return;
     }
-  
+
     // Handle the event
     switch (event.type) {
-      case "checkout.session.completed":{
-        console.log("Completeddddddddddddddddddddd");
-        const orderId = event.data.object.metadata.orderId;
-        const order = await OrderModel.findOne({
-            where :{
-                id:orderId
-            }
-        });
+        case "checkout.session.completed": {
+            console.log("Completeddddddddddddddddddddd");
+            const orderId = event.data.object.metadata.orderId;
+            const order = await OrderModel.findOne({
+                where: {
+                    id: orderId
+                }
+            });
 
- 
-        const updatedOrder = await order.update({orderStatus:"on the way"});
-        await order.save();
-        response.status(202).json({
-            data:updatedOrder,
-    
-            status:"success"
-        })
-        // Then define and call a function to handle the event payment_intent.canceled
-        break;
 
-    }
-       case "checkout.session.async_payment_failed":{
-        const failedOrderId = event.data.object.metadata.orderId;
-        const deletedOrderedProduct = await OrderProductModel.destroy({
-            where: {
-                orderId: parseInt(failedOrderId)
-            }
-        });
-        const deletedShipment = await ShipmentModel.destroy({
-            where: {
-                orderId: parseInt(failedOrderId)
-            }
-        });
-        const deletedOrder = await OrderModel.destroy({
-            where: {
-                id: parseInt(failedOrderId)
-            }
-        });
-        response.status(202).json({
-            status:"success"
-        })
-        break;
-    }
-        case "payment_intent.canceled":{
-        const cancelledOrderId = event.data.object.metadata.orderId;
-        const deleteOrderedProduct = await OrderProductModel.destroy({
-            where: {
-                orderId: parseInt(cancelledOrderId)
-            }
-        });
-        const deleteShipment = await ShipmentModel.destroy({
-            where: {
-                orderId: parseInt(cancelledOrderId)
-            }
-        });
-        const deleteOrder = await OrderModel.destroy({
-            where: {
-                id: parseInt(cancelledOrderId)
-            }
-        });
-        response.status(202).json({
-            status:"success"
-        })
-        break;
-    }
-    case "checkout.session.expired": {
-        const cancelledOrderId = event.data.object.metadata.orderId;
-        const deleteOrderedProduct = await OrderProductModel.destroy({
-            where: {
-                orderId: parseInt(cancelledOrderId)
-            }
-        });
-        const deleteShipment = await ShipmentModel.destroy({
-            where: {
-                orderId: parseInt(cancelledOrderId)
-            }
-        });
-        const deleteOrder = await OrderModel.destroy({
-            where: {
-                id: parseInt(cancelledOrderId)
-            }
-        });
-        response.status(202).json({
-            status:"success"
-        })
-        break;
-    }
-      default:
-        console.log(`Unhandled event type ${event.type}`);
+            const updatedOrder = await order.update({
+                orderStatus: "on the way"
+            });
+            await order.save();
+            response.status(202).json({
+                data: updatedOrder,
+
+                status: "success"
+            })
+            // Then define and call a function to handle the event payment_intent.canceled
+            break;
+
+        }
+        case "checkout.session.async_payment_failed": {
+            const failedOrderId = event.data.object.metadata.orderId;
+            const deletedOrderedProduct = await OrderProductModel.destroy({
+                where: {
+                    orderId: parseInt(failedOrderId)
+                }
+            });
+            const deletedShipment = await ShipmentModel.destroy({
+                where: {
+                    orderId: parseInt(failedOrderId)
+                }
+            });
+            const deletedOrder = await OrderModel.destroy({
+                where: {
+                    id: parseInt(failedOrderId)
+                }
+            });
+            response.status(202).json({
+                status: "success"
+            })
+            break;
+        }
+        case "payment_intent.canceled": {
+            const cancelledOrderId = event.data.object.metadata.orderId;
+            const deleteOrderedProduct = await OrderProductModel.destroy({
+                where: {
+                    orderId: parseInt(cancelledOrderId)
+                }
+            });
+            const deleteShipment = await ShipmentModel.destroy({
+                where: {
+                    orderId: parseInt(cancelledOrderId)
+                }
+            });
+            const deleteOrder = await OrderModel.destroy({
+                where: {
+                    id: parseInt(cancelledOrderId)
+                }
+            });
+            response.status(202).json({
+                status: "success"
+            })
+            break;
+        }
+        case "checkout.session.expired": {
+            const cancelledOrderId = event.data.object.metadata.orderId;
+            const deleteOrderedProduct = await OrderProductModel.destroy({
+                where: {
+                    orderId: parseInt(cancelledOrderId)
+                }
+            });
+            const deleteShipment = await ShipmentModel.destroy({
+                where: {
+                    orderId: parseInt(cancelledOrderId)
+                }
+            });
+            const deleteOrder = await OrderModel.destroy({
+                where: {
+                    id: parseInt(cancelledOrderId)
+                }
+            });
+            response.status(202).json({
+                status: "success"
+            })
+            break;
+        }
+        default:
+            console.log(`Unhandled event type ${event.type}`);
     }
     // Return a 200 response to acknowledge receipt of the event
-  });
+});
