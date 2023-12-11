@@ -34,6 +34,7 @@ app.use("/api/v1/order", orderRoute);
 app.use("/api/v1/product", productRoute);
 app.use("/api/v1/category", categoryRoute);
 app.use("/api/v1/dashboard", dashboardRoute);
+app.use("/api/v1/discount", discountRoute);
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });

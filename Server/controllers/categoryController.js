@@ -1,15 +1,12 @@
 const Model = require("../models");
+const AppError = require("../utilis/AppError");
 const QueryStringBuilder = require("../utilis/QueryStringBuilder");
 const categoryModel = Model.Category;
 
 const catchAsync = require("../utilis/catchAsync");
 exports.createCategory = catchAsync(async (req, res, next) => {
     if (!req.file) {
-        res.status(404).json({
-            status: "failed",
-            message: "You must enter an image",
-        });
-        return;
+        return next(new AppError("You must provide an image",400, true));
     }
     const categoryData = {
         name: req.body.name,
@@ -17,11 +14,8 @@ exports.createCategory = catchAsync(async (req, res, next) => {
         fileName: req.file.fileName,
         filePath: req.file.filePath
     };
-
     const category = await categoryModel.create(categoryData);
-
-
-    res.status(202).json({
+    res.status(201).json({
         data: category,
         status: "success"
     })
