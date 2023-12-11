@@ -40,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
       type:DataTypes.STRING(20),
       defaultValue:"processing",
       validate:{
-      isIn: [["processing","cancelled", "on the way", "delivered"]]
+      isIn: [["processing", "on the way", "delivered"]]
       }
     },
   }, {

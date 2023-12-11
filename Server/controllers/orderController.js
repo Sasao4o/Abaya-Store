@@ -7,6 +7,7 @@ const OrderModel = Model.Order;
 const ShipmentModel = Model.Shipment;
 const OrderProductModel = Model.OrderedProduct;
 const ProductImageModel = Model.ProductImage;
+const DiscountModel = Model.Discount;
 const ProductModel = Model.Product;
 const sequelize = require("../models/index.js").sequelize;
 const catchAsync = require("../utilis/catchAsync");
@@ -15,6 +16,7 @@ const endpointSecret = process.env.WEBHOOK_ENDPOINT;
 
 exports.createOrder = catchAsync(async (req, res, next) => {
     const addressInfo = req.body.addressInfo;
+    const promoCode = req.body.promoCode;
     const shipmentData = {
 
         address: addressInfo.address,
@@ -23,6 +25,10 @@ exports.createOrder = catchAsync(async (req, res, next) => {
         zipCode: addressInfo.zipCode,
         country: addressInfo.country
     };
+    let shipmentPrice = 0;
+    if (shipmentData.city.toString().tolowercase() !== "abu dahbi"){
+        shipmentPrice += 25;
+    }
     const orderedProductsData = [];
     const productsId = [];
     req.body.productsInfo.forEach(v => {
@@ -32,10 +38,10 @@ exports.createOrder = catchAsync(async (req, res, next) => {
         obj.quantity = v.quantity;
         obj.size = v.size;
         obj.length = v.length;
- 
+
         orderedProductsData.push(obj);
     });
- 
+    
     const totalPrice = await ProductModel.findOne({
         attributes: [
             [sequelize.fn('SUM', sequelize.col('price')), 'totalPrice']
@@ -44,12 +50,31 @@ exports.createOrder = catchAsync(async (req, res, next) => {
             id: productsId
         }
     });
-    // console.log("kkkkkkkk"+totalPrice);
+    console.log("kkkkkkkk"+totalPrice);
     if(!totalPrice.dataValues.totalPrice){
         res.status(404).json({
            data : "Product Not added in the database"
         });
         return;
+    }
+    let discountPart  = 0;
+    if (promoCode !== ""){
+        const promoPercent = await DiscountModel.findOne({
+            // attributes:[
+            //     discountPercentage
+            // ],
+            where: {
+                discountCode : promoCode
+            }
+        });
+        if (!promoPercent) {
+            res.status(400).send({
+                message : "Invalid Promotion Code!"
+            });
+            return;
+        }else {
+            discountPart += parseInt(parseFloat((promoPercent.dataValues.discountPercentage/100 * totalPrice.dataValues.totalPrice).toFixed(2)));
+        }
     }
    // const cardInfo = req.body.cardInfo;
  
@@ -73,6 +98,8 @@ exports.createOrder = catchAsync(async (req, res, next) => {
     const currentTimestampSeconds = Math.floor(Date.now() / 1000);
     // Calculate the timestamp for 30 minutes from now in seconds
     const thirtyMinutesLaterSeconds = currentTimestampSeconds + 30 * 60;
+    console.log(thirtyMinutesLaterSeconds);
+
     const session = await stripe.checkout.sessions.create({
         success_url: 'https://www.google.com',
         cancel_url: cancel_url_base, 
@@ -81,9 +108,19 @@ exports.createOrder = catchAsync(async (req, res, next) => {
             price_data: {
                 currency : 'aed',
                 product_data : {
-                    name : "order"
+                    name : "Total Order"
                 },
-                unit_amount : parseInt(totalPrice.dataValues.totalPrice, 10) * 100
+                unit_amount : parseInt(totalPrice.dataValues.totalPrice - discountPart, 10) * 100
+            },
+            quantity : 1
+          },
+          {
+            price_data: {
+                currency : 'aed',
+                product_data : {
+                    name : "Shipping Price"
+                },
+                unit_amount : parseInt(shipmentPrice, 10) * 100
             },
             quantity : 1
           }
@@ -92,7 +129,7 @@ exports.createOrder = catchAsync(async (req, res, next) => {
         metadata: { 
             orderId : orderId
         },
-        expires_at: thirtyMinutesLaterSeconds
+        expires_at: thirtyMinutesLaterSeconds,
       });
             res.status(202).json({
                     data:{
@@ -224,11 +261,11 @@ exports.getOrderById = catchAsync(async (req, res, next) => {
             include: {
                 model: Model.Product,
                 required: true,
-                // include:{
-                //     model:ProductImageModel,
-                //     required:true,
-                //     as:"productImages"
-                // }
+                include:{
+                    model:ProductImageModel,
+                    required:true,
+                    as:"productImages"
+                }
             }
         },
         where: {
@@ -309,20 +346,28 @@ exports.stripeWebhookController = catchAsync(async (request, response, next) => 
     }
        case "checkout.session.async_payment_failed":{
         const failedOrderId = event.data.object.metadata.orderId;
-        const deletedOrderedProduct = await OrderProductModel.destroy({
-            where: {
-                orderId: parseInt(failedOrderId)
-            }
-        });
-        const deletedShipment = await ShipmentModel.destroy({
-            where: {
-                orderId: parseInt(failedOrderId)
-            }
-        });
-        const deletedOrder = await OrderModel.destroy({
-            where: {
-                id: parseInt(failedOrderId)
-            }
+        const action = await sequelize.transaction(async (t) => {
+            const deletedOrderedProduct = await OrderProductModel.destroy({
+                where: {
+                    orderId: parseInt(failedOrderId)
+                }
+            },
+            {transaction:t}
+            );
+            const deletedShipment = await ShipmentModel.destroy({
+                where: {
+                    orderId: parseInt(failedOrderId)
+                }
+            },
+             {transaction:t}
+            );
+            const deletedOrder = await OrderModel.destroy({
+                where: {
+                    id: parseInt(failedOrderId)
+                }
+            }, 
+            {transaction:t}
+            );
         });
         response.status(202).json({
             status:"success"
@@ -330,47 +375,75 @@ exports.stripeWebhookController = catchAsync(async (request, response, next) => 
         break;
     }
         case "payment_intent.canceled":{
-        const cancelledOrderId = event.data.object.metadata.orderId;
-        const deleteOrderedProduct = await OrderProductModel.destroy({
-            where: {
-                orderId: parseInt(cancelledOrderId)
-            }
-        });
-        const deleteShipment = await ShipmentModel.destroy({
-            where: {
-                orderId: parseInt(cancelledOrderId)
-            }
-        });
-        const deleteOrder = await OrderModel.destroy({
-            where: {
-                id: parseInt(cancelledOrderId)
-            }
+            const failedOrderId = event.data.object.metadata.orderId;
+            const action = await sequelize.transaction(async (t) => {
+                const deletedOrderedProduct = await OrderProductModel.destroy({
+                    where: {
+                        orderId: parseInt(failedOrderId)
+                    }
+                },
+                {transaction:t}
+                );
+                const deletedShipment = await ShipmentModel.destroy({
+                    where: {
+                        orderId: parseInt(failedOrderId)
+                    }
+                },
+                 {transaction:t}
+                );
+                const deletedOrder = await OrderModel.destroy({
+                    where: {
+                        id: parseInt(failedOrderId)
+                    }
+                }, 
+                {transaction:t}
+                );
+            });
+            response.status(202).json({
+                status:"success"
+            })
+            break;
+    }
+    case "checkout.session.expired": {
+        const failedOrderId = event.data.object.metadata.orderId;
+        const action = await sequelize.transaction(async (t) => {
+            const deletedOrderedProduct = await OrderProductModel.destroy({
+                where: {
+                    orderId: parseInt(failedOrderId)
+                }
+            },
+            {transaction:t}
+            );
+            const deletedShipment = await ShipmentModel.destroy({
+                where: {
+                    orderId: parseInt(failedOrderId)
+                }
+            },
+             {transaction:t}
+            );
+            const deletedOrder = await OrderModel.destroy({
+                where: {
+                    id: parseInt(failedOrderId)
+                }
+            }, 
+            {transaction:t}
+            );
         });
         response.status(202).json({
             status:"success"
         })
         break;
     }
-    case "checkout.session.expired": {
-        const cancelledOrderId = event.data.object.metadata.orderId;
-        const deleteOrderedProduct = await OrderProductModel.destroy({
-            where: {
-                orderId: parseInt(cancelledOrderId)
-            }
-        });
-        const deleteShipment = await ShipmentModel.destroy({
-            where: {
-                orderId: parseInt(cancelledOrderId)
-            }
-        });
-        const deleteOrder = await OrderModel.destroy({
-            where: {
-                id: parseInt(cancelledOrderId)
-            }
-        });
-        response.status(202).json({
-            status:"success"
-        })
+    case "charge.succeeded":{
+        console.log("Charge on Stripe Succeeded");
+        break;
+    }
+    case "payment_intent.succeeded":{
+        console.log("payment intent on Stripe Succeeded");
+        break;
+    }
+    case "payment_intent.created":{
+        console.log("payment intent on Stripe created");
         break;
     }
       default:

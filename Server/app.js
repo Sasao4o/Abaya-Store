@@ -15,6 +15,9 @@ const orderRoute = require("./routes/orderRoute");
 const productRoute = require("./routes/productRoute");
 const categoryRoute = require("./routes/categoryRoute");
 const dashboardRoute = require("./routes/dashboardRoute");
+const discountRoute = require("./routes/discountRoute");
+
+
 const orderController = require("./controllers/orderController");
 app.post(
   "/webhook",
@@ -29,6 +32,7 @@ app.use("/api/v1/order", orderRoute);
 app.use("/api/v1/product", productRoute);
 app.use("/api/v1/category", categoryRoute);
 app.use("/api/v1/dashboard", dashboardRoute);
+app.use("/api/v1/discount", discountRoute);
 app.use((err, req, res, next) => {
   console.log("I CATCHED IT WHILE EXPECTING");
   console.log(err);
