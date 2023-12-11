@@ -3,7 +3,7 @@ npx sequelize-cli model:generate --name ModelName --attributes productId:integer
 npx sequelize-cli seed:generate --name demoOrderedProduct
 
 npx sequelize-cli db:seed:all
- 
+
 npx sequelize-cli db:seed:undo:all
 
 
@@ -12,3 +12,5 @@ npx sequelize db:migrate
 
 
 npm i faker@5.5.3 //This faker we are seeding with
+stripe listen  --forward-to localhost:3006/webhook
+stripe trigger checkout.session.completed

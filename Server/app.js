@@ -17,6 +17,9 @@ const orderRoute = require("./routes/orderRoute");
 const productRoute = require("./routes/productRoute");
 const categoryRoute = require("./routes/categoryRoute");
 const dashboardRoute = require("./routes/dashboardRoute");
+const discountRoute = require("./routes/discountRoute");
+
+
 const orderController = require("./controllers/orderController");
 app.post(
   "/webhook",
