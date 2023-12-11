@@ -43,7 +43,7 @@ export default function CartItem({ id }) {
         </div>
       </div>
       <p className="cart-item-total-price">
-        Dhs.{productData.price * getItemQuantity(id)}
+        {productData.price * getItemQuantity(id)} AED
       </p>
     </div>
   );

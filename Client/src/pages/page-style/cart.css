@@ -16,6 +16,7 @@
   border: 1px solid black;
   padding: 15px 30px;
   transition: 0.3s;
+  margin-top: 40px;
 }
 .cart-view .cart-empty a:hover {
   background-color: black;
@@ -89,6 +90,64 @@
   align-items: flex-start;
   gap: 10px;
 }
+.cart-view .total-price {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 10px;
+  font-size: 25px;
+}
+.cart-view .cart-checkout {
+  padding: 20px;
+}
+.cart-view .cart-checkout form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.cart-view .cart-checkout form .err {
+  color: red;
+  align-self: center;
+}
+.cart-view .cart-checkout form label {
+  font-size: 20px;
+  width: 100%;
+}
+.cart-view .cart-checkout form input {
+  min-width: 100px;
+  padding: 10px;
+  font-size: 18px;
+  font-family: "cera round";
+  font-weight: normal;
+  border: 1px solid black;
+  transition: 0.3s;
+}
+.cart-view .cart-checkout form select {
+  min-width: 100px;
+  padding: 10px;
+  font-size: 18px;
+  font-family: "cera round";
+  font-weight: normal;
+  border: 1px solid black;
+  transition: 0.3s;
+}
+.cart-view .cart-checkout form button {
+  font-family: "cera round";
+  font-weight: normal;
+  background-color: black;
+  color: white;
+  font-size: 22px;
+  border: 1px solid black;
+  padding: 15px 70px;
+  transition: 0.3s;
+  width: fit-content;
+  margin-left: auto;
+  cursor: pointer;
+  margin-top: 20px;
+}
+.cart-view .cart-checkout form button:hover {
+  background-color: transparent;
+  color: black;
+}
 
 @media (max-width: 767px) {
   .cart-view {
@@ -100,5 +159,8 @@
     align-items: center;
     justify-content: space-between;
     gap: 5px;
+  }
+  .cart-view .cart-checkout form button {
+    width: 100%;
   }
 }
