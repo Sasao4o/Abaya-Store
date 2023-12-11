@@ -6,7 +6,6 @@ import Products from "./pages/Products";
 import ViewProduct from "./pages/ViewProduct";
 import Contact from "./pages/Contact";
 import PageNotFound from "./pages/PageNotFound";
-import Search from "./pages/Search";
 import { ShoppingCartProvider } from "./contexts/ShoppingCartContext";
 import Navbar from "./components/Navbar";
 import Collection from "./pages/Collection";
@@ -25,7 +24,6 @@ function App() {
             <Route path="/collections/:collectionId" element={<Collection />} />
             <Route path="/products/:id" element={<ViewProduct />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/search/:prdName" element={<Search />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>

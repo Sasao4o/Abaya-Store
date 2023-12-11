@@ -4,6 +4,7 @@ import "./page-style/viewprods.css";
 import { useParams } from "react-router-dom";
 import { useShoppingCart } from "../contexts/ShoppingCartContext";
 import ShoppingCartMessage from "../components/ShoppingCartMessage";
+import baseUrl from "../constants/baseUrl";
 
 export default function ViewProduct() {
   const { setIsOpen } = useShoppingCart();
@@ -21,7 +22,7 @@ export default function ViewProduct() {
   //Fetch the product data by id
   useEffect(() => {
     const getProduct = async () => {
-      const res = await fetch(`http://localhost:3006/api/v1/product/${id}`);
+      const res = await fetch(`${baseUrl}/api/v1/product/${id}`);
       const data = await res.json();
       setProductData(data.data);
     };

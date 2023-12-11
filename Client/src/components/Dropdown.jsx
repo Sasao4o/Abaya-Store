@@ -1,11 +1,12 @@
 import { NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
+import baseUrl from "../constants/baseUrl";
 
 const Dropdown = ({ dropdown, onClick, mobileMenuClick }) => {
   const [menus, setMenus] = useState([]);
   useEffect(() => {
     const getCollections = async () => {
-      const res = await fetch(`http://localhost:3006/api/v1/category`);
+      const res = await fetch(`${baseUrl}/api/v1/category`);
       const data = await res.json();
       setMenus(data.data);
     };

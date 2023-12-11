@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useShoppingCart } from "../contexts/ShoppingCartContext";
 import img from "../assets/images/PB_05195.jpg";
 import { IoTrashOutline } from "react-icons/io5";
+import baseUrl from "../constants/baseUrl";
 
 export default function CartItem({ id }) {
   const [productData, setProductData] = useState({});
@@ -15,7 +16,7 @@ export default function CartItem({ id }) {
 
   useEffect(() => {
     const getProduct = async () => {
-      const res = await fetch(`http://localhost:3006/api/v1/product/${id}`);
+      const res = await fetch(`${baseUrl}/api/v1/product/${id}`);
       const data = await res.json();
       setProductData(data.data);
     };

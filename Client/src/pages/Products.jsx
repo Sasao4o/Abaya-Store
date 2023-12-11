@@ -1,21 +1,22 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./page-style/products.css";
 import "react-loading-skeleton/dist/skeleton.css";
 import Product from "../components/Product";
 import Paginate from "../components/Paginate";
 import ProductSkeleton from "../components/ProductSkeleton";
 import img from "../assets/images/wallpapertest.jpg";
+import baseUrl from "../constants/baseUrl";
 
 export default function Products() {
-  const [products, setProducts] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(true);
+  const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const totalNumberPerPage = 8;
-  const [productCount, setProductCount] = React.useState(0);
+  const [productCount, setProductCount] = useState(0);
 
-  React.useEffect(() => {
+  useEffect(() => {
     //Get the total amount of products to be used in pagination
     const getProductsCount = async () => {
-      const res = await fetch(`http://localhost:3006/api/v1/product/count`);
+      const res = await fetch(`${baseUrl}/api/v1/product/count`);
       const data = await res.json();
       setProductCount(data.data.count);
     };
@@ -24,7 +25,7 @@ export default function Products() {
     //Get the actual products data
     const getProducts = async () => {
       const res = await fetch(
-        `http://localhost:3006/api/v1/product?page=1&limit=${totalNumberPerPage}`
+        `${baseUrl}/api/v1/product?page=1&limit=${totalNumberPerPage}`
       );
       const data = await res.json();
       setProducts(data.data);
@@ -36,7 +37,7 @@ export default function Products() {
 
   const fetchProducts = async (currentPage) => {
     const res = await fetch(
-      `http://localhost:3006/api/v1/product?page=${currentPage}&limit=${totalNumberPerPage}`
+      `${baseUrl}/api/v1/product?page=${currentPage}&limit=${totalNumberPerPage}`
     );
     const data = await res.json();
     return data;

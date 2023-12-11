@@ -17,6 +17,6 @@ export const menuItemsData = [
   {
     title: "Collections",
     url: null,
-    submenu: [],
+    submenu: menus,
   },
 ];

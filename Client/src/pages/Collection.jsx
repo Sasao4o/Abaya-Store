@@ -6,6 +6,7 @@ import Paginate from "../components/Paginate";
 import ProductSkeleton from "../components/ProductSkeleton";
 import img from "../assets/images/wallpapertest.jpg";
 import { useParams } from "react-router-dom";
+import baseUrl from "../constants/baseUrl";
 
 export default function Collection() {
   const { collectionId } = useParams();
@@ -16,9 +17,7 @@ export default function Collection() {
   const [productCount, setProductCount] = useState(0);
 
   const getCollectionData = async () => {
-    const res = await fetch(
-      `http://localhost:3006/api/v1/category/${collectionId}`
-    );
+    const res = await fetch(`${baseUrl}/api/v1/category/${collectionId}`);
     const data = await res.json();
     setCollectionData(data.data);
     console.log(data.data.name);
@@ -27,7 +26,7 @@ export default function Collection() {
 
   const getProductsCount = async () => {
     const res = await fetch(
-      `http://localhost:3006/api/v1/product/category/${collectionId}/count`
+      `${baseUrl}/api/v1/product/category/${collectionId}/count`
     );
     const data = await res.json();
     setProductCount(data.data.count);
@@ -36,7 +35,7 @@ export default function Collection() {
 
   const getProducts = async () => {
     const res = await fetch(
-      `http://localhost:3006/api/v1/product/category/${collectionId}?page=1&limit=${totalNumberPerPage}`
+      `${baseUrl}/api/v1/product/category/${collectionId}?page=1&limit=${totalNumberPerPage}`
     );
     const data = await res.json();
     setProducts(data.data);
@@ -53,7 +52,7 @@ export default function Collection() {
 
   const fetchProducts = async (currentPage) => {
     const res = await fetch(
-      `http://localhost:3006/api/v1/product?page=${currentPage}&limit=${totalNumberPerPage}`
+      `${baseUrl}/api/v1/product?page=${currentPage}&limit=${totalNumberPerPage}`
     );
     const data = await res.json();
     return data;
