@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
 import "./styles/navbar.css";
 import { menuItemsData } from "../constants/menuItemsData";
 import { MenuItems } from "./MenuItems";
-import { IoSearch } from "react-icons/io5";
 import { TbShoppingBag } from "react-icons/tb";
 import { MdMenu } from "react-icons/md";
 import { useShoppingCart } from "../contexts/ShoppingCartContext";
@@ -18,15 +16,9 @@ export default function Navbar() {
 
   const [toggleMobileMenu, setToggleMobileMenu] = useState(false);
 
-  const { register, handleSubmit } = useForm();
-  const { register: registerMobile, handleSubmit: handleSubmitMobile } =
-    useForm();
-
   function mobileMenuClick() {
     setToggleMobileMenu((prevState) => !prevState);
   }
-
-  const onSubmit = (data) => console.log(data);
 
   return (
     <nav>
@@ -59,19 +51,6 @@ export default function Navbar() {
               cursor={"pointer"}
             />
           </div>
-          <form
-            className="nav-search-bar-mobile"
-            onSubmit={handleSubmitMobile(onSubmit)}
-          >
-            <input
-              placeholder="Search here..."
-              type="text"
-              {...registerMobile("search")}
-            />
-            <button type="submit">
-              <IoSearch fontSize={25} color="white" cursor={"pointer"} />
-            </button>
-          </form>
         </div>
 
         <ul>
@@ -107,16 +86,6 @@ export default function Navbar() {
         </li>
       </ul>
       <div className="nav-icons">
-        <form className="nav-search-bar" onSubmit={handleSubmit(onSubmit)}>
-          <input
-            placeholder="Search here..."
-            type="text"
-            {...register("search")}
-          />
-          <button type="submit">
-            <IoSearch fontSize={25} color="white" cursor={"pointer"} />
-          </button>
-        </form>
         <div className="shopping-cart">
           <TbShoppingBag
             fontSize={25}

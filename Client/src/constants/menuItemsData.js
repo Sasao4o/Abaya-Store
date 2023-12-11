@@ -19,8 +19,4 @@ export const menuItemsData = [
     url: null,
     submenu: [],
   },
-  {
-    title: "About",
-    url: "/about",
-  },
 ];

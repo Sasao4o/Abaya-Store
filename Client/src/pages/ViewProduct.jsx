@@ -40,7 +40,7 @@ export default function ViewProduct() {
           <h1 className="product-title">
             {productData.name} {productData.id}
           </h1>
-          <h1 className="seller-name">Seller: {productData.userId}</h1>
+          <h1 className="seller-name">Material: {productData.material}</h1>
           <h2 className="price">{productData.price} L.E</h2>
           <p className="desc">{productData.description}</p>
           {quantity === 0 ? (

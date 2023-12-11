@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./page-style/products.css";
 import "react-loading-skeleton/dist/skeleton.css";
 import Product from "../components/Product";
@@ -9,44 +9,46 @@ import { useParams } from "react-router-dom";
 
 export default function Collection() {
   const { collectionId } = useParams();
-  const [collectionData, setCollectionData] = useState();
-  const [products, setProducts] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(true);
+  const [collectionData, setCollectionData] = useState({});
+  const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const totalNumberPerPage = 8;
-  const [productCount, setProductCount] = React.useState(0);
+  const [productCount, setProductCount] = useState(0);
 
-  React.useEffect(() => {
-    //Get the total amount of products to be used in pagination
-    const getProductsCount = async () => {
-      const res = await fetch(`http://localhost:3006/api/v1/product/count`);
-      const data = await res.json();
-      setProductCount(data.data.count);
-      console.log(data.data.count);
-    };
-    getProductsCount();
+  const getCollectionData = async () => {
+    const res = await fetch(
+      `http://localhost:3006/api/v1/category/${collectionId}`
+    );
+    const data = await res.json();
+    setCollectionData(data.data);
+    console.log(data.data.name);
+    console.log(collectionData);
+  };
 
-    //Get the actual products data
-    const getProducts = async () => {
-      const res = await fetch(
-        `http://localhost:3006/api/v1/product?page=1&limit=${totalNumberPerPage}`
-      );
-      const data = await res.json();
-      setProducts(data.data);
-      console.log(data);
-      setIsLoading(false);
-    };
-    getProducts();
+  const getProductsCount = async () => {
+    const res = await fetch(
+      `http://localhost:3006/api/v1/product/category/${collectionId}/count`
+    );
+    const data = await res.json();
+    setProductCount(data.data.count);
+    console.log(data.data);
+  };
 
-    //Get the Collection data products data
-    const getCollectionData = async () => {
-      const res = await fetch(
-        `http://localhost:3006/api/v1/category/${collectionId}`
-      );
-      const data = await res.json();
-      setCollectionData(data.data);
-      console.log(data);
-    };
+  const getProducts = async () => {
+    const res = await fetch(
+      `http://localhost:3006/api/v1/product/category/${collectionId}?page=1&limit=${totalNumberPerPage}`
+    );
+    const data = await res.json();
+    setProducts(data.data);
+    console.log(data.data);
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
     getCollectionData();
+    getProductsCount();
+    getProducts();
+    console.log(collectionData);
   }, [collectionId]);
 
   const fetchProducts = async (currentPage) => {
@@ -57,11 +59,11 @@ export default function Collection() {
     return data;
   };
 
-  async function handlePageClick(data) {
+  const handlePageClick = async (data) => {
     let currentPage = data.selected + 1;
     const productsFromServer = await fetchProducts(currentPage);
     setProducts(productsFromServer.data);
-  }
+  };
 
   const productsArray = products.map((product) => (
     <Product

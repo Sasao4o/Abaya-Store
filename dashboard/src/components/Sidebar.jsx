@@ -13,10 +13,10 @@ export default function Sidebar() {
           <NavLink to="/products">Products</NavLink>
         </li>
         <li>
-          <NavLink to="">Collections</NavLink>
+          <NavLink to="/collections">Collections</NavLink>
         </li>
         <li>
-          <NavLink to="">Orders</NavLink>
+          <NavLink to="/orders">Orders</NavLink>
         </li>
       </ul>
     </div>

@@ -4,13 +4,16 @@ import { useShoppingCart } from "../contexts/ShoppingCartContext";
 import "./styles/shoppingcart.css";
 import { MdCheck } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
 
 export default function ShoppingCartMessage({ prodName }) {
   const { isOpen, setIsOpen, cartQuantity } = useShoppingCart();
 
-  setTimeout(() => {
-    setIsOpen(false);
-  }, 4000);
+  useEffect(() => {
+    setTimeout(() => {
+      setIsOpen(false);
+    }, 2000);
+  }, [setIsOpen, isOpen]);
 
   return (
     <div

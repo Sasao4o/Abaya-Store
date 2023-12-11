@@ -1,6 +1,7 @@
 import React from "react";
 import { useShoppingCart } from "../contexts/ShoppingCartContext";
 import "./page-style/cart.css";
+import { useForm } from "react-hook-form";
 import CartItem from "../components/CartItem";
 import { Link } from "react-router-dom";
 
@@ -19,6 +20,11 @@ import { Link } from "react-router-dom";
 
 export default function Cart() {
   const { cartItemsNumber, cartItems } = useShoppingCart();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
   return (
     <div className="cart-view">
@@ -44,6 +50,11 @@ export default function Cart() {
           <br />
           <br />
           <div className="cart-checkout">
+            <form>
+              <input type="text" {...register("address")} />
+              <input type="text" {...register("city")} />
+              <input type="text" {...register("zipCode")} />
+            </form>
             <p className="total-cart-price">TOTAL price</p>
             <Link to="">Checkout</Link>
           </div>
