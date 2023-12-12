@@ -72,8 +72,7 @@ const sendErrorProd = (err, req, res) => {
 };
 
 module.exports = (err, req, res, next) => {
-    // console.log(err.stack);
-    console.log(err);
+  
     err.statusCode = err.statusCode || 500;
     err.status = err.status || 'error';
 
@@ -83,6 +82,7 @@ module.exports = (err, req, res, next) => {
         let error = {
             ...err
         };
+        console.log(error)
         error.message = err.message;
 
         if (error.name === 'CastError') error = handleCastErrorDB(error);

@@ -45,17 +45,13 @@ exports.getCategoryById = catchAsync(async (req, res, next) => {
             id: categoryId
         }
     });
-
     if (category) {
         res.status(202).json({
             data: category,
             status: "success",
         });
     } else {
-        res.status(404).json({
-            status: "failed",
-            message: "No Category found with this id",
-        });
+        return next(new AppError("No Category Found", 400, true));
     }
 });
 
@@ -63,18 +59,13 @@ exports.getCategoryById = catchAsync(async (req, res, next) => {
 exports.deleteCategoryById = catchAsync(async (req, res, next) => {
 
     const categoryId = req.params.categoryId;
-
-
     let numberOfProductsDeleted = await categoryModel.destroy({
         where: {
             id: categoryId
         }
     })
-
-
-    res.status(404).json({
+    res.status(200).json({
         status: "success",
-        message: "deleted",
-        deleted: numberOfProductsDeleted
+        deleted:  numberOfProductsDeleted + " categories is deleted "
     });
 });

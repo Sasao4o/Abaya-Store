@@ -64,7 +64,10 @@ exports.createOrder = catchAsync(async (req, res, next) => {
             //     discountPercentage
             // ],
             where: {
-                discountCode : promoCode
+                discountCode : promoCode,
+                expiryDate:{
+                    [Op.gte] : new Date()
+                         }  
             }
         });
         if (!promoPercent) {

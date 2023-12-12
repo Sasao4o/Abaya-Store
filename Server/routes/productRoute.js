@@ -8,7 +8,7 @@ router.post("/image", upload.uploadOnMemory.array('file') ,upload.injectFileName
 router.post("/",upload.uploadOnMemory.array('productImage') ,upload.injectFileNameAndPath(),productController.createProduct);
 router.get("/count", productController.getProductsCount);
 router.get("/category/:categoryId/count", productController.getProductsCountInCategory);
-router.post("/search", productController.searchForProducts);
+// router.post("/search", productController.searchForProducts);
 router.get("/category/:categoryId", productController.getProductsByCategory);
 router.get("/:productId", productController.getProductById);
 router.delete("/:productId", productController.deleteProductById);

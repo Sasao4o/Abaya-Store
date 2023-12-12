@@ -15,12 +15,7 @@ exports.createProduct = catchAsync(async (req, res, next) => {
     //TODO we need to make a utility where it checks that all fields in req.body are there (LOOK IN PREV PROJECTS)
 
     if (!req.files.length) {
-
-        res.status(404).json({
-            status: "failed",
-            message: "You must enter an image",
-        });
-        return;
+        return next(new AppError("You Must enter at least one image !", 400, true));
     }
     const productData = {
         name: req.body.name,
@@ -63,23 +58,19 @@ exports.createProduct = catchAsync(async (req, res, next) => {
     });
 
 
-    res.status(202).json({
+    res.status(201).json({
         data: result,
         status: "success",
     });
 });
 
 exports.addProductImage = catchAsync(async (req, res, next) => {
-
-    if (!req.files) {
-        res.status(404).json({
-            status: "failed",
-            message: "You must enter an image",
-        });
-        return;
+    if (!req.files.length) {
+        return next(new AppError("You Must enter at least one image !", 400, true));
     }
+   
     let results = [];
-    console.log(req.files);
+ 
     if (req.files) {
         await Promise.all(req.files.map(async (v) => {
             const fileName = v.fileName;
@@ -119,23 +110,18 @@ exports.getProductById = catchAsync(async (req, res, next) => {
             as: 'productImages'
         }]
     });
-
     if (product) {
         res.status(202).json({
             data: product,
             status: "success",
         });
     } else {
-        res.status(404).json({
-            status: "failed",
-            message: "No Product found with this id",
-        });
+        return next(new AppError("No Product Found with Id",400,true));
     }
 });
 exports.getAllProducts = catchAsync(async (req, res, next) => {
-    console.log(req.query);
+ 
     const queryStringBulder = new QueryStringBuilder(req.query).paginate();
-    // console.log(queryStringBulder.result);
     queryStringResult = queryStringBulder.result;
 
     const product = await ProductModel.findAll({
@@ -149,50 +135,42 @@ exports.getAllProducts = catchAsync(async (req, res, next) => {
             as: 'productImages'
         }]
     });
-    //if name makes conflict and u wanna productId use this
-    // product.forEach(v => {
-    //   console.log(v);
-    //   v.dataValues["productId"] = v.dataValues.id;
-    //   delete v.dataValues["id"];
-    // });
+ 
     if (product) {
         res.status(202).json({
             data: product,
             status: "success",
         });
     } else {
-        res.status(404).json({
-            status: "success",
-            message: "No Products Are Available",
-        });
+        return next (new AppError("No Products Are Available",200 ,true))
     }
 });
-exports.searchForProducts = catchAsync(async (req, res, next) => {
-    const queryStringBulder = new QueryStringBuilder(req.query).paginate();
-    queryStringResult = queryStringBulder.result;
-    let isValid = true;
-    isValid =
-        isValid && valid.validNumber(req.body.id) && valid.validWord(req.body.name);
-    console.log(valid.filter(req.body));
-    const product = await ProductModel.findAll({
-        limit: queryStringResult.limit,
-        offset: queryStringResult.offset,
-        where: valid.filter(req.body),
-    });
+// exports.searchForProducts = catchAsync(async (req, res, next) => {
+//     const queryStringBulder = new QueryStringBuilder(req.query).paginate();
+//     queryStringResult = queryStringBulder.result;
+//     let isValid = true;
+//     isValid =
+//         isValid && valid.validNumber(req.body.id) && valid.validWord(req.body.name);
+//     console.log(valid.filter(req.body));
+//     const product = await ProductModel.findAll({
+//         limit: queryStringResult.limit,
+//         offset: queryStringResult.offset,
+//         where: valid.filter(req.body),
+//     });
 
-    console.log(isValid);
-    if (product) {
-        res.status(202).json({
-            data: product,
-            status: "success",
-        });
-    } else {
-        res.status(404).json({
-            status: "failed",
-            message: "No Products Are Avialable",
-        });
-    }
-});
+//     console.log(isValid);
+//     if (product) {
+//         res.status(202).json({
+//             data: product,
+//             status: "success",
+//         });
+//     } else {
+//         res.status(404).json({
+//             status: "failed",
+//             message: "No Products Are Avialable",
+//         });
+//     }
+// });
 exports.getProductsCount = catchAsync(async (req, res, next) => {
     const productsCount = await ProductModel.count({});
     const data = {
@@ -232,10 +210,7 @@ exports.getProductsByCategory = catchAsync(async (req, res, next) => {
             status: "success",
         });
     } else {
-        res.status(404).json({
-            status: "failed",
-            message: "No Product found with this id",
-        });
+        return next(new AppError("No Product found with this id", 200, true));
     }
 
 
@@ -277,7 +252,7 @@ exports.deleteProductById = catchAsync(async (req, res, next) => {
             transaction: t
         });
     });
-    res.status(404).json({
+    res.status(200).json({
         status: "success",
         message: "deleted",
         deleted: numberOfProductsDeleted

@@ -1,28 +1,39 @@
 const Model = require("../models");
+const AppError = require("../utilis/AppError");
 const catchAsync = require("../utilis/catchAsync");
+const { Op } = require('sequelize')
+
 const DiscountModel = Model.Discount;
 exports.createDiscount = catchAsync(async (req, res, next) => {
     const discountCode = req.body.discountCode;
     const discountPercentage = req.body.discountPercentage;
     const expiryDate = req.body.expiryDate;
-    if (!discountCode || !discountPercentage){ 
-        res.status(400).json({
-            msg : "Bad discount Create Request"
-         });
-        return;
-    }
     const discount = await DiscountModel.create({
         discountCode: discountCode,
         discountPercentage: parseInt(discountPercentage),
-        expiryDate : expiryDate
+        expiryDate
     });
     if(discount){
-        res.status(202).json({
+        res.status(201).json({
+            status:"success",
             data: discount
         });
-    } else {
-        res.status(500).json({msg:"Server Error!"});
+    }  
+
+
+});
+
+exports.validateDiscount = catchAsync(async (req,res,next) => {
+    const discountCode = req.body.discountCode;
+    if (!discountCode) {
+          return(next (new AppError("You must enter discount code", 400, true)));
     }
-
-
+ const result = await   DiscountModel.findAll({
+        where: {
+            expiryDate:{
+        [Op.gte] : new Date()
+             }  
+        }
+      });
+       res.json(result);
 });
