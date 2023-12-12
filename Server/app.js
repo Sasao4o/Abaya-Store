@@ -7,10 +7,18 @@ const cookieParser = require("cookie-parser");
 const dotenv = require("dotenv").config({ path: "./config.env" });
 var cors = require("cors");
 process.on("uncaughtException", (err) => {
-  console.log("From the app.js");
-  console.log(err);
-});
+  console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
+  console.log(err.name, err.message);
+  process.exit(1);
 
+});
+process.on('unhandledRejection', err => {
+  console.log('UNHANDLED REJECTION! 💥 Shutting down...');
+  console.log(err.name, err.message);
+  server.close(() => {
+    process.exit(1);
+  });
+});
 const app = express();
 const userRoute = require("./routes/userRoute");
 const orderRoute = require("./routes/orderRoute");
