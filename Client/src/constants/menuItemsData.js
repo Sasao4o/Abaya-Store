@@ -8,25 +8,8 @@ export const menuItemsData = [
     url: "/products",
   },
   {
-    title: "Abayat",
+    title: "Collections",
     url: null,
-    submenu: [
-      {
-        title: "VIP collection",
-        url: "/collections/vip-collection",
-      },
-      {
-        title: "Daily collection",
-        url: "/collections/daily-collection",
-      },
-      {
-        title: "Any collection",
-        url: "/collections/any-collection",
-      },
-    ],
-  },
-  {
-    title: "About",
-    url: "/about",
+    submenu: [],
   },
 ];

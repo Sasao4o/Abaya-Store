@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import { useForm } from "react-hook-form";
 import "./styles/navbar.css";
 import { menuItemsData } from "../constants/menuItemsData";
 import { MenuItems } from "./MenuItems";
-import { IoSearch } from "react-icons/io5";
 import { TbShoppingBag } from "react-icons/tb";
 import { MdMenu } from "react-icons/md";
 import { useShoppingCart } from "../contexts/ShoppingCartContext";
@@ -17,11 +15,11 @@ export default function Navbar() {
   const { cartItemsNumber } = useShoppingCart();
 
   const [toggleMobileMenu, setToggleMobileMenu] = useState(false);
-  // const { register, handleSubmit } = useForm();
 
   function mobileMenuClick() {
     setToggleMobileMenu((prevState) => !prevState);
   }
+
   return (
     <nav>
       {/* This is the sub menu for mobile screens */}
@@ -33,25 +31,28 @@ export default function Navbar() {
         }
       >
         <div className="nav-icons-mobile">
-          <div className="shopping-cart">
-            <TbShoppingBag
-              fontSize={40}
+          <div className="top-level-menu-icons">
+            <div className="shopping-cart">
+              <TbShoppingBag
+                fontSize={40}
+                color="white"
+                cursor={"pointer"}
+                onClick={() => {
+                  mobileMenuClick();
+                  history("/cart");
+                }}
+              />
+              <div>{cartItemsNumber}</div>
+            </div>
+            <IoClose
+              onClick={mobileMenuClick}
               color="white"
+              fontSize={40}
               cursor={"pointer"}
-              onClick={() => {
-                mobileMenuClick();
-                history("/cart");
-              }}
             />
-            <div>{cartItemsNumber}</div>
           </div>
-          <IoClose
-            onClick={mobileMenuClick}
-            color="white"
-            fontSize={40}
-            cursor={"pointer"}
-          />
         </div>
+
         <ul>
           {menuItemsData.map((menu, index) => {
             return (
@@ -66,13 +67,14 @@ export default function Navbar() {
       </div>
       {/* ================================================== */}
       {/* This is for normal screens */}
+
       <div className="logo">
         <h2>LEVEL</h2>
         {/* <img src="../images/" alt="" /> */}
       </div>
       <ul className="main-links">
         {menuItemsData.map((menu, index) => {
-          return <MenuItems items={menu} key={index} />;
+          return <MenuItems item={menu} key={index} />;
         })}
         <li id="mobile-menu-toggle">
           <MdMenu
@@ -84,7 +86,6 @@ export default function Navbar() {
         </li>
       </ul>
       <div className="nav-icons">
-        <IoSearch fontSize={25} color="white" cursor={"pointer"} />
         <div className="shopping-cart">
           <TbShoppingBag
             fontSize={25}
