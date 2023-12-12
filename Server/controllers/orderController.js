@@ -13,7 +13,8 @@ const sequelize = require("../models/index.js").sequelize;
 const catchAsync = require("../utilis/catchAsync");
 const stripe = require('stripe')(process.env.SECRET_TEST_KEY);
 const endpointSecret = process.env.WEBHOOK_ENDPOINT;
-
+const { Op } = require('sequelize');
+const AppError = require("../utilis/AppError");
 exports.createOrder = catchAsync(async (req, res, next) => {
     const addressInfo = req.body.addressInfo;
     const promoCode = req.body.promoCode;
@@ -26,7 +27,7 @@ exports.createOrder = catchAsync(async (req, res, next) => {
         country: addressInfo.country
     };
     let shipmentPrice = 0;
-    if (shipmentData.city.toString().tolowercase() !== "abu dahbi"){
+    if (shipmentData.city.toString() !== "Abu Dhabi"){
         shipmentPrice += 25;
     }
     const orderedProductsData = [];
@@ -51,11 +52,8 @@ exports.createOrder = catchAsync(async (req, res, next) => {
         }
     });
     console.log("kkkkkkkk"+totalPrice);
-    if(!totalPrice.dataValues.totalPrice){
-        res.status(404).json({
-            data: "Product Not added in the database"
-        });
-        return;
+    if(totalPrice.dataValues.totalPrice <= 0){
+        return(next (new AppError("We don't have some of those products here", 400, true)));
     }
     let discountPart  = 0;
     if (promoCode !== ""){
@@ -71,14 +69,14 @@ exports.createOrder = catchAsync(async (req, res, next) => {
             }
         });
         if (!promoPercent) {
-            res.status(400).send({
-                message : "Invalid Promotion Code!"
-            });
-            return;
+            return(next (new AppError("Discount code is not valid", 400, true)));
         }else {
             discountPart += parseInt(parseFloat((promoPercent.dataValues.discountPercentage/100 * totalPrice.dataValues.totalPrice).toFixed(2)));
         }
-    }
+    } 
+    // else {
+    //     return(next (new AppError("You must enter discount code", 400, true)));
+    // }
    // const cardInfo = req.body.cardInfo;
  
     const createdOrder = await sequelize.transaction(async (t) => {
@@ -244,10 +242,7 @@ exports.getAllOrders = catchAsync(async (req, res, next) => {
             status: "success"
         })
     } else {
-        res.status(404).json({
-            status: "failed",
-            message: "no orders where found"
-        });
+        return next (new AppError("No Orders Are Available",200 ,true))
     }
 });
 
@@ -282,10 +277,7 @@ exports.getOrderById = catchAsync(async (req, res, next) => {
             status: "success"
         })
     } else {
-        res.status(404).json({
-            status: "failed",
-            message: "no order found with this id"
-        });
+        return next (new AppError("No Order with this Id",200 ,true))
     }
 });
 
@@ -298,16 +290,20 @@ exports.changeOrderStatusById = catchAsync(async (req, res, next) => {
         }
     });
 
+    if (order) {
+        const updatedOrder = await order.update({
+            orderStatus: req.body.status
+        });
+        await order.save();
+        res.status(202).json({
+            data: updatedOrder,
+            status: "success"
+        })
+    } else {
+        return next (new AppError("No Order with this Id",200 ,true))
+    }
 
-    const updatedOrder = await order.update({
-        orderStatus: req.body.status
-    });
-    await order.save();
-    res.status(202).json({
-        data: updatedOrder,
-
-        status: "success"
-    })
+    
 
 });
 
