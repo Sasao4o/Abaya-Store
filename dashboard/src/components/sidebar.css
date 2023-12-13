@@ -7,6 +7,15 @@
   top: 0;
   left: 0;
 }
+.sidebar button {
+  margin-top: 20px;
+  color: white;
+  transition: 0.3s;
+}
+.sidebar button:hover {
+  color: black;
+  background-color: white;
+}
 .sidebar a {
   color: white;
   text-decoration: none;

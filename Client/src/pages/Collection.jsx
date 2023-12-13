@@ -20,8 +20,6 @@ export default function Collection() {
     const res = await fetch(`${baseUrl}/api/v1/category/${collectionId}`);
     const data = await res.json();
     setCollectionData(data.data);
-    console.log(data.data.name);
-    console.log(collectionData);
   };
 
   const getProductsCount = async () => {
@@ -30,7 +28,6 @@ export default function Collection() {
     );
     const data = await res.json();
     setProductCount(data.data.count);
-    console.log(data.data);
   };
 
   const getProducts = async () => {
@@ -39,7 +36,6 @@ export default function Collection() {
     );
     const data = await res.json();
     setProducts(data.data);
-    console.log(data.data);
     setIsLoading(false);
   };
 
@@ -47,7 +43,6 @@ export default function Collection() {
     getCollectionData();
     getProductsCount();
     getProducts();
-    console.log(collectionData);
   }, [collectionId]);
 
   const fetchProducts = async (currentPage) => {

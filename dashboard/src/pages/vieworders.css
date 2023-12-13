@@ -1,0 +1,14 @@
+.view-orders .order {
+  display: flex;
+  width: 1000px;
+  flex-wrap: nowrap;
+  gap: 20px;
+  justify-content: space-between;
+  align-items: center;
+}
+.view-orders .order form button {
+  margin-left: 10px;
+}
+.view-orders .order:not(:last-child) {
+  border-bottom: 1px solid black;
+}

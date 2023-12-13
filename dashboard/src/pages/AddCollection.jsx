@@ -1,9 +1,15 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import "./addcollection.css";
 
 export default function AddCollection() {
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [msg, setMsg] = useState("");
 
   const handleFileUpload = (e) => {
     setUploadedFiles([...uploadedFiles, ...e.target.files]);
@@ -19,15 +25,15 @@ export default function AddCollection() {
       formData.append("categoryImage", uploadedFiles[i]);
     }
 
-    try {
-      const response = await fetch("http://localhost:3006/api/v1/category", {
-        method: "POST",
-        body: formData,
-      });
-      const data = await response.json();
-      console.log(data);
-    } catch (error) {
-      console.error(error);
+    let response = await fetch("http://localhost:3006/api/v1/category", {
+      method: "POST",
+      body: formData,
+    });
+    response = await response.json();
+    if (response.status === "Failed") {
+      setMsg(response.message);
+    } else {
+      setMsg("Collection Added");
     }
   };
 
@@ -35,16 +41,30 @@ export default function AddCollection() {
     <div className="add-collection container">
       <form onSubmit={handleSubmit(onSubmit)}>
         <label htmlFor="name">Name:</label>
-        <input id="name" {...register("name")} />
-
+        <input
+          id="name"
+          {...register("name", {
+            required: "This field is required.",
+          })}
+        />
+        {errors.name && <p style={{ color: "red" }}>{errors.name.message}</p>}
         <label htmlFor="description">Description:</label>
-        <textarea id="description" {...register("description")} />
+        <textarea
+          id="description"
+          {...register("description", {
+            required: "This field is required.",
+          })}
+        />
+        {errors.description && (
+          <p style={{ color: "red" }}>{errors.description.message}</p>
+        )}
 
         <label htmlFor="image">Image:</label>
         <input type="file" name="categoryImage" onChange={handleFileUpload} />
 
         <button type="submit">Add Collection</button>
       </form>
+      {msg && <p style={{ color: "red" }}>{msg}</p>}
     </div>
   );
 }

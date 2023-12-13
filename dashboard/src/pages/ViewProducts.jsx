@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import "./viewproduct.css";
 
 export default function ViewProducts() {
   const [products, setProducts] = useState([]);
@@ -29,6 +30,7 @@ export default function ViewProducts() {
     <div className="view-products container">
       <Link to="/addproduct">Add a product</Link>
       <div className="product-list">
+        <h1>Products</h1>
         {products.map((product, index) => (
           <div key={index} className="product">
             <p>#{index + 1}</p>

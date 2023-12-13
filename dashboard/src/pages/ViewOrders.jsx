@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "./vieworders.css";
 
 export default function ViewOrders() {
   const [orders, setOrders] = useState([]);
@@ -60,7 +61,14 @@ export default function ViewOrders() {
             <p>ID: {order.id}</p>
             <p>Created at: {order.createdAt} AED</p>
             <p>
-              Current state: <strong>{order.orderStatus}</strong>
+              Current state:{" "}
+              {order.orderStatus === "delivered" ? (
+                <strong style={{ color: "green" }}>{order.orderStatus}</strong>
+              ) : order.orderStatus === "on the way" ? (
+                <strong style={{ color: "grey" }}>{order.orderStatus}</strong>
+              ) : (
+                <strong style={{ color: "red" }}>{order.orderStatus}</strong>
+              )}
             </p>
             <form onSubmit={(event) => handleSubmit(event, order)}>
               <select

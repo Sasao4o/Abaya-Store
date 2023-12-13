@@ -4,7 +4,6 @@ import { SkeletonTheme } from "react-loading-skeleton";
 import Home from "./pages/Home";
 import Products from "./pages/Products";
 import ViewProduct from "./pages/ViewProduct";
-import Contact from "./pages/Contact";
 import PageNotFound from "./pages/PageNotFound";
 import { ShoppingCartProvider } from "./contexts/ShoppingCartContext";
 import Navbar from "./components/Navbar";
@@ -23,7 +22,6 @@ function App() {
             <Route path="/products" element={<Products />} />
             <Route path="/collections/:collectionId" element={<Collection />} />
             <Route path="/products/:id" element={<ViewProduct />} />
-            <Route path="/contact" element={<Contact />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>

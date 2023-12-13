@@ -5,6 +5,8 @@ import { useParams } from "react-router-dom";
 import { useShoppingCart } from "../contexts/ShoppingCartContext";
 import ShoppingCartMessage from "../components/ShoppingCartMessage";
 import baseUrl from "../constants/baseUrl";
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import { Carousel } from "react-responsive-carousel";
 
 export default function ViewProduct() {
   const { setIsOpen } = useShoppingCart();
@@ -34,9 +36,19 @@ export default function ViewProduct() {
       <div className="view-product">
         <ShoppingCartMessage prodName={productData.name} prodImg={img} />
         <div className="img">
-          <img src={img} alt="" />
-          <p>carrousel here</p>
+          <Carousel showThumbs={false} width={400}>
+            <img src={img} alt="" />
+            <img src={img} alt="" />
+            <img src={img} alt="" />
+            <img src={img} alt="" />
+            <img src={img} alt="" />
+            <img src={img} alt="" />
+            <img src={img} alt="" />
+            <img src={img} alt="" />
+            <img src={img} alt="" />
+          </Carousel>
         </div>
+
         <div className="product-text">
           <h1 className="product-title">
             {productData.name} {productData.id}
