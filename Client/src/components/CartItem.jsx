@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useShoppingCart } from "../contexts/ShoppingCartContext";
 import img from "../assets/images/PB_05195.jpg";
-// import { IoTrashOutline } from "react-icons/io5";
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import baseUrl from "../constants/baseUrl";
 
 export default function CartItem({ id }) {
@@ -33,7 +33,9 @@ export default function CartItem({ id }) {
             <button
               className="remove-button"
               onClick={() => removeFromCart(id)}
-            ></button>
+            >
+              <DeleteOutlinedIcon sx={{ fontSize: 20 }} />
+            </button>
           </div>
         </div>
       </div>
