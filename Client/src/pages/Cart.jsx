@@ -24,14 +24,14 @@ export default function Cart() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  useEffect(() => {
-    const getProduct = async () => {
-      const res = await fetch(`${baseUrl}/api/v1/product`);
-      const data = await res.json();
-      setProducts(data.data);
-    };
-    getProduct();
-  }, []);
+  // useEffect(() => {
+  //   const getProduct = async () => {
+  //     const res = await fetch(`${baseUrl}/api/v1/product`);
+  //     const data = await res.json();
+  //     setProducts(data.data);
+  //   };
+  //   getProduct();
+  // }, []);
   function calculateTotalCost() {
     return cartItems.reduce((total, cartItem) => {
       const item = products.find((i) => i.id === cartItem.id);
