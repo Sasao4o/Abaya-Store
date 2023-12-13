@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
-import img from "../assets/images/product.jpg";
-import "./page-style/viewprods.css";
-import { useParams } from "react-router-dom";
-import { useShoppingCart } from "../contexts/ShoppingCartContext";
-import ShoppingCartMessage from "../components/ShoppingCartMessage";
-import baseUrl from "../constants/baseUrl";
-import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
-import { Carousel } from "react-responsive-carousel";
+// import React, { useState, useEffect } from "react";
+// import img from "../assets/images/product.jpg";
+// import "./page-style/viewprods.css";
+// import { useParams } from "react-router-dom";
+// import { useShoppingCart } from "../contexts/ShoppingCartContext";
+// import ShoppingCartMessage from "../components/ShoppingCartMessage";
+// import baseUrl from "../constants/baseUrl";
+// import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+// import { Carousel } from "react-responsive-carousel";
 
 export default function ViewProduct() {
   // const { setIsOpen } = useShoppingCart();

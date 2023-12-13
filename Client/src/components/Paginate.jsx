@@ -1,6 +1,6 @@
-import React from "react";
-import ReactPaginate from "react-paginate";
-import "./styles/paginate.css";
+// import React from "react";
+// import ReactPaginate from "react-paginate";
+// import "./styles/paginate.css";
 
 export default function Paginate(props) {
   // const scrollToTop = () => {

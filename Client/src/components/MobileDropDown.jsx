@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
-import baseUrl from "../constants/baseUrl";
+// import React, { useState, useEffect } from "react";
+// import { NavLink } from "react-router-dom";
+// import baseUrl from "../constants/baseUrl";
 
 const MobileDropdown = ({ dropdown, onClick, mobileMenuClick }) => {
   // const [menus, setMenus] = useState([]);

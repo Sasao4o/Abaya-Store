@@ -1,5 +1,5 @@
-import React from "react";
-import "./page-style/pagenotfound.css";
+// import React from "react";
+// import "./page-style/pagenotfound.css";
 
 export default function PageNotFound() {
   // return (

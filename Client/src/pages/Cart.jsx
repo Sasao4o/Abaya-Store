@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { useShoppingCart } from "../contexts/ShoppingCartContext";
-import "./page-style/cart.css";
-import { useForm } from "react-hook-form";
-import CartItem from "../components/CartItem";
-import { Link } from "react-router-dom";
-import baseUrl from "../constants/baseUrl";
+// import React, { useState, useEffect } from "react";
+// import { useShoppingCart } from "../contexts/ShoppingCartContext";
+// import "./page-style/cart.css";
+// import { useForm } from "react-hook-form";
+// import CartItem from "../components/CartItem";
+// import { Link } from "react-router-dom";
+// import baseUrl from "../constants/baseUrl";
 
 // Idea about how to store cart items ya mazennnn
 //////////////////////////////////////////////////////////////

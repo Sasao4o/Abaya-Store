@@ -1,7 +1,7 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import img from "../assets/images/PB_05195.jpg";
-import "./styles/product.css";
+// import React from "react";
+// import { Link } from "react-router-dom";
+// import img from "../assets/images/PB_05195.jpg";
+// import "./styles/product.css";
 
 export default function Product(props) {
   // return (

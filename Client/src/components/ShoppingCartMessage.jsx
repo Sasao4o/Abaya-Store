@@ -1,10 +1,10 @@
-import React from "react";
-import { MdOutlineClose } from "react-icons/md";
-import { useShoppingCart } from "../contexts/ShoppingCartContext";
-import "./styles/shoppingcart.css";
-import { MdCheck } from "react-icons/md";
-import { Link } from "react-router-dom";
-import { useEffect } from "react";
+// import React from "react";
+// import { MdOutlineClose } from "react-icons/md";
+// import { useShoppingCart } from "../contexts/ShoppingCartContext";
+// import "./styles/shoppingcart.css";
+// import { MdCheck } from "react-icons/md";
+// import { Link } from "react-router-dom";
+// import { useEffect } from "react";
 
 export default function ShoppingCartMessage({ prodName }) {
   // const { isOpen, setIsOpen, cartQuantity } = useShoppingCart();

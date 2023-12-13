@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
-import "./page-style/products.css";
-import "react-loading-skeleton/dist/skeleton.css";
-import Product from "../components/Product";
-import Paginate from "../components/Paginate";
-import ProductSkeleton from "../components/ProductSkeleton";
-import img from "../assets/images/wallpapertest.jpg";
-import baseUrl from "../constants/baseUrl";
+// import React, { useState, useEffect } from "react";
+// import "./page-style/products.css";
+// import "react-loading-skeleton/dist/skeleton.css";
+// import Product from "../components/Product";
+// import Paginate from "../components/Paginate";
+// import ProductSkeleton from "../components/ProductSkeleton";
+// import img from "../assets/images/wallpapertest.jpg";
+// import baseUrl from "../constants/baseUrl";
 
 export default function Products() {
   // const [products, setProducts] = useState([]);

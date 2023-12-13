@@ -1,15 +1,15 @@
-import "./App.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { SkeletonTheme } from "react-loading-skeleton";
-import Home from "./pages/Home";
-import Products from "./pages/Products";
-import ViewProduct from "./pages/ViewProduct";
-import PageNotFound from "./pages/PageNotFound";
-import { ShoppingCartProvider } from "./contexts/ShoppingCartContext";
-import Navbar from "./components/Navbar";
-import Collection from "./pages/Collection";
-import Cart from "./pages/Cart";
-import Footer from "./components/Footer";
+// import "./App.css";
+// import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+// import { SkeletonTheme } from "react-loading-skeleton";
+// import Home from "./pages/Home";
+// import Products from "./pages/Products";
+// import ViewProduct from "./pages/ViewProduct";
+// import PageNotFound from "./pages/PageNotFound";
+// import { ShoppingCartProvider } from "./contexts/ShoppingCartContext";
+// import Navbar from "./components/Navbar";
+// import Collection from "./pages/Collection";
+// import Cart from "./pages/Cart";
+// import Footer from "./components/Footer";
 
 function App() {
   // return (
