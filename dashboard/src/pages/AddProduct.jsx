@@ -5,6 +5,7 @@ import "./addproduct.css";
 const AddProduct = () => {
   const [categories, setCategories] = useState([]);
   const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [msg, setMsg] = useState("");
 
   const handleFileUpload = (e) => {
     setUploadedFiles([...uploadedFiles, ...e.target.files]);
@@ -29,15 +30,15 @@ const AddProduct = () => {
       formData.append("productImage", uploadedFiles[i]);
     }
 
-    try {
-      const response = await fetch("http://localhost:3006/api/v1/product", {
-        method: "POST",
-        body: formData,
-      });
-      const data = await response.json();
-      console.log(data);
-    } catch (error) {
-      console.error(error);
+    const response = await fetch("http://localhost:3006/api/v1/product", {
+      method: "POST",
+      body: formData,
+    });
+    const res = await response.json();
+    if (res.status === "Failed") {
+      setMsg(res.message);
+    } else {
+      setMsg("Product Added");
     }
   };
 
@@ -85,6 +86,7 @@ const AddProduct = () => {
 
         <button type="submit">Add product</button>
       </form>
+      {msg && <p style={{ color: "red" }}>{msg}</p>}
     </div>
   );
 };
