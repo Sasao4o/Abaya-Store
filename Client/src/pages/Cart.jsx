@@ -20,38 +20,38 @@ import baseUrl from "../constants/baseUrl";
 // will return a total of 1200 ==> 3*100+3*200+3*100
 
 export default function Cart() {
-  // const { cartItemsNumber, cartItems } = useShoppingCart();
-  // const [products, setProducts] = useState([]);
-  // const [shippingCost] = useState(0);
-  // const cities = [
-  //   "Abu Dhabi",
-  //   "Dubai",
-  //   "Sharjah",
-  //   "Ajman",
-  //   "Umm Al-Quwain",
-  //   "Fujairah",
-  //   "Ras Al Khaimah",
-  // ];
-  // const {
-  //   register,
-  //   handleSubmit,
-  //   formState: { errors },
-  // } = useForm();
-  // useEffect(() => {
-  //   const getProduct = async () => {
-  //     const res = await fetch(`${baseUrl}/api/v1/product`);
-  //     const data = await res.json();
-  //     setProducts(data.data);
-  //   };
-  //   getProduct();
-  // }, []);
-  // function calculateTotalCost() {
-  //   return cartItems.reduce((total, cartItem) => {
-  //     const item = products.find((i) => i.id === cartItem.id);
-  //     return total + (item?.price || 0) * cartItem.quantity;
-  //   }, 0);
-  // }
-  // const onSubmit = (data) => console.log(data);
+  const { cartItemsNumber, cartItems } = useShoppingCart();
+  const [products, setProducts] = useState([]);
+  const [shippingCost] = useState(0);
+  const cities = [
+    "Abu Dhabi",
+    "Dubai",
+    "Sharjah",
+    "Ajman",
+    "Umm Al-Quwain",
+    "Fujairah",
+    "Ras Al Khaimah",
+  ];
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  useEffect(() => {
+    const getProduct = async () => {
+      const res = await fetch(`${baseUrl}/api/v1/product`);
+      const data = await res.json();
+      setProducts(data.data);
+    };
+    getProduct();
+  }, []);
+  function calculateTotalCost() {
+    return cartItems.reduce((total, cartItem) => {
+      const item = products.find((i) => i.id === cartItem.id);
+      return total + (item?.price || 0) * cartItem.quantity;
+    }, 0);
+  }
+  const onSubmit = (data) => console.log(data);
   // return (
   //   <div className="cart-view">
   //     {cartItemsNumber === 0 ? (
