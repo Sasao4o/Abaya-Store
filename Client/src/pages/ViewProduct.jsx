@@ -17,15 +17,15 @@ export default function ViewProduct() {
     removeFromCart,
   } = useShoppingCart();
   const quantity = getItemQuantity(productData.id);
-  // //Fetch the product data by id
-  // useEffect(() => {
-  //   const getProduct = async () => {
-  //     const res = await fetch(`${baseUrl}/api/v1/product/${id}`);
-  //     const data = await res.json();
-  //     setProductData(data.data);
-  //   };
-  //   getProduct();
-  // }, [id]);
+  //Fetch the product data by id
+  useEffect(() => {
+    const getProduct = async () => {
+      const res = await fetch(`${baseUrl}/api/v1/product/${id}`);
+      const data = await res.json();
+      setProductData(data.data);
+    };
+    getProduct();
+  }, [id]);
   // return (
   //   <>
   //     <div className="view-product">
