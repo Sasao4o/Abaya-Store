@@ -12,24 +12,24 @@ import Cart from "./pages/Cart";
 import Footer from "./components/Footer";
 
 function App() {
-  // return (
-  //   <ShoppingCartProvider>
-  //     <SkeletonTheme baseColor="#F7F7F7" highlightColor="#eaeaea">
-  //       <Router>
-  //         <Navbar />
-  //         <Routes>
-  //           <Route path="/" element={<Home />} />
-  //           <Route path="/products" element={<Products />} />
-  //           <Route path="/collections/:collectionId" element={<Collection />} />
-  //           <Route path="/products/:id" element={<ViewProduct />} />
-  //           <Route path="/cart" element={<Cart />} />
-  //           <Route path="*" element={<PageNotFound />} />
-  //         </Routes>
-  //         <Footer />
-  //       </Router>
-  //     </SkeletonTheme>
-  //   </ShoppingCartProvider>
-  // );
+  return (
+    <ShoppingCartProvider>
+      <SkeletonTheme baseColor="#F7F7F7" highlightColor="#eaeaea">
+        <Router>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/collections/:collectionId" element={<Collection />} />
+            <Route path="/products/:id" element={<ViewProduct />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="*" element={<PageNotFound />} />
+          </Routes>
+          <Footer />
+        </Router>
+      </SkeletonTheme>
+    </ShoppingCartProvider>
+  );
 }
 
 export default App;
