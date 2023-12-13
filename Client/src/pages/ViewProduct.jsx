@@ -7,7 +7,7 @@ import ShoppingCartMessage from "../components/ShoppingCartMessage";
 import baseUrl from "../constants/baseUrl";
 
 export default function ViewProduct() {
-  // const { setIsOpen } = useShoppingCart();
+  const { setIsOpen } = useShoppingCart();
   // const [productData, setProductData] = useState({});
   // let { id } = useParams();
   // const {
