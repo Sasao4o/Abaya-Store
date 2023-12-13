@@ -1,8 +1,8 @@
-// import React, { useState, useEffect } from "react";
-// import { useShoppingCart } from "../contexts/ShoppingCartContext";
-// import img from "../assets/images/PB_05195.jpg";
-// import { IoTrashOutline } from "react-icons/io5";
-// import baseUrl from "../constants/baseUrl";
+import React, { useState, useEffect } from "react";
+import { useShoppingCart } from "../contexts/ShoppingCartContext";
+import img from "../assets/images/PB_05195.jpg";
+import { IoTrashOutline } from "react-icons/io5";
+import baseUrl from "../constants/baseUrl";
 
 export default function CartItem({ id }) {
   // const [productData, setProductData] = useState({});
