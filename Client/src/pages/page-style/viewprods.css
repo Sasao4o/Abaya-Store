@@ -13,7 +13,7 @@
   gap: 20px;
 }
 .view-product .img img {
-  width: 400px;
+  /* width: 400px; */
   height: 500px;
   object-fit: cover;
   object-position: top;

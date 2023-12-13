@@ -22,7 +22,7 @@ import baseUrl from "../constants/baseUrl";
 export default function Cart() {
   const { cartItemsNumber, cartItems } = useShoppingCart();
   const [products, setProducts] = useState([]);
-  const [shippingCost, setShippingCost] = useState(0);
+  const [shippingCost] = useState(0);
   const cities = [
     "Abu Dhabi",
     "Dubai",

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import "./addproduct.css";
 
 const AddProduct = () => {
   const [categories, setCategories] = useState([]);
@@ -55,32 +56,22 @@ const AddProduct = () => {
     <div className="add-product container">
       <form onSubmit={handleSubmit(onSubmit)}>
         <h1>Add a product</h1>
-        <label>
-          Product Name:
-          <input type="text" {...register("name")} />
-        </label>
-        <label>
-          Product Description:
-          <textarea type="text" {...register("description")} />
-        </label>
-        <label>
-          Product Price:
-          <input type="number" {...register("price")} />
-        </label>
-        <label>
-          Product Material:
-          <input type="text" {...register("material")} />
-        </label>
-        <label>
-          Category:
-          <select {...register("categoryId")}>
-            {categories.map((category, index) => (
-              <option key={index} value={`${category.id}`}>
-                {category.name}
-              </option>
-            ))}
-          </select>
-        </label>
+        <label>Product Name:</label>
+        <input type="text" {...register("name")} />
+        <label>Product Description:</label>
+        <textarea type="text" {...register("description")} />
+        <label>Product Price:</label>
+        <input type="number" {...register("price")} />
+        <label>Product Material:</label>
+        <input type="text" {...register("material")} />
+        <label>Category:</label>
+        <select {...register("categoryId")}>
+          {categories.map((category, index) => (
+            <option key={index} value={`${category.id}`}>
+              {category.name}
+            </option>
+          ))}
+        </select>
         <div>
           <label>Product Images:</label>
           <input

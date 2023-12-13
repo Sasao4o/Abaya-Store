@@ -16,38 +16,32 @@ export default function Collection() {
   const totalNumberPerPage = 8;
   const [productCount, setProductCount] = useState(0);
 
-  const getCollectionData = async () => {
-    const res = await fetch(`${baseUrl}/api/v1/category/${collectionId}`);
-    const data = await res.json();
-    setCollectionData(data.data);
-    console.log(data.data.name);
-    console.log(collectionData);
-  };
-
-  const getProductsCount = async () => {
-    const res = await fetch(
-      `${baseUrl}/api/v1/product/category/${collectionId}/count`
-    );
-    const data = await res.json();
-    setProductCount(data.data.count);
-    console.log(data.data);
-  };
-
-  const getProducts = async () => {
-    const res = await fetch(
-      `${baseUrl}/api/v1/product/category/${collectionId}?page=1&limit=${totalNumberPerPage}`
-    );
-    const data = await res.json();
-    setProducts(data.data);
-    console.log(data.data);
-    setIsLoading(false);
-  };
-
   useEffect(() => {
+    const getCollectionData = async () => {
+      const res = await fetch(`${baseUrl}/api/v1/category/${collectionId}`);
+      const data = await res.json();
+      setCollectionData(data.data);
+    };
+
+    const getProductsCount = async () => {
+      const res = await fetch(
+        `${baseUrl}/api/v1/product/category/${collectionId}/count`
+      );
+      const data = await res.json();
+      setProductCount(data.data.count);
+    };
+
+    const getProducts = async () => {
+      const res = await fetch(
+        `${baseUrl}/api/v1/product/category/${collectionId}?page=1&limit=${totalNumberPerPage}`
+      );
+      const data = await res.json();
+      setProducts(data.data);
+      setIsLoading(false);
+    };
     getCollectionData();
     getProductsCount();
     getProducts();
-    console.log(collectionData);
   }, [collectionId]);
 
   const fetchProducts = async (currentPage) => {

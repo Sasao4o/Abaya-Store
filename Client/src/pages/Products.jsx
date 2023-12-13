@@ -29,7 +29,6 @@ export default function Products() {
       );
       const data = await res.json();
       setProducts(data.data);
-      console.log(data);
       setIsLoading(false);
     };
     getProducts();
@@ -68,7 +67,7 @@ export default function Products() {
         </p>
       </div>
       {isLoading && (
-        <div className="products">
+        <div className="products-skeleton">
           <ProductSkeleton />
         </div>
       )}
