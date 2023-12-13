@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom";
 import "./styles/navbar.css";
 import { menuItemsData } from "../constants/menuItemsData";
 import { MenuItems } from "./MenuItems";
-import { TbShoppingBag } from "react-icons/tb";
-import { MdMenu } from "react-icons/md";
+// import { TbShoppingBag } from "react-icons/tb";
+// import { MdMenu } from "react-icons/md";
 import { useShoppingCart } from "../contexts/ShoppingCartContext";
-import { IoClose } from "react-icons/io5";
+// import { IoClose } from "react-icons/io5";
 import { MobileMenuItems } from "./MobileMenuItems";
 
 export default function Navbar() {
