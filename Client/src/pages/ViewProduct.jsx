@@ -8,15 +8,15 @@ import baseUrl from "../constants/baseUrl";
 
 export default function ViewProduct() {
   const { setIsOpen } = useShoppingCart();
-  // const [productData, setProductData] = useState({});
-  // let { id } = useParams();
-  // const {
-  //   getItemQuantity,
-  //   increaseCartQuantity,
-  //   decreaseCartQuantity,
-  //   removeFromCart,
-  // } = useShoppingCart();
-  // const quantity = getItemQuantity(productData.id);
+  const [productData, setProductData] = useState({});
+  let { id } = useParams();
+  const {
+    getItemQuantity,
+    increaseCartQuantity,
+    decreaseCartQuantity,
+    removeFromCart,
+  } = useShoppingCart();
+  const quantity = getItemQuantity(productData.id);
   // //Fetch the product data by id
   // useEffect(() => {
   //   const getProduct = async () => {
