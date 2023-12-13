@@ -1,10 +1,10 @@
-// import React, { useState, useEffect } from "react";
-// import img from "../assets/images/product.jpg";
-// import "./page-style/viewprods.css";
-// import { useParams } from "react-router-dom";
-// import { useShoppingCart } from "../contexts/ShoppingCartContext";
-// import ShoppingCartMessage from "../components/ShoppingCartMessage";
-// import baseUrl from "../constants/baseUrl";
+import React, { useState, useEffect } from "react";
+import img from "../assets/images/product.jpg";
+import "./page-style/viewprods.css";
+import { useParams } from "react-router-dom";
+import { useShoppingCart } from "../contexts/ShoppingCartContext";
+import ShoppingCartMessage from "../components/ShoppingCartMessage";
+import baseUrl from "../constants/baseUrl";
 
 export default function ViewProduct() {
   // const { setIsOpen } = useShoppingCart();
