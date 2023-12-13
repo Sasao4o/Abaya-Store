@@ -39,14 +39,19 @@ export default function Cart() {
     }, 0);
   }
   const onSubmit = (data) => console.log(data);
-  // return (
-  //   <div className="cart-view">
-  //     {cartItemsNumber === 0 ? (
-  //       <div className="cart-empty">
-  //         <h1>Shopping cart is empty :c</h1>
-  //         <Link to="/products">Go Shopping!</Link>
-  //       </div>
-  //     ) : (
+  return (
+    <div className="cart-view">
+      {cartItemsNumber === 0 ? (
+        <div className="cart-empty">
+          <h1>Shopping cart is empty :c</h1>
+          <Link to="/products">Go Shopping!</Link>
+        </div>
+      ) : (
+        ""
+      )}
+    </div>
+  );
+  //  (
   //       <>
   //         <h1>Cart</h1>
   //         <div className="cart-view-header">
