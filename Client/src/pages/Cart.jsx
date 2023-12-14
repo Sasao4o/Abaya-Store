@@ -136,6 +136,7 @@ export default function Cart() {
               <p className="err">{errors.zipCode?.message}</p>{" "}
               <button type="submit">Checkout</button>
             </form>
+            {msg && <p style={{ color: "red" }}>{msg}</p>}
           </div>
         </>
       )}
