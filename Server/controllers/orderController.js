@@ -34,11 +34,11 @@ exports.createOrder = catchAsync(async (req, res, next) => {
     const productsId = [];
     req.body.productsInfo.forEach(v => {
         let obj = {};
-        obj.productId = v.productId;
+        obj.productId = v.id;
         productsId.push(obj.productId);
         obj.quantity = v.quantity;
-        obj.size = v.size;
-        obj.length = v.length;
+        obj.size = 6;
+        obj.length = 7;
 
         orderedProductsData.push(obj);
     });
@@ -68,6 +68,7 @@ exports.createOrder = catchAsync(async (req, res, next) => {
                          }  
             }
         });
+
         if (!promoPercent) {
             return(next (new AppError("Discount code is not valid", 400, true)));
         }else {
