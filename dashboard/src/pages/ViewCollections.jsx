@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./viewcollection.css";
+import baseUrl from "../constants/baseUrl";
 
 export default function ViewCollections() {
   const [collections, setCollections] = useState([]);
   useEffect(() => {
     const getCollections = async () => {
-      const res = await fetch(
-        `http://localhost:3006/api/v1/category?offset=1&limit=100`
-      );
+      const res = await fetch(`${baseUrl}/api/v1/category?offset=1&limit=100`);
       const data = await res.json();
       setCollections(data.data);
     };

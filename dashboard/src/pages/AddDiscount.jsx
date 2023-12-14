@@ -1,16 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import "./adddiscount.css";
+import baseUrl from "../constants/baseUrl";
 
 export default function AddDiscount() {
+  const [msg, setMsg] = useState("");
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log(data);
+    let request = await fetch(`${baseUrl}/api/v1/discount`, {
+      method: "POST",
+      body: data,
+    });
+    let response = await request.json();
+    if (response.status === "Failed") {
+      setMsg("Failed to add discount");
+    } else {
+      setMsg("Discount added successfuly");
+    }
   };
 
   return (
@@ -20,7 +32,7 @@ export default function AddDiscount() {
         <label>Add Discount:</label>
         <input
           type="text"
-          {...register("discount", {
+          {...register("discountCode", {
             required: "This field is required.",
             pattern: {
               value: /^[A-Z0-9]{6}$/,
@@ -34,7 +46,7 @@ export default function AddDiscount() {
         <label>Expiration Date:</label>
         <input
           type="date"
-          {...register("date", {
+          {...register("expiryDate", {
             required: "This field is required.",
           })}
         />
@@ -44,7 +56,7 @@ export default function AddDiscount() {
           type="number"
           max={100}
           min={0}
-          {...register("percentage", {
+          {...register("discountPercentage", {
             required: "This field is required.",
             max: {
               value: 100,
@@ -61,6 +73,7 @@ export default function AddDiscount() {
         )}
         <button type="submit">Add</button>
       </form>
+      {msg && <p style={{ color: "red" }}>{msg}</p>}
     </div>
   );
 }

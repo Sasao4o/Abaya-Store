@@ -1,11 +1,14 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { UserContext } from "../contexts/UserContext";
 import { useForm } from "react-hook-form";
 import "./signin.css";
 import { useNavigate } from "react-router-dom";
+import baseUrl from "../constants/baseUrl";
 
 export default function SignIn() {
   const { signIn } = useContext(UserContext);
+  const [msg, setMsg] = useState("");
+
   const {
     register,
     handleSubmit,
@@ -14,10 +17,18 @@ export default function SignIn() {
 
   const navigate = useNavigate();
 
-  const onSubmit = (data) => {
-    signIn();
-    console.log(data);
-    navigate("/");
+  const onSubmit = async (data) => {
+    let request = await fetch(`${baseUrl}/api/v1/user`, {
+      method: "POST",
+      body: data,
+    });
+    let response = await request.json();
+    if (response.status === "Failed") {
+      setMsg("Wrong user");
+    } else {
+      signIn();
+      navigate("/");
+    }
   };
 
   return (
@@ -28,7 +39,7 @@ export default function SignIn() {
         <label>Username:</label>
         <input
           type="text"
-          {...register("username", {
+          {...register("email", {
             required: "This field is required",
           })}
         />

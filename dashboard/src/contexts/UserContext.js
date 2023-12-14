@@ -5,7 +5,7 @@ export const UserContext = createContext();
 const userSessionStorage = JSON.parse(
   sessionStorage.getItem("user_data") ||
     JSON.stringify({
-      isAuthenticated: true,
+      isAuthenticated: false,
     })
 );
 

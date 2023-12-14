@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import "./addproduct.css";
+import baseUrl from "../constants/baseUrl";
 
 const AddProduct = () => {
   const [categories, setCategories] = useState([]);
@@ -30,7 +31,7 @@ const AddProduct = () => {
       formData.append("productImage", uploadedFiles[i]);
     }
 
-    const response = await fetch("http://localhost:3006/api/v1/product", {
+    const response = await fetch(`${baseUrl}/api/v1/product`, {
       method: "POST",
       body: formData,
     });
@@ -44,9 +45,7 @@ const AddProduct = () => {
 
   useEffect(() => {
     const getCollections = async () => {
-      const res = await fetch(
-        `http://localhost:3006/api/v1/category?offset=1&limit=100`
-      );
+      const res = await fetch(`${baseUrl}/api/v1/category?offset=1&limit=100`);
       const data = await res.json();
       setCategories(data.data);
     };

@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./viewproduct.css";
+import baseUrl from "../constants/baseUrl";
 
 export default function ViewProducts() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
     const getProducts = async () => {
-      const res = await fetch(`http://localhost:3006/api/v1/product`);
+      const res = await fetch(`${baseUrl}/api/v1/product`);
       const data = await res.json();
       setProducts(data.data);
     };
@@ -15,14 +16,14 @@ export default function ViewProducts() {
   }, []);
 
   async function deleteProduct(id) {
-    let res = await fetch(`http://localhost:3006/api/v1/product/${id}`, {
+    let res = await fetch(`${baseUrl}/api/v1/product/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
     });
     let data = await res.json();
-    res = await fetch(`http://localhost:3006/api/v1/product`);
+    res = await fetch(`${baseUrl}/api/v1/product`);
     data = await res.json();
     setProducts(data.data);
   }

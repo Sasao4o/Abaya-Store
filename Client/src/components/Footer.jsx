@@ -4,11 +4,8 @@ import "./styles/footer.css";
 export default function Footer() {
   return (
     <footer>
-      <h1>Tenzor</h1>
-      <div className="contact">
-        <p>0102233445</p>
-        <p>tenzor@gmail.com</p>
-      </div>
+      <h1>LEVEL</h1>
+      <div className="contact"></div>
     </footer>
   );
 }
