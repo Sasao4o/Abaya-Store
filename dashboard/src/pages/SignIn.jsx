@@ -54,6 +54,7 @@ export default function SignIn() {
         {errors.password && <p className="err">{errors.password.message}</p>}
         <button type="submit">Sign in</button>
       </form>
+      {msg && <p style={{ color: "red" }}>{msg}</p>}
     </div>
   );
 }
