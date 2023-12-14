@@ -3,11 +3,12 @@ import { useShoppingCart } from "../contexts/ShoppingCartContext";
 import "./page-style/cart.css";
 import { useForm } from "react-hook-form";
 import CartItem from "../components/CartItem";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import baseUrl from "../constants/baseUrl";
 
 export default function Cart() {
   const { cartItemsNumber, cartItems } = useShoppingCart();
+  const [msg, setMsg] = useState("");
   const [products, setProducts] = useState([]);
   const [shippingCost] = useState(0);
   const cities = [
@@ -19,6 +20,7 @@ export default function Cart() {
     "Fujairah",
     "Ras Al Khaimah",
   ];
+  const history = useNavigate();
   const {
     register,
     handleSubmit,
@@ -38,7 +40,28 @@ export default function Cart() {
       return total + (item?.price || 0) * cartItem.quantity;
     }, 0);
   }
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = async (data) => {
+    let request = await fetch(`${baseUrl}/api/v1/order`, {
+      method: "POST",
+      body: {
+        addressInfo: {
+          address: data.address,
+          city: data.city,
+          zipCode: data.zipCode,
+          shippingDate: "2023-12-08T10:30:00.000Z",
+          country: "UAE",
+        },
+        productsInfo: cartItems,
+        promoCode: data.discount,
+      },
+    });
+    let response = await request.json();
+    if (response.statusCode === 400) {
+      setMsg(response.message);
+    } else {
+      history(response.checkOutPage);
+    }
+  };
   return (
     <div className="cart-view">
       {cartItemsNumber === 0 ? (
@@ -73,7 +96,7 @@ export default function Cart() {
               <label>
                 Country / Region: <br />
               </label>
-              <input type="text" readOnly value="United Arab Emirates" />
+              <input readOnly value="United Arab Emirates" />
               <label>
                 Address: <br />
               </label>

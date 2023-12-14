@@ -73,7 +73,6 @@ export default function ViewProduct() {
               </button>
             </div>
           )}
-          <button className="buy-button">Buy Now</button>
         </div>
       </div>
     </>
