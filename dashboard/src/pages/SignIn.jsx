@@ -18,12 +18,13 @@ export default function SignIn() {
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
+    console.log(data);
     let request = await fetch(`${baseUrl}/api/v1/user`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: data,
+      body: JSON.stringify(data),
     });
     let response = await request.json();
     if (response.status === "Failed") {
