@@ -37,7 +37,7 @@ app.use(express.static("public"));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors());
-// app.use("/api/v1/user", userRoute);
+app.use("/api/v1/user", userRoute);
 app.use("/api/v1/order", orderRoute);
 app.use("/api/v1/product", productRoute);
 app.use("/api/v1/category", categoryRoute);
