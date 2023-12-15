@@ -18,7 +18,9 @@ exports.createDiscount = catchAsync(async (req, res, next) => {
             status:"success",
             data: discount
         });
-    }  
+    } else {
+        return next (new AppError("There is a discount with same code",400 ,true));
+    }
 
 
 });
