@@ -58,6 +58,8 @@ export default function Collection() {
       name={product.name}
       id={product.id}
       price={product.price}
+      imgPath={product.productImages[0].filePath}
+      imgName={product.productImages[0].fileName}
     />
   ));
   return (

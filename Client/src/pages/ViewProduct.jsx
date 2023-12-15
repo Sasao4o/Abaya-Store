@@ -31,7 +31,10 @@ export default function ViewProduct() {
       <div className="view-product">
         <ShoppingCartMessage prodName={productData.name} prodImg={img} />
         <div className="img">
-          <img src={img} alt="" />
+          <img
+            src={`${baseUrl}/${productData.productImages[0].filePath}/${productData.productImages[0].fileName}`}
+            alt=""
+          />
         </div>
         <div className="product-text">
           <h1 className="product-title">

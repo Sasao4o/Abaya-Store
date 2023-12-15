@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-// import img from "../assets/images/PB_05195.jpg";
 import "./styles/product.css";
 import baseUrl from "../constants/baseUrl";
 
@@ -11,7 +10,7 @@ export default function Product(props) {
         <img
           width={100}
           height={100}
-          src={`${baseUrl}/productImage-PB_05715.jpg`}
+          src={`${baseUrl}/${props.imgPath}/${props.imgName}`}
           alt="pic"
           loading="lazy"
         />
