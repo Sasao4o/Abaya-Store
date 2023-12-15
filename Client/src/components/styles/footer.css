@@ -1,5 +1,5 @@
 footer {
-  background-color: #28282c;
+  background-color: #1f1f22;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -10,7 +10,7 @@ footer .contact {
   font-size: 17px;
 }
 footer h1 {
-  color: #2dc3bb;
+  color: white;
 }
 /* Mobile */
 

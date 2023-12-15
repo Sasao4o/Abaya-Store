@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "./vieworders.css";
+import baseUrl from "../constants/baseUrl";
 
 export default function ViewOrders() {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
     const getOrders = async () => {
-      const request = await fetch("http://localhost:3006/api/v1/order");
+      const request = await fetch(`${baseUrl}/api/v1/order`);
       const response = await request.json();
       setOrders(response.data);
       console.log(response.data);
@@ -23,21 +24,18 @@ export default function ViewOrders() {
       return;
     }
 
-    let request = await fetch(
-      `http://localhost:3006/api/v1/order/${order.id}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          status: order.selectedState,
-        }),
-      }
-    );
+    let request = await fetch(`${baseUrl}/api/v1/order/${order.id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        status: order.selectedState,
+      }),
+    });
     let response = await request.json();
     console.log(response);
-    request = await fetch("http://localhost:3006/api/v1/order");
+    request = await fetch(`${baseUrl}/api/v1/order`);
     response = await request.json();
     setOrders(response.data);
   }

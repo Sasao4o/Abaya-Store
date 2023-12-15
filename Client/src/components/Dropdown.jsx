@@ -12,7 +12,6 @@ const Dropdown = ({ dropdown, onClick, mobileMenuClick }) => {
     };
     getCollections();
   }, []);
-
   return (
     <ul
       className={`dropdown ${

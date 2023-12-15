@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useShoppingCart } from "../contexts/ShoppingCartContext";
 import img from "../assets/images/PB_05195.jpg";
-import { IoTrashOutline } from "react-icons/io5";
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import baseUrl from "../constants/baseUrl";
 
 export default function CartItem({ id }) {
   const [productData, setProductData] = useState({});
-
   const {
     getItemQuantity,
     increaseCartQuantity,
     decreaseCartQuantity,
     removeFromCart,
   } = useShoppingCart();
-
   useEffect(() => {
     const getProduct = async () => {
       const res = await fetch(`${baseUrl}/api/v1/product/${id}`);
@@ -22,7 +20,6 @@ export default function CartItem({ id }) {
     };
     getProduct();
   }, [id]);
-
   return (
     <div className="cart-item">
       <div className="cart-item-data">
@@ -37,7 +34,7 @@ export default function CartItem({ id }) {
               className="remove-button"
               onClick={() => removeFromCart(id)}
             >
-              <IoTrashOutline />
+              <DeleteOutlinedIcon sx={{ fontSize: 20 }} />
             </button>
           </div>
         </div>

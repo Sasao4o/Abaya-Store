@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import "./addproduct.css";
+import baseUrl from "../constants/baseUrl";
 
 const AddProduct = () => {
   const [categories, setCategories] = useState([]);
   const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [msg, setMsg] = useState("");
 
   const handleFileUpload = (e) => {
     setUploadedFiles([...uploadedFiles, ...e.target.files]);
@@ -29,23 +31,21 @@ const AddProduct = () => {
       formData.append("productImage", uploadedFiles[i]);
     }
 
-    try {
-      const response = await fetch("http://localhost:3006/api/v1/product", {
-        method: "POST",
-        body: formData,
-      });
-      const data = await response.json();
-      console.log(data);
-    } catch (error) {
-      console.error(error);
+    const response = await fetch(`${baseUrl}/api/v1/product`, {
+      method: "POST",
+      body: formData,
+    });
+    const res = await response.json();
+    if (res.status === "Failed") {
+      setMsg(res.message);
+    } else {
+      setMsg("Product Added");
     }
   };
 
   useEffect(() => {
     const getCollections = async () => {
-      const res = await fetch(
-        `http://localhost:3006/api/v1/category?offset=1&limit=100`
-      );
+      const res = await fetch(`${baseUrl}/api/v1/category?offset=1&limit=100`);
       const data = await res.json();
       setCategories(data.data);
     };
@@ -85,6 +85,7 @@ const AddProduct = () => {
 
         <button type="submit">Add product</button>
       </form>
+      {msg && <p style={{ color: "red" }}>{msg}</p>}
     </div>
   );
 };

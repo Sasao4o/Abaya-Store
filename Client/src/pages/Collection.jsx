@@ -15,14 +15,12 @@ export default function Collection() {
   const [isLoading, setIsLoading] = useState(true);
   const totalNumberPerPage = 8;
   const [productCount, setProductCount] = useState(0);
-
   useEffect(() => {
     const getCollectionData = async () => {
       const res = await fetch(`${baseUrl}/api/v1/category/${collectionId}`);
       const data = await res.json();
       setCollectionData(data.data);
     };
-
     const getProductsCount = async () => {
       const res = await fetch(
         `${baseUrl}/api/v1/product/category/${collectionId}/count`
@@ -30,7 +28,6 @@ export default function Collection() {
       const data = await res.json();
       setProductCount(data.data.count);
     };
-
     const getProducts = async () => {
       const res = await fetch(
         `${baseUrl}/api/v1/product/category/${collectionId}?page=1&limit=${totalNumberPerPage}`
@@ -43,7 +40,6 @@ export default function Collection() {
     getProductsCount();
     getProducts();
   }, [collectionId]);
-
   const fetchProducts = async (currentPage) => {
     const res = await fetch(
       `${baseUrl}/api/v1/product?page=${currentPage}&limit=${totalNumberPerPage}`
@@ -51,13 +47,11 @@ export default function Collection() {
     const data = await res.json();
     return data;
   };
-
   const handlePageClick = async (data) => {
     let currentPage = data.selected + 1;
     const productsFromServer = await fetchProducts(currentPage);
     setProducts(productsFromServer.data);
   };
-
   const productsArray = products.map((product) => (
     <Product
       key={product.id}
@@ -66,7 +60,6 @@ export default function Collection() {
       price={product.price}
     />
   ));
-
   return (
     <>
       <div className="intro-pic" style={{ backgroundImage: `url(${img})` }}>

@@ -1,6 +1,6 @@
 const express = require("express");
 const AppError = require("./utilis/AppError");
-const globalErrorHandler = require('./controllers/errorController');
+const globalErrorHandler = require("./controllers/errorController");
 
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
@@ -27,7 +27,6 @@ const categoryRoute = require("./routes/categoryRoute");
 const dashboardRoute = require("./routes/dashboardRoute");
 const discountRoute = require("./routes/discountRoute");
 
-
 const orderController = require("./controllers/orderController");
 app.post(
   "/webhook",
@@ -35,7 +34,6 @@ app.post(
   orderController.stripeWebhookController
 );
 app.use(express.static("public"));
-
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors());
@@ -45,10 +43,10 @@ app.use("/api/v1/product", productRoute);
 app.use("/api/v1/category", categoryRoute);
 app.use("/api/v1/dashboard", dashboardRoute);
 app.use("/api/v1/discount", discountRoute);
-app.all('*', (req, res, next) => {
+app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
- 
+
 app.use(globalErrorHandler);
 
 app.listen(3006, () => {

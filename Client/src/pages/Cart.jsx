@@ -3,24 +3,12 @@ import { useShoppingCart } from "../contexts/ShoppingCartContext";
 import "./page-style/cart.css";
 import { useForm } from "react-hook-form";
 import CartItem from "../components/CartItem";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import baseUrl from "../constants/baseUrl";
-
-// Idea about how to store cart items ya mazennnn
-//////////////////////////////////////////////////////////////
-
-//   cart = [{id:1, secondId:"1232", quantity:3, price:100},
-// {id:2, secondId:"5548", quantity:3, price:200},
-// {id:1, secondId:"4618", quantity:3, price:100}];
-
-// console.log(cart.reduce((total, item)=>{
-//     return total + (item.quantity * item.price);
-// }, 0))
-// }
-// will return a total of 1200 ==> 3*100+3*200+3*100
 
 export default function Cart() {
   const { cartItemsNumber, cartItems } = useShoppingCart();
+  const [msg, setMsg] = useState("");
   const [products, setProducts] = useState([]);
   const [shippingCost] = useState(0);
   const cities = [
@@ -32,13 +20,12 @@ export default function Cart() {
     "Fujairah",
     "Ras Al Khaimah",
   ];
-
+  const history = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-
   useEffect(() => {
     const getProduct = async () => {
       const res = await fetch(`${baseUrl}/api/v1/product`);
@@ -47,16 +34,34 @@ export default function Cart() {
     };
     getProduct();
   }, []);
-
   function calculateTotalCost() {
     return cartItems.reduce((total, cartItem) => {
       const item = products.find((i) => i.id === cartItem.id);
       return total + (item?.price || 0) * cartItem.quantity;
     }, 0);
   }
-
-  const onSubmit = (data) => console.log(data);
-
+  const onSubmit = async (data) => {
+    let request = await fetch(`${baseUrl}/api/v1/order`, {
+      method: "POST",
+      body: {
+        addressInfo: {
+          address: data.address,
+          city: data.city,
+          zipCode: data.zipCode,
+          shippingDate: "2023-12-08T10:30:00.000Z",
+          country: "UAE",
+        },
+        productsInfo: cartItems,
+        promoCode: data.discount,
+      },
+    });
+    let response = await request.json();
+    if (response.statusCode === 400) {
+      setMsg(response.message);
+    } else {
+      history(response.checkOutPage);
+    }
+  };
   return (
     <div className="cart-view">
       {cartItemsNumber === 0 ? (
@@ -91,7 +96,7 @@ export default function Cart() {
               <label>
                 Country / Region: <br />
               </label>
-              <input type="text" readOnly value="United Arab Emirates" />
+              <input readOnly value="United Arab Emirates" />
               <label>
                 Address: <br />
               </label>
@@ -131,6 +136,7 @@ export default function Cart() {
               <p className="err">{errors.zipCode?.message}</p>{" "}
               <button type="submit">Checkout</button>
             </form>
+            {msg && <p style={{ color: "red" }}>{msg}</p>}
           </div>
         </>
       )}

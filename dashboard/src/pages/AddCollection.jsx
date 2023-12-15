@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import "./addcollection.css";
+import baseUrl from "../constants/baseUrl";
 
 export default function AddCollection() {
   const {
@@ -25,7 +26,7 @@ export default function AddCollection() {
       formData.append("categoryImage", uploadedFiles[i]);
     }
 
-    let response = await fetch("http://localhost:3006/api/v1/category", {
+    let response = await fetch(`${baseUrl}/api/v1/category`, {
       method: "POST",
       body: formData,
     });

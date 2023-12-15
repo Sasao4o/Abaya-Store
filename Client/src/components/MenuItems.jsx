@@ -5,7 +5,6 @@ import { NavLink } from "react-router-dom";
 export const MenuItems = ({ item, onClick }) => {
   const [dropdown, setDropdown] = useState(false);
   let ref = useRef();
-
   useEffect(() => {
     const handler = (event) => {
       if (dropdown && ref.current && !ref.current.contains(event.target)) {
@@ -19,7 +18,6 @@ export const MenuItems = ({ item, onClick }) => {
       document.removeEventListener("touchstart", handler);
     };
   }, [dropdown]);
-
   return (
     <li className="menu-items" ref={ref}>
       {item.submenu ? (
