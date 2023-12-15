@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.dbee9bc4.css",
-    "main.js": "/static/js/main.88f3f31e.js",
+    "main.css": "/static/css/main.f63d9d79.css",
+    "main.js": "/static/js/main.441b95fc.js",
     "static/media/wallpapertest.jpg": "/static/media/wallpapertest.a4832c879a852dbfe878.jpg",
     "static/media/PB_05195.jpg": "/static/media/PB_05195.edde4aaf9aa851c1fbe0.jpg",
     "static/media/404error.png": "/static/media/404error.05d14d30bcb403680fac.png",
@@ -10,11 +10,11 @@
     "static/media/TypeMates - CeraRoundPro-Light.otf": "/static/media/TypeMates - CeraRoundPro-Light.86099afbea61ed93d310.otf",
     "static/media/product.jpg": "/static/media/product.334b9f8c4cdbffb7ab5c.jpg",
     "index.html": "/index.html",
-    "main.dbee9bc4.css.map": "/static/css/main.dbee9bc4.css.map",
-    "main.88f3f31e.js.map": "/static/js/main.88f3f31e.js.map"
+    "main.f63d9d79.css.map": "/static/css/main.f63d9d79.css.map",
+    "main.441b95fc.js.map": "/static/js/main.441b95fc.js.map"
   },
   "entrypoints": [
-    "static/css/main.dbee9bc4.css",
-    "static/js/main.88f3f31e.js"
+    "static/css/main.f63d9d79.css",
+    "static/js/main.441b95fc.js"
   ]
 }

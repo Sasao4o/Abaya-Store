@@ -34,6 +34,8 @@ app.post(
   express.raw({ type: "application/json" }),
   orderController.stripeWebhookController
 );
+app.use(express.static("public"));
+
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors());
