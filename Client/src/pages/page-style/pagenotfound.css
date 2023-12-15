@@ -3,7 +3,7 @@
   background-size: 600px;
   background-repeat: no-repeat;
   background-position: top;
-  height: calc(100vh - 141.6px - 118px);
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
