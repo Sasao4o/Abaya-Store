@@ -1,5 +1,6 @@
 const multer = require("multer");
 const path = require('path');
+const AppError = require("./AppError");
 function getFileName(file) {
     const parts = file.originalname.split(".");
     const extension = parts[parts.length - 1];
@@ -11,19 +12,20 @@ function getFileName(file) {
 }
  
 function getPath() {
-    return "./public";
+    return "./";
 }
 exports.injectFileNameAndPath = function ()  {
    
     return (req, res, next) => {
         
         if (req.file) {
-            req.file.filePath = getPath();
+             req.file.filePath = getPath();
             req.file.fileName = getFileName(req.file);
         } else if (req.files) {
            req.files.forEach(v => {
             v.fileName = getFileName(v);
             v.filePath = getPath();
+
            });
 
         }
@@ -55,7 +57,9 @@ const storage = multer.diskStorage({
     if(mimetype && extname){
       return cb(null,true);
     } else {
-      cb("Error: File upload only supports the following filetypes - " + filetypes);
+      cb(null, false);
+      return cb(new AppError('Only .png, .jpg and .jpeg format allowed!', 400, false));
+
     }
   }
      

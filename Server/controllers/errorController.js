@@ -12,6 +12,13 @@ const handleDuplicateFieldsDB = err => {
     return new AppError(message, 400);
 };
 
+
+const handleImageSupport = err => {
+    const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
+    const filetypes = /jpeg|jpg|png/;
+    const message = "Error: File upload only supports the following filetypes - " + filetypes;
+    return new AppError(message, 400);
+};
 const handleValidationErrorDB = err => {
     const errors = Object.values(err.errors).map(el => el.message);
 
@@ -90,10 +97,11 @@ module.exports = (err, req, res, next) => {
         if (error.name === 'SequelizeValidationError') error = handleValidationErrorDB(error);
 
         if (error.name === 'SequelizeUniqueConstraintError') error = handleConstraintErrorDB(error);
-             
+ 
+     
         if (error.name === 'JsonWebTokenError') error = handleJWTError();
         if (error.name === 'TokenExpiredError') error = handleJWTExpiredError();
-
+    
         sendErrorProd(error, req, res);
     }
 };
