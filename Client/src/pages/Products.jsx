@@ -5,6 +5,7 @@ import Product from "../components/Product";
 import Paginate from "../components/Paginate";
 import ProductSkeleton from "../components/ProductSkeleton";
 import img from "../assets/images/wallpapertest.jpg";
+import img2 from "../assets/images/PB_05195.jpg";
 import baseUrl from "../constants/baseUrl";
 
 export default function Products() {
@@ -49,8 +50,11 @@ export default function Products() {
       name={product.name}
       id={product.id}
       price={product.price}
-      imgPath={product.productImages[0].filePath}
-      imgName={product.productImages[0].fileName}
+      imgPath={
+        product.productImages[0] !== undefined
+          ? `${baseUrl}/${product.productImages[0].filePath}/${product.productImages[0].fileName}`
+          : img2
+      }
     />
   ));
   return (
