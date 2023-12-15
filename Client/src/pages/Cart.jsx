@@ -40,10 +40,25 @@ export default function Cart() {
       return total + (item?.price || 0) * cartItem.quantity;
     }, 0);
   }
+  
   const onSubmit = async (data) => {
+    let test = {
+      addressInfo: {
+        address: data.address,
+        city: data.city,
+        zipCode: data.zipCode,
+        shippingDate: "2023-12-08T10:30:00.000Z",
+        country: "UAE",
+      },
+      productsInfo: cartItems,
+      promoCode: data.discount,
+    };
     let request = await fetch(`${baseUrl}/api/v1/order`, {
       method: "POST",
-      body: {
+      headers: {
+        'Content-Type': 'application/json',
+    },
+      body: JSON.stringify({
         addressInfo: {
           address: data.address,
           city: data.city,
@@ -53,13 +68,17 @@ export default function Cart() {
         },
         productsInfo: cartItems,
         promoCode: data.discount,
-      },
+      }),
     });
+    console.log(request)
     let response = await request.json();
+ 
     if (response.statusCode === 400) {
       setMsg(response.message);
     } else {
-      history(response.checkOutPage);
+      window.location.replace(response.checkOutPage)
+
+      // history(response.checkOutPage);
     }
   };
   return (
