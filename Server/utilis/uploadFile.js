@@ -11,19 +11,20 @@ function getFileName(file) {
 }
  
 function getPath() {
-    return "./public";
+    return "./";
 }
 exports.injectFileNameAndPath = function ()  {
    
     return (req, res, next) => {
         
         if (req.file) {
-            req.file.filePath = getPath();
+             req.file.filePath = getPath();
             req.file.fileName = getFileName(req.file);
         } else if (req.files) {
            req.files.forEach(v => {
             v.fileName = getFileName(v);
             v.filePath = getPath();
+
            });
 
         }
