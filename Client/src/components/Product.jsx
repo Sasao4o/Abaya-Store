@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./styles/product.css";
-import baseUrl from "../constants/baseUrl";
 
 export default function Product(props) {
   return (
@@ -10,7 +9,7 @@ export default function Product(props) {
         <img
           width={100}
           height={100}
-          src={`${baseUrl}/${props.imgPath}/${props.imgName}`}
+          src={props.imgPath}
           alt="pic"
           loading="lazy"
         />
