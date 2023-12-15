@@ -15,6 +15,9 @@ export default function AddDiscount() {
     console.log(data);
     let request = await fetch(`${baseUrl}/api/v1/discount`, {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: data,
     });
     let response = await request.json();

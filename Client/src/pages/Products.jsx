@@ -49,6 +49,8 @@ export default function Products() {
       name={product.name}
       id={product.id}
       price={product.price}
+      imgPath={product.productImages[0].filePath}
+      imgName={product.productImages[0].fileName}
     />
   ));
   return (

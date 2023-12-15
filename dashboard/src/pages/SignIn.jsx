@@ -20,6 +20,9 @@ export default function SignIn() {
   const onSubmit = async (data) => {
     let request = await fetch(`${baseUrl}/api/v1/user`, {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: data,
     });
     let response = await request.json();

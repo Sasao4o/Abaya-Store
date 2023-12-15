@@ -3,7 +3,7 @@ import { useShoppingCart } from "../contexts/ShoppingCartContext";
 import "./page-style/cart.css";
 import { useForm } from "react-hook-form";
 import CartItem from "../components/CartItem";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import baseUrl from "../constants/baseUrl";
 
 export default function Cart() {
@@ -20,7 +20,6 @@ export default function Cart() {
     "Fujairah",
     "Ras Al Khaimah",
   ];
-  const history = useNavigate();
   const {
     register,
     handleSubmit,
@@ -43,6 +42,9 @@ export default function Cart() {
   const onSubmit = async (data) => {
     let request = await fetch(`${baseUrl}/api/v1/order`, {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: {
         addressInfo: {
           address: data.address,
@@ -59,7 +61,7 @@ export default function Cart() {
     if (response.statusCode === 400) {
       setMsg(response.message);
     } else {
-      history(response.checkOutPage);
+      window.location.replace(response.checkOutPage);
     }
   };
   return (
