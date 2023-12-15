@@ -16,6 +16,8 @@ const endpointSecret = process.env.WEBHOOK_ENDPOINT;
 const { Op } = require('sequelize');
 const AppError = require("../utilis/AppError");
 exports.createOrder = catchAsync(async (req, res, next) => {
+    console.log(req.body) ;
+    console.log("Test");
     const addressInfo = req.body.addressInfo;
     const promoCode = req.body.promoCode;
     const shipmentData = {
