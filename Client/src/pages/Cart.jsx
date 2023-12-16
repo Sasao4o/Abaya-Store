@@ -45,7 +45,7 @@ export default function Cart() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: {
+      body: JSON.stringify({
         addressInfo: {
           address: data.address,
           city: data.city,
@@ -55,7 +55,7 @@ export default function Cart() {
         },
         productsInfo: cartItems,
         promoCode: data.discount,
-      },
+      }),
     });
     let response = await request.json();
     if (response.statusCode === 400) {
