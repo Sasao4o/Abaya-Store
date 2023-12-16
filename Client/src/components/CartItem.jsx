@@ -11,15 +11,19 @@ export default function CartItem({ id }) {
     increaseCartQuantity,
     decreaseCartQuantity,
     removeFromCart,
+    clearCart,
   } = useShoppingCart();
+
   useEffect(() => {
     const getProduct = async () => {
       const res = await fetch(`${baseUrl}/api/v1/product/${id}`);
       const data = await res.json();
-      setProductData(data.data);
+      if (data.status === "failed") {
+        clearCart();
+      } else setProductData(data.data);
     };
     getProduct();
-  }, [id]);
+  }, [id, clearCart]);
   return (
     <div className="cart-item">
       <div className="cart-item-data">
