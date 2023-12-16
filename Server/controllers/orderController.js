@@ -43,16 +43,18 @@ exports.createOrder = catchAsync(async (req, res, next) => {
         orderedProductsData.push(obj);
     });
     
-    const totalPrice = await ProductModel.findOne({
-        attributes: [
-            [sequelize.fn('SUM', sequelize.col('price')), 'totalPrice']
-        ],
-        where: {
-            id: productsId
-        }
-    });
+    let totalPrice = 0;
+    for (const obj of orderedProductsData){
+        const price  = await ProductModel.findOne({
+            where: {
+                id: obj.productId
+            }
+        });
+        totalPrice += price.dataValues.price * obj.quantity;
+    }
+    
     console.log("kkkkkkkk"+totalPrice);
-    if(totalPrice.dataValues.totalPrice <= 0){
+    if(totalPrice <= 0){
         return(next (new AppError("We don't have some of those products here", 400, true)));
     }
     let discountPart  = 0;
@@ -72,7 +74,7 @@ exports.createOrder = catchAsync(async (req, res, next) => {
         if (!promoPercent) {
             return(next (new AppError("Discount code is not valid", 400, true)));
         }else {
-            discountPart += parseInt(parseFloat((promoPercent.dataValues.discountPercentage/100 * totalPrice.dataValues.totalPrice).toFixed(2)));
+            discountPart += parseInt(parseFloat((promoPercent.dataValues.discountPercentage/100 * totalPrice).toFixed(2)));
         }
     } 
     // else {
@@ -83,7 +85,7 @@ exports.createOrder = catchAsync(async (req, res, next) => {
     const createdOrder = await sequelize.transaction(async (t) => {
         const order = await OrderModel.create({
             orderDate: (new Date(Date.now())).toISOString(),
-            totalPrice: totalPrice.dataValues.totalPrice
+            totalPrice: totalPrice
         });
         orderedProductsData.forEach(v => {
             v.orderId = order.id;
@@ -112,7 +114,7 @@ exports.createOrder = catchAsync(async (req, res, next) => {
                 product_data : {
                     name : "Total Order"
                 },
-                unit_amount : parseInt(totalPrice.dataValues.totalPrice - discountPart, 10) * 100
+                unit_amount : parseInt(totalPrice - discountPart, 10) * 100
             },
             quantity : 1
           },

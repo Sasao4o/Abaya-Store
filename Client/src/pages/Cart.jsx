@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import baseUrl from "../constants/baseUrl";
 
 export default function Cart() {
-  const { cartItemsNumber, cartItems } = useShoppingCart();
+  const { cartItemsNumber, cartItems, clearCart } = useShoppingCart();
   const [msg, setMsg] = useState("");
   const [products, setProducts] = useState([]);
   const [shippingCost] = useState(0);
@@ -40,6 +40,7 @@ export default function Cart() {
     }, 0);
   }
   const onSubmit = async (data) => {
+<<<<<<< HEAD
     let request = await fetch(`${baseUrl}/api/v1/order`, {
       method: "POST",
       headers: {
@@ -60,8 +61,37 @@ export default function Cart() {
     let response = await request.json();
     if (response.statusCode === 400) {
       setMsg(response.message);
+=======
+    console.log(data.city);
+    if (data.city !== "null") {
+      let request = await fetch(`${baseUrl}/api/v1/order`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          addressInfo: {
+            address: data.address,
+            city: data.city,
+            zipCode: data.zipCode,
+            shippingDate: "2023-12-08T10:30:00.000Z",
+            country: "UAE",
+          },
+          productsInfo: cartItems,
+          promoCode: data.discount,
+        }),
+      });
+      let response = await request.json();
+      console.log(request.body);
+      if (response.statusCode === 400) {
+        setMsg(response.message);
+      } else {
+        clearCart();
+        window.location.replace(response.checkOutPage);
+      }
+>>>>>>> origin/WaelBranch
     } else {
-      window.location.replace(response.checkOutPage);
+      setMsg("Please select a city.");
     }
   };
   return (
@@ -113,7 +143,7 @@ export default function Cart() {
                 City: <br />
               </label>
               <select {...register("city")}>
-                <option value={null}>--Select a city--</option>
+                <option value={"null"}>--Select a city--</option>
                 {cities.map((city, index) => (
                   <option key={index} value={city}>
                     {city}
@@ -138,6 +168,7 @@ export default function Cart() {
               <p className="err">{errors.zipCode?.message}</p>{" "}
               <button type="submit">Checkout</button>
             </form>
+            <br />
             {msg && <p style={{ color: "red" }}>{msg}</p>}
           </div>
         </>

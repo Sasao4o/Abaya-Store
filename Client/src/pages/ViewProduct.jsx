@@ -32,7 +32,7 @@ export default function ViewProduct() {
   return (
     <>
       <div className="view-product">
-        <ShoppingCartMessage prodName={productData.name} prodImg={img} />
+        <ShoppingCartMessage prodName={productData.name} />
         <div className="img">
           {productData.productImages &&
           productData.productImages.length !== 0 ? (
@@ -55,26 +55,9 @@ export default function ViewProduct() {
             productData.productImages &&
             productData.productImages.length === 0 && <img src={img} alt="" />
           )}
-          {/* <Carousel
-            width={400}
-            showArrows={true}
-            infiniteLoop={true}
-            showThumbs={false}
-            dynamicHeight={false}
-          >
-            <img src={img} a alt="" />
-            <img src={img} a alt="" />
-            <img src={img} a alt="" />
-          </Carousel> */}
-          {/* <img
-            src={`${baseUrl}/${productData.productImages[0].filePath}/${productData.productImages[0].fileName}`}
-            alt=""
-          /> */}
         </div>
         <div className="product-text">
-          <h1 className="product-title">
-            {productData.name} {productData.id}
-          </h1>
+          <h1 className="product-title">{productData.name}</h1>
           <h1 className="seller-name">Material: {productData.material}</h1>
           <h2 className="price">{productData.price} L.E</h2>
           <p className="desc">{productData.description}</p>

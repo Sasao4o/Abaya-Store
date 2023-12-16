@@ -18,7 +18,7 @@ export default function AddDiscount() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: data,
+      body: JSON.stringify(data),
     });
     let response = await request.json();
     if (response.status === "Failed") {

@@ -10,6 +10,8 @@ import Navbar from "./components/Navbar";
 import Collection from "./pages/Collection";
 import Cart from "./pages/Cart";
 import Footer from "./components/Footer";
+import Success from "./pages/Success";
+import Failed from "./pages/Failed";
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
             <Route path="/collections/:collectionId" element={<Collection />} />
             <Route path="/products/:id" element={<ViewProduct />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/success" element={<Success />} />
+            <Route path="/failed" element={<Failed />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
           <Footer />
