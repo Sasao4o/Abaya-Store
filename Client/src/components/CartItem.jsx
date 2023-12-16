@@ -23,7 +23,15 @@ export default function CartItem({ id }) {
   return (
     <div className="cart-item">
       <div className="cart-item-data">
-        <img src={img} alt="" />
+        <img
+          src={
+            productData.productImages &&
+            productData.productImages[0] !== undefined
+              ? `${baseUrl}/${productData.productImages[0].filePath}/${productData.productImages[0].fileName}`
+              : img
+          }
+          alt=""
+        />
         <div className="cart-item-data-context">
           <h2 className="cart-item-name">{productData.name}</h2>
           <p className="cart-item-quantity">&times;{getItemQuantity(id)}</p>
