@@ -3,6 +3,8 @@ import img from "../assets/images/product.jpg";
 import "./page-style/viewprods.css";
 import { useParams } from "react-router-dom";
 import { useShoppingCart } from "../contexts/ShoppingCartContext";
+import { Carousel } from "react-responsive-carousel";
+
 import ShoppingCartMessage from "../components/ShoppingCartMessage";
 import baseUrl from "../constants/baseUrl";
 
@@ -19,6 +21,7 @@ export default function ViewProduct() {
   const quantity = getItemQuantity(productData.id);
   //Fetch the product data by id
   useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
     const getProduct = async () => {
       const res = await fetch(`${baseUrl}/api/v1/product/${id}`);
       const data = await res.json();
@@ -31,10 +34,42 @@ export default function ViewProduct() {
       <div className="view-product">
         <ShoppingCartMessage prodName={productData.name} prodImg={img} />
         <div className="img">
-          <img
+          {productData.productImages &&
+          productData.productImages.length !== 0 ? (
+            <Carousel
+              width={400}
+              showArrows={true}
+              infiniteLoop={true}
+              showThumbs={false}
+              dynamicHeight={false}
+            >
+              {productData.productImages.map((product, index) => (
+                <img
+                  key={index}
+                  src={`${baseUrl}/${product.filePath}/${product.fileName}`}
+                  alt={`img-[${index}]`}
+                />
+              ))}
+            </Carousel>
+          ) : (
+            productData.productImages &&
+            productData.productImages.length === 0 && <img src={img} alt="" />
+          )}
+          {/* <Carousel
+            width={400}
+            showArrows={true}
+            infiniteLoop={true}
+            showThumbs={false}
+            dynamicHeight={false}
+          >
+            <img src={img} a alt="" />
+            <img src={img} a alt="" />
+            <img src={img} a alt="" />
+          </Carousel> */}
+          {/* <img
             src={`${baseUrl}/${productData.productImages[0].filePath}/${productData.productImages[0].fileName}`}
             alt=""
-          />
+          /> */}
         </div>
         <div className="product-text">
           <h1 className="product-title">
