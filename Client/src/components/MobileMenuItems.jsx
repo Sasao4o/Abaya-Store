@@ -5,7 +5,6 @@ import MobileDropdown from "./MobileDropDown";
 export const MobileMenuItems = ({ items, mobileMenuClick }) => {
   const [dropdown, setDropdown] = useState(false);
   let ref = useRef();
-
   useEffect(() => {
     const handler = (event) => {
       if (dropdown && ref.current && !ref.current.contains(event.target)) {
@@ -19,7 +18,6 @@ export const MobileMenuItems = ({ items, mobileMenuClick }) => {
       document.removeEventListener("touchstart", handler);
     };
   }, [dropdown]);
-
   return (
     <li className="menu-items" ref={ref}>
       {items.submenu ? (

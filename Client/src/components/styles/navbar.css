@@ -18,6 +18,27 @@ nav .nav-icons {
   align-items: center;
   gap: 20px;
 }
+nav .nav-icons .nav-search-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+nav .nav-icons .nav-search-bar input {
+  background-color: black;
+  color: white;
+  border-radius: 50px;
+  border: rgba(255, 255, 255, 0.279) 2px solid;
+  font-size: 16px;
+  padding: 3px 10px;
+}
+nav .nav-icons .nav-search-bar input::placeholder {
+  font-family: "cera round";
+  font-weight: normal;
+  font-style: italic;
+}
+nav .nav-icons .nav-search-bar input:focus {
+  background-color: rgb(48, 48, 48);
+}
 nav .active {
   text-decoration: underline;
 }
@@ -45,6 +66,36 @@ nav ul button {
 }
 #mobile-menu-toggle {
   display: none;
+}
+nav .nav-icons-mobile {
+  display: flex;
+  flex-direction: column;
+}
+nav .nav-icons-mobile .top-level-menu-icons {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+nav .nav-icons-mobile .nav-search-bar-mobile {
+  padding-top: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+nav .nav-icons-mobile .nav-search-bar-mobile input {
+  color: white;
+  width: 70%;
+  height: 25px;
+  font-size: 18px;
+  padding-left: 15px;
+  background-color: rgb(71, 71, 71);
+  border: rgba(255, 255, 255, 0.279) 2px solid;
+  border-radius: 50px;
+}
+input:focus {
+  outline: none;
 }
 nav .main-links > li {
   transition: 0.3s;

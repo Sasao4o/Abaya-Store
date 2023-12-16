@@ -2,10 +2,9 @@ import { useRef, useState, useEffect } from "react";
 import Dropdown from "./Dropdown";
 import { NavLink } from "react-router-dom";
 
-export const MenuItems = ({ items, onClick }) => {
+export const MenuItems = ({ item, onClick }) => {
   const [dropdown, setDropdown] = useState(false);
   let ref = useRef();
-
   useEffect(() => {
     const handler = (event) => {
       if (dropdown && ref.current && !ref.current.contains(event.target)) {
@@ -19,10 +18,9 @@ export const MenuItems = ({ items, onClick }) => {
       document.removeEventListener("touchstart", handler);
     };
   }, [dropdown]);
-
   return (
     <li className="menu-items" ref={ref}>
-      {items.submenu ? (
+      {item.submenu ? (
         <>
           <button
             className={`${
@@ -34,17 +32,17 @@ export const MenuItems = ({ items, onClick }) => {
             type="button"
             aria-haspopup="menu"
           >
-            {items.title}{" "}
+            {item.title}{" "}
           </button>
           <Dropdown
             onClick={() => setDropdown(false)}
             dropdown={dropdown}
-            submenus={items.submenu}
+            submenu={item.submenu}
           />
         </>
       ) : (
-        <NavLink onClick={() => onClick} to={items.url}>
-          {items.title}{" "}
+        <NavLink onClick={() => onClick} to={item.url}>
+          {item.title}{" "}
         </NavLink>
       )}
     </li>

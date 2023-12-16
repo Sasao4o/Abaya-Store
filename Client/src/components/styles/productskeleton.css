@@ -1,3 +1,11 @@
+.products-skeleton {
+  padding: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: nowrap;
+}
 .product-skeleton {
   width: 300px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px,

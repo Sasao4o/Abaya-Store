@@ -18,7 +18,7 @@
 .link-paginate {
   display: block;
   padding: 5px 10px;
-  color: #2dc3bb;
+  color: #1f1f22;
   cursor: pointer;
   transition: 0.3s;
 }
@@ -34,7 +34,7 @@
 .prev-link-paginate,
 .break-link-paginate {
   /* padding: 0; */
-  color: #2dc3bb;
+  color: #1f1f22;
   cursor: pointer;
 }
 .prev-paginate {
@@ -44,7 +44,7 @@
   border-radius: 5px 0 0 5px;
 }
 .active-page {
-  background-color: #2dc3bb;
+  background-color: #1f1f22;
 }
 .active-page a {
   color: white;

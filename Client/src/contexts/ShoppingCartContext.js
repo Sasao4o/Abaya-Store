@@ -67,6 +67,10 @@ export function ShoppingCartProvider({ children }) {
     });
   }
 
+  function clearCart() {
+    setCartItems([]);
+  }
+
   return (
     <ShoppingCartContext.Provider
       value={{
@@ -81,6 +85,7 @@ export function ShoppingCartProvider({ children }) {
         isOpen,
         cartItemsNumber,
         setIsOpen,
+        clearCart,
       }}
     >
       {children}

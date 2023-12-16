@@ -1,158 +1,91 @@
-import React, { useState, useCallback } from "react";
-import { useDropzone } from "react-dropzone";
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import "./addproduct.css";
+import baseUrl from "../constants/baseUrl";
 
 const AddProduct = () => {
-  //   const object = [
-  //     { id: 1, variants: [{ size: "X" }, { length: 45 }], quantity: 2 },
-  //     { id: 1, variants: [{ size: "X" }, { length: 45 }], quantity: 2 },
-  //   ];
-  //   console.log(object);
-  const [productName, setProductName] = useState("");
-  const [productDescription, setProductDescription] = useState("");
-  const [productPrice, setProductPrice] = useState("");
-  const [variants, setVariants] = useState([{ name: "", values: [] }]);
-  const [images, setImages] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [msg, setMsg] = useState("");
 
-  const handleAddVariant = () => {
-    setVariants([...variants, { name: "", values: [] }]);
+  const handleFileUpload = (e) => {
+    setUploadedFiles([...uploadedFiles, ...e.target.files]);
   };
 
-  const handleRemoveVariant = (index) => {
-    const newVariants = [...variants];
-    newVariants.splice(index, 1);
-    setVariants(newVariants);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = async (data) => {
+    // Include file uploads in data to be submitted
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("description", data.description);
+    formData.append("price", data.price);
+    formData.append("material", data.material);
+    formData.append("categoryId", data.categoryId);
+
+    for (let i = 0; i < uploadedFiles.length; i++) {
+      formData.append("productImage", uploadedFiles[i]);
+    }
+
+    const response = await fetch(`${baseUrl}/api/v1/product`, {
+      method: "POST",
+      body: formData,
+    });
+    const res = await response.json();
+    if (res.status === "Failed") {
+      setMsg(res.message);
+    } else {
+      setMsg("Product Added");
+    }
   };
 
-  const handleAddValue = (index) => {
-    const newVariants = [...variants];
-    newVariants[index].values.push("");
-    setVariants(newVariants);
-  };
-
-  const handleRemoveValue = (variantIndex, valueIndex) => {
-    const newVariants = [...variants];
-    newVariants[variantIndex].values.splice(valueIndex, 1);
-    setVariants(newVariants);
-  };
-
-  const handleValueChange = (variantIndex, valueIndex, newValue) => {
-    const newVariants = [...variants];
-    newVariants[variantIndex].values[valueIndex] = newValue;
-    setVariants(newVariants);
-  };
-
-  const onDrop = useCallback((acceptedFiles) => {
-    setImages(
-      acceptedFiles.map((file) =>
-        Object.assign(file, {
-          preview: URL.createObjectURL(file),
-        })
-      )
-    );
+  useEffect(() => {
+    const getCollections = async () => {
+      const res = await fetch(`${baseUrl}/api/v1/category?offset=1&limit=100`);
+      const data = await res.json();
+      setCategories(data.data);
+    };
+    getCollections();
   }, []);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    multiple: true,
-    accept: "image/*",
-  });
-
-  const handleSubmit = () => {
-    const data = {
-      productName,
-      productDescription,
-      productPrice,
-      variants,
-      images,
-    };
-    console.log(data);
-  };
-
   return (
-    <div>
-      <label>
-        Product Name:
-        <input
-          value={productName}
-          onChange={(e) => setProductName(e.target.value)}
-        />
-      </label>
-      <label>
-        Product Description:
-        <input
-          value={productDescription}
-          onChange={(e) => setProductDescription(e.target.value)}
-        />
-      </label>
-      <label>
-        Product Price:
-        <input
-          value={productPrice}
-          onChange={(e) => setProductPrice(e.target.value)}
-        />
-      </label>
-      <div>
-        <label>
-          Product Images:
-          <div {...getRootProps()}>
-            <input {...getInputProps()} />
-            {isDragActive ? (
-              <p>Drop the images here...</p>
-            ) : (
-              <p>Drag 'n' drop some files here, or click to select files</p>
-            )}
-          </div>
-        </label>
-        <aside>
-          <h4>Files:</h4>
-          <ul>
-            {images.map((image) => (
-              <li key={image.name}>{image.name}</li>
-            ))}
-          </ul>
-        </aside>
-      </div>
-      {variants.map((variant, index) => (
-        <div key={index}>
-          <label>
-            Variant Name:
-            <input
-              value={variant.name}
-              onChange={(e) =>
-                setVariants(
-                  variants.map((variant, i) =>
-                    i === index
-                      ? { name: e.target.value, values: variant.values }
-                      : variant
-                  )
-                )
-              }
-            />
-          </label>
-          {variant.values.map((value, valueIndex) => (
-            <div key={valueIndex}>
-              <label>
-                Value:
-                <input
-                  value={value}
-                  onChange={(e) =>
-                    handleValueChange(index, valueIndex, e.target.value)
-                  }
-                />
-              </label>
-              <button onClick={() => handleRemoveValue(index, valueIndex)}>
-                Remove Value
-              </button>
-            </div>
+    <div className="add-product container">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <h1>Add a product</h1>
+        <label>Product Name:</label>
+        <input type="text" {...register("name")} />
+        <label>Product Description:</label>
+        <textarea type="text" {...register("description")} />
+        <label>Product Price:</label>
+        <input type="number" {...register("price")} />
+        <label>Product Material:</label>
+        <input type="text" {...register("material")} />
+        <label>Category:</label>
+        <select {...register("categoryId")}>
+          {categories.map((category, index) => (
+            <option key={index} value={`${category.id}`}>
+              {category.name}
+            </option>
           ))}
-          <button onClick={() => handleAddValue(index)}>Add Value</button>
-          <button onClick={() => handleRemoveVariant(index)}>
-            Remove Variant
-          </button>
+        </select>
+        <div>
+          <label>Product Images:</label>
+          <input
+            type="file"
+            name="productImage"
+            onChange={handleFileUpload}
+            multiple
+          />
         </div>
-      ))}
-      <button onClick={() => handleAddVariant()}>Add Variant</button>
-      <button onClick={() => handleSubmit()}>Submit</button>
+        {errors.productImage && <p>{errors.productImage.message}</p>}
+
+        <button type="submit">Add product</button>
+      </form>
+      {msg && <p style={{ color: "red" }}>{msg}</p>}
     </div>
   );
 };

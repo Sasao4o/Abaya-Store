@@ -1,0 +1,15 @@
+.view-products .product-list .product {
+  padding: 20px 0;
+  min-width: 700px;
+  justify-content: space-between;
+  display: flex;
+  border-bottom: 1px solid black;
+}
+.view-products .product-list .product img {
+  width: 100px;
+  height: 100%;
+  object-fit: cover;
+}
+.view-products .product-list .product:not(:last-child) {
+  border-bottom: 1px solid black;
+}

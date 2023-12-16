@@ -1,0 +1,48 @@
+.sidebar {
+  padding: 20px 30px;
+  background-color: black;
+  color: white;
+  position: sticky;
+  max-height: 100vh;
+  top: 0;
+  left: 0;
+}
+.sidebar button {
+  margin-top: 20px;
+  color: white;
+  transition: 0.3s;
+}
+.sidebar button:hover {
+  color: black;
+  background-color: white;
+}
+.sidebar a {
+  color: white;
+  text-decoration: none;
+}
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+.sidebar ul li {
+  margin-bottom: 10px;
+}
+.sidebar ul a {
+  font-weight: bold;
+  display: block;
+  text-decoration: none;
+  color: white;
+  padding: 10px 60px 10px 10px;
+  font-size: 18px;
+  border-radius: 18px;
+  background-color: black;
+  transition: 0.3s;
+}
+.sidebar ul a:hover {
+  color: black;
+  background-color: white;
+}
+.active {
+  color: black;
+  background-color: white;
+}

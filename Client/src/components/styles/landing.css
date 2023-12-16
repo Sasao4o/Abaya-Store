@@ -1,9 +1,8 @@
 .landing {
   position: relative;
   height: calc(100vh - 70.4px);
-  background-image: url("../../assets/images/wallpapertest.jpg");
   background-size: cover;
-  background-position: center top;
+  background-position: center bottom;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -20,7 +19,7 @@
   line-height: 1;
   padding-bottom: 200px;
   color: white;
-  padding-left: 200px;
+  padding-left: 20%;
 }
 .landing .content p {
   font-size: 45px;
@@ -36,7 +35,7 @@
   .landing {
     display: flex;
     justify-content: center;
-    background-position: right;
+    background-position: center;
     align-items: center;
     height: 80vh;
   }

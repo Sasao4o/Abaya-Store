@@ -1,25 +1,76 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useShoppingCart } from "../contexts/ShoppingCartContext";
 import "./page-style/cart.css";
+import { useForm } from "react-hook-form";
 import CartItem from "../components/CartItem";
 import { Link } from "react-router-dom";
-
-// Idea about how to store cart items ya mazennnn
-//////////////////////////////////////////////////////////////
-
-//   cart = [{id:1, secondId:"1232", quantity:3, price:100},
-// {id:2, secondId:"5548", quantity:3, price:200},
-// {id:1, secondId:"4618", quantity:3, price:100}];
-
-// console.log(cart.reduce((total, item)=>{
-//     return total + (item.quantity * item.price);
-// }, 0))
-// }
-// will return a total of 1200 ==> 3*100+3*200+3*100
+import baseUrl from "../constants/baseUrl";
 
 export default function Cart() {
-  const { cartItemsNumber, cartItems } = useShoppingCart();
-
+  const { cartItemsNumber, cartItems, clearCart } = useShoppingCart();
+  const [msg, setMsg] = useState("");
+  const [products, setProducts] = useState([]);
+  const [shippingCost] = useState(0);
+  const cities = [
+    "Abu Dhabi",
+    "Dubai",
+    "Sharjah",
+    "Ajman",
+    "Umm Al-Quwain",
+    "Fujairah",
+    "Ras Al Khaimah",
+  ];
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  useEffect(() => {
+    const getProduct = async () => {
+      const res = await fetch(`${baseUrl}/api/v1/product`);
+      const data = await res.json();
+      setProducts(data.data);
+    };
+    getProduct();
+  }, []);
+  function calculateTotalCost() {
+    return cartItems.reduce((total, cartItem) => {
+      const item = products.find((i) => i.id === cartItem.id);
+      return total + (item?.price || 0) * cartItem.quantity;
+    }, 0);
+  }
+  const onSubmit = async (data) => {
+    console.log(data.city);
+    if (data.city !== "null") {
+      let request = await fetch(`${baseUrl}/api/v1/order`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          addressInfo: {
+            address: data.address,
+            city: data.city,
+            zipCode: data.zipCode,
+            shippingDate: "2023-12-08T10:30:00.000Z",
+            country: "UAE",
+          },
+          productsInfo: cartItems,
+          promoCode: data.discount,
+        }),
+      });
+      let response = await request.json();
+      console.log(request.body);
+      if (response.statusCode === 400) {
+        setMsg(response.message);
+      } else {
+        clearCart();
+        window.location.replace(response.checkOutPage);
+      }
+    } else {
+      setMsg("Please select a city.");
+    }
+  };
   return (
     <div className="cart-view">
       {cartItemsNumber === 0 ? (
@@ -41,11 +92,61 @@ export default function Cart() {
             <CartItem id={item.id} key={index} />
           ))}
           <hr />
+          <div className="total-price">
+            <p className="total-cart-price">Total price</p>
+            <strong>
+              {calculateTotalCost() + shippingCost || calculateTotalCost()} AED
+            </strong>
+          </div>
           <br />
           <br />
           <div className="cart-checkout">
-            <p className="total-cart-price">TOTAL price</p>
-            <Link to="">Checkout</Link>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <label>
+                Country / Region: <br />
+              </label>
+              <input readOnly value="United Arab Emirates" />
+              <label>
+                Address: <br />
+              </label>
+              <input
+                type="text"
+                {...register("address", {
+                  required: "Address is required.",
+                })}
+              />
+              <p className="err">{errors.address?.message}</p>
+              <label>
+                City: <br />
+              </label>
+              <select {...register("city")}>
+                <option value={"null"}>--Select a city--</option>
+                {cities.map((city, index) => (
+                  <option key={index} value={city}>
+                    {city}
+                  </option>
+                ))}
+              </select>
+              <small>Shipping is free in Abu Dhabi.</small>
+              <p className="err">{errors.city?.message}</p>{" "}
+              <label>
+                ZIP code: <br />
+              </label>
+              <input
+                type="text"
+                {...register("zipCode", {
+                  required: "ZIP code is required.",
+                })}
+              />
+              <label>
+                Discount / Promo code: <br />
+              </label>
+              <input type="text" {...register("discount")} />
+              <p className="err">{errors.zipCode?.message}</p>{" "}
+              <button type="submit">Checkout</button>
+            </form>
+            <br />
+            {msg && <p style={{ color: "red" }}>{msg}</p>}
           </div>
         </>
       )}
