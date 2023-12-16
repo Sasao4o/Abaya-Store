@@ -441,14 +441,23 @@ exports.stripeWebhookController = catchAsync(async (request, response, next) => 
         break;
     }
     case "charge.succeeded":{
+        response.status(202).json({
+            status:"success"
+        });
         console.log("Charge on Stripe Succeeded");
         break;
     }
     case "payment_intent.succeeded":{
+        response.status(202).json({
+            status:"success"
+        });
         console.log("payment intent on Stripe Succeeded");
         break;
     }
     case "payment_intent.created":{
+        response.status(202).json({
+            status:"success"
+        });
         console.log("payment intent on Stripe created");
         break;
     }
