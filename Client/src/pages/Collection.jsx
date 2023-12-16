@@ -7,6 +7,7 @@ import ProductSkeleton from "../components/ProductSkeleton";
 import img from "../assets/images/wallpapertest.jpg";
 import { useParams } from "react-router-dom";
 import baseUrl from "../constants/baseUrl";
+import img2 from "../assets/images/PB_05195.jpg";
 
 export default function Collection() {
   const { collectionId } = useParams();
@@ -58,8 +59,11 @@ export default function Collection() {
       name={product.name}
       id={product.id}
       price={product.price}
-      imgPath={product.productImages[0].filePath}
-      imgName={product.productImages[0].fileName}
+      imgPath={
+        product.productImages[0] !== undefined
+          ? `${baseUrl}/${product.productImages[0].filePath}/${product.productImages[0].fileName}`
+          : img2
+      }
     />
   ));
   return (
