@@ -98,14 +98,14 @@ exports.createOrder = catchAsync(async (req, res, next) => {
     });
 
     const orderId = createdOrder.dataValues.id.toString();
-    const cancel_url_base = "http://localhost:3006/api/v1/order/delete/" + orderId;
+    const cancel_url_base = "http://16.171.42.226:3000/failed";
     const currentTimestampSeconds = Math.floor(Date.now() / 1000);
     // Calculate the timestamp for 30 minutes from now in seconds
     const thirtyMinutesLaterSeconds = currentTimestampSeconds + 30 * 60;
     console.log(thirtyMinutesLaterSeconds);
 
     const session = await stripe.checkout.sessions.create({
-        success_url: 'https://www.google.com',
+        success_url: 'http://16.171.42.226:3000/success',
         cancel_url: cancel_url_base, 
         line_items: [
           {
@@ -441,15 +441,24 @@ exports.stripeWebhookController = catchAsync(async (request, response, next) => 
         break;
     }
     case "charge.succeeded":{
+	response.status(202).json({
+            status:"success"
+        });
         console.log("Charge on Stripe Succeeded");
         break;
     }
     case "payment_intent.succeeded":{
-        console.log("payment intent on Stripe Succeeded");
+        response.status(202).json({
+            status:"success"
+        });
+	console.log("payment intent on Stripe Succeeded");
         break;
     }
     case "payment_intent.created":{
-        console.log("payment intent on Stripe created");
+        response.status(202).json({
+            status:"success"
+        });
+	console.log("payment intent on Stripe created");
         break;
     }
       default:

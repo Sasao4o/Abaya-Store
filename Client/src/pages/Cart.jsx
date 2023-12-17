@@ -40,28 +40,6 @@ export default function Cart() {
     }, 0);
   }
   const onSubmit = async (data) => {
-<<<<<<< HEAD
-    let request = await fetch(`${baseUrl}/api/v1/order`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        addressInfo: {
-          address: data.address,
-          city: data.city,
-          zipCode: data.zipCode,
-          shippingDate: "2023-12-08T10:30:00.000Z",
-          country: "UAE",
-        },
-        productsInfo: cartItems,
-        promoCode: data.discount,
-      }),
-    });
-    let response = await request.json();
-    if (response.statusCode === 400) {
-      setMsg(response.message);
-=======
     console.log(data.city);
     if (data.city !== "null") {
       let request = await fetch(`${baseUrl}/api/v1/order`, {
@@ -89,7 +67,6 @@ export default function Cart() {
         clearCart();
         window.location.replace(response.checkOutPage);
       }
->>>>>>> origin/WaelBranch
     } else {
       setMsg("Please select a city.");
     }
@@ -176,3 +153,4 @@ export default function Cart() {
     </div>
   );
 }
+
