@@ -15,9 +15,9 @@ function getPath() {
     return "./";
 }
 exports.injectFileNameAndPath = function ()  {
-   
+ 
     return (req, res, next) => {
-        
+ 
         if (req.file) {
              req.file.filePath = getPath();
             req.file.fileName = getFileName(req.file);
