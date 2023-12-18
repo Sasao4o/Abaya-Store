@@ -2,3 +2,5 @@ Client/node_modules/
 Server/node_modules/
 dashboard/node_modules/
 Server/swnw-db.sqlite3
+Client/build
+dashboard/build

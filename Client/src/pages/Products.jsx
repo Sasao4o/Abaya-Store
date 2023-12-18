@@ -51,7 +51,7 @@ export default function Products() {
       id={product.id}
       price={product.price}
       imgPath={
-        product.productImages[0] !== undefined
+        product.productImages[0] != undefined
           ? `${baseUrl}/${product.productImages[0].filePath}/${product.productImages[0].fileName}`
           : img2
       }

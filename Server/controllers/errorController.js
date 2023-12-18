@@ -66,12 +66,14 @@ const sendErrorProd = (err, req, res) => {
  
         // A) Operational, trusted error: send message to client
         if (err.isOperational) {
-            return res.status(err.statusCode).json({
+             
+               res.status(err.statusCode).json({
                 status: err.status,
                 message: err.message,
                 statusCode: err.statusCode
             });
-        }
+          
+        } else {
         // B) Programming or other unknown error: don't leak error details
         // 1) Log error
         console.error('ERROR 💥', err);
@@ -81,8 +83,9 @@ const sendErrorProd = (err, req, res) => {
             message: 'Something went very wrong!'
         });
     }
+    }
 
-
+   
 };
 
 module.exports = (err, req, res, next) => {
