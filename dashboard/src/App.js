@@ -20,7 +20,7 @@ function App() {
   const { userData } = useContext(UserContext);
   return (
     <div className="App">
-      <Router>
+      <Router basename="/dashboard">
         <Sidebar />
         <Routes>
           <Route
