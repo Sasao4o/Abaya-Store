@@ -31,9 +31,9 @@ export default function AddDiscount() {
     if (response.status === "Failed") {
       setMsg("Failed to add discount");
     } else {
-      reset();
       setMsg("Discount added successfuly");
     }
+    reset();
   };
 
   return (

@@ -10,11 +10,11 @@ export default function AddCollection() {
     formState: { errors },
     reset,
   } = useForm();
-  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [uploadedFile, setUploadedFile] = useState(null); // Changed state to hold a single file
   const [msg, setMsg] = useState("");
-  console.log(uploadedFiles);
+
   const handleFileUpload = (e) => {
-    setUploadedFiles([...uploadedFiles, ...e.target.files]);
+    setUploadedFile(e.target.files[0]); // Store the first selected file only
   };
 
   useEffect(() => {
@@ -24,14 +24,13 @@ export default function AddCollection() {
   }, [msg]);
 
   const onSubmit = async (data) => {
-    console.log(data);
-    // Include file uploads in data to be submitted
+    // Include file upload in data to be submitted
     const formData = new FormData();
     formData.append("name", data.name);
     formData.append("description", data.description);
 
-    for (let i = 0; i < uploadedFiles.length; i++) {
-      formData.append("categoryImage", uploadedFiles[i]);
+    if (uploadedFile) {
+      formData.append("categoryImage", uploadedFile);
     }
 
     let response = await fetch(`${baseUrl}/api/v1/category`, {
@@ -44,7 +43,7 @@ export default function AddCollection() {
     } else {
       setMsg("Collection Added");
       reset();
-      setUploadedFiles([]);
+      setUploadedFile(null);
     }
   };
 
