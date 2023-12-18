@@ -64,9 +64,6 @@ app.use(compression());
 
 app.use(xss());
 
-app.use(bodyParser.json({limit: '10kb' }));
-app.use(cookieParser());
-
 const userRoute = require("./routes/userRoute");
 const orderRoute = require("./routes/orderRoute");
 const productRoute = require("./routes/productRoute");
@@ -95,7 +92,8 @@ app.post(
  
  
  
- 
+app.use(bodyParser.json({limit: '10kb' }));
+app.use(cookieParser());
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/order", orderRoute);
 app.use("/api/v1/product", productRoute);

@@ -85,7 +85,7 @@ exports.createOrder = catchAsync(async (req, res, next) => {
         const order = await OrderModel.create({
             orderDate: (new Date(Date.now())).toISOString(),
             totalPrice: totalPrice,
-            discount:discountPart
+            discount:   discountPart
      
         }, {transaction:t});
         orderedProductsData.forEach(v => {
@@ -98,17 +98,16 @@ exports.createOrder = catchAsync(async (req, res, next) => {
         await Promise.all([orderedProducts, shipment]);
         return order;
     });
-
     const orderId = createdOrder.dataValues.id.toString();
     console.log(req.get("host"));
-    const cancel_url_base = "http://16.171.42.226:3000/failed";
+    const cancel_url_base = "http://"+req.hostname.toString()+":3006/failed";
     const currentTimestampSeconds = Math.floor(Date.now() / 1000);
     // Calculate the timestamp for 30 minutes from now in seconds
     const thirtyMinutesLaterSeconds = currentTimestampSeconds + 30 * 60;
     console.log(thirtyMinutesLaterSeconds);
 
     const session = await stripe.checkout.sessions.create({
-        success_url: 'http://16.171.42.226:3000/success',
+        success_url: "http://"+req.hostname.toString()+":3006/success",
         cancel_url: cancel_url_base, 
         line_items: [
           {
@@ -294,6 +293,7 @@ exports.changeOrderStatusById = catchAsync(async (req, res, next) => {
 
 exports.stripeWebhookController = catchAsync(async (request, response, next) => {
     const sig = request.headers["stripe-signature"];
+    console.log(sig);
     let event;
     try {
         event = stripe.webhooks.constructEvent(
@@ -302,6 +302,7 @@ exports.stripeWebhookController = catchAsync(async (request, response, next) => 
             endpointSecret
         );
     } catch (err) {
+        console.log("I am here");
         response.status(400).send(`Webhook Error: ${err.message}`);
         return;
     }
