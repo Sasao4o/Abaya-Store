@@ -1,4 +1,5 @@
 const express = require("express");
+const morgan = require("morgan");
 const AppError = require("./utilis/AppError");
 const globalErrorHandler = require("./controllers/errorController");
 const path = require('path');
@@ -46,6 +47,7 @@ app.post(
 
 app.use(express.static("public"));
 app.use(bodyParser.json());
+app.use(morgan('tiny'));
 app.use(cookieParser());
 app.use(cors());
 app.use("/api/v1/user", userRoute);
