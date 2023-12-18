@@ -12,13 +12,21 @@ const AddProduct = () => {
     setUploadedFiles([...uploadedFiles, ...e.target.files]);
   };
 
+  useEffect(() => {
+    setTimeout(() => {
+      setMsg("");
+    }, 2000);
+  }, [msg]);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
 
   const onSubmit = async (data) => {
+    console.log(data);
     // Include file uploads in data to be submitted
     const formData = new FormData();
     formData.append("name", data.name);
@@ -30,16 +38,22 @@ const AddProduct = () => {
     for (let i = 0; i < uploadedFiles.length; i++) {
       formData.append("productImage", uploadedFiles[i]);
     }
-
-    const response = await fetch(`${baseUrl}/api/v1/product`, {
-      method: "POST",
-      body: formData,
-    });
-    const res = await response.json();
-    if (res.status === "Failed") {
-      setMsg(res.message);
+    if (data.categoryId !== "null") {
+      const response = await fetch(`${baseUrl}/api/v1/product`, {
+        method: "POST",
+        body: formData,
+      });
+      const res = await response.json();
+      console.log(res);
+      if (res.status === "Failed") {
+        setMsg(res.message);
+      } else {
+        setMsg("Product Added");
+        reset();
+        setUploadedFiles([]);
+      }
     } else {
-      setMsg("Product Added");
+      setMsg("Please enter a valid Category");
     }
   };
 
@@ -54,8 +68,9 @@ const AddProduct = () => {
 
   return (
     <div className="add-product container">
+      <h1>Add a product</h1>
+      {msg && <p style={{ color: "red" }}>{msg}</p>}
       <form onSubmit={handleSubmit(onSubmit)}>
-        <h1>Add a product</h1>
         <label>Product Name:</label>
         <input type="text" {...register("name")} />
         <label>Product Description:</label>
@@ -66,6 +81,7 @@ const AddProduct = () => {
         <input type="text" {...register("material")} />
         <label>Category:</label>
         <select {...register("categoryId")}>
+          <option value="null">--Please select a Collection--</option>
           {categories.map((category, index) => (
             <option key={index} value={`${category.id}`}>
               {category.name}
@@ -85,7 +101,6 @@ const AddProduct = () => {
 
         <button type="submit">Add product</button>
       </form>
-      {msg && <p style={{ color: "red" }}>{msg}</p>}
     </div>
   );
 };

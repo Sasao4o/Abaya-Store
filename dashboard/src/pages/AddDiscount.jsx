@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import "./adddiscount.css";
 import baseUrl from "../constants/baseUrl";
@@ -9,7 +9,14 @@ export default function AddDiscount() {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
+
+  useEffect(() => {
+    setTimeout(() => {
+      setMsg("");
+    }, 2000);
+  }, [msg]);
 
   const onSubmit = async (data) => {
     console.log(data);
@@ -24,6 +31,7 @@ export default function AddDiscount() {
     if (response.status === "Failed") {
       setMsg("Failed to add discount");
     } else {
+      reset();
       setMsg("Discount added successfuly");
     }
   };
@@ -31,6 +39,7 @@ export default function AddDiscount() {
   return (
     <div className="add-discount container">
       <h1>Adding a discount</h1>
+      {msg && <p style={{ color: "red" }}>{msg}</p>}
       <form onSubmit={handleSubmit(onSubmit)}>
         <label>Add Discount:</label>
         <input
@@ -76,7 +85,6 @@ export default function AddDiscount() {
         )}
         <button type="submit">Add</button>
       </form>
-      {msg && <p style={{ color: "red" }}>{msg}</p>}
     </div>
   );
 }
