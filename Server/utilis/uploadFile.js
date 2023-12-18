@@ -47,7 +47,7 @@ exports.injectFileNameAndPath = function ()  {
 }
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      const destPath = getPath(req);
+      const destPath = req.uploadPath;
       console.log(destPath);
       if (!fs.existsSync(destPath)) {
       fs.mkdirSync(destPath, {recursive:true});
