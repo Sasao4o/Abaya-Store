@@ -8,10 +8,38 @@ import { Carousel } from "react-responsive-carousel";
 import ShoppingCartMessage from "../components/ShoppingCartMessage";
 import baseUrl from "../constants/baseUrl";
 
+const sizeVariants = ["s", "m", "l", "xl", "2xl", "3xl"];
+const lengthVariants = [
+  "49",
+  "50",
+  "51",
+  "52",
+  "53",
+  "54",
+  "55",
+  "56",
+  "57",
+  "58",
+  "59",
+  "60",
+  "61",
+  "62",
+];
+
 export default function ViewProduct() {
+  const [size, setSize] = useState("xs");
+  const [length, setLength] = useState("49");
   const { setIsOpen } = useShoppingCart();
   const [productData, setProductData] = useState({});
   let { id } = useParams();
+
+  const onSizeChange = (e) => {
+    setSize(e.target.value);
+  };
+  const onLengthChange = (e) => {
+    setLength(e.target.value);
+  };
+
   const {
     getItemQuantity,
     increaseCartQuantity,
@@ -29,6 +57,8 @@ export default function ViewProduct() {
     };
     getProduct();
   }, [id]);
+  console.log(size);
+  console.log(length);
   return (
     <>
       <div className="view-product">
@@ -53,7 +83,9 @@ export default function ViewProduct() {
             </Carousel>
           ) : (
             productData.productImages &&
-            productData.productImages.length === 0 && <img src={img} alt="" />
+            productData.productImages.length === 0 && (
+              <img src={img} alt="mazen" />
+            )
           )}
         </div>
         <div className="product-text">
@@ -61,6 +93,59 @@ export default function ViewProduct() {
           <h1 className="seller-name">Material: {productData.material}</h1>
           <h2 className="price">{productData.price} L.E</h2>
           <p className="desc">{productData.description}</p>
+          <form>
+            <div className="size-variants">
+              <p>Sizes:</p>
+              <label>
+                XS
+                <input
+                  type="radio"
+                  name="size"
+                  value="xs"
+                  checked={size === "xs"}
+                  onChange={onSizeChange}
+                />
+              </label>
+              {sizeVariants.map((variant, index) => (
+                <label key={index}>
+                  {variant.toUpperCase()}
+                  <input
+                    type="radio"
+                    name="size"
+                    value={variant}
+                    onChange={onSizeChange}
+                  />
+                </label>
+              ))}
+            </div>
+            <div className="size-variants">
+              <p>Length:</p>
+              <label>
+                49
+                <input
+                  type="radio"
+                  name="length"
+                  value="49"
+                  checked={length === "49"}
+                  onChange={onSizeChange}
+                />
+              </label>
+              {lengthVariants.map((variant, index) => (
+                <label key={index}>
+                  {variant.toUpperCase()}
+                  <input
+                    type="radio"
+                    name="length"
+                    value={variant}
+                    onChange={onLengthChange}
+                  />
+                </label>
+              ))}
+            </div>
+          </form>
+          <div className="length-variants">
+            <p>Lengths:</p>
+          </div>
           {quantity === 0 ? (
             <button
               className="buy-button"
