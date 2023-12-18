@@ -12,8 +12,6 @@ const AddProduct = () => {
     setUploadedFiles([...uploadedFiles, ...e.target.files]);
   };
 
- 
-
   const {
     register,
     handleSubmit,
@@ -68,13 +66,33 @@ const AddProduct = () => {
       {msg && <p style={{ color: "red" }}>{msg}</p>}
       <form onSubmit={handleSubmit(onSubmit)}>
         <label>Product Name:</label>
-        <input type="text" {...register("name")} />
+        <input
+          type="text"
+          {...register("name", {
+            required: "Please enter a name.",
+          })}
+        />
         <label>Product Description:</label>
-        <textarea type="text" {...register("description")} />
+        <textarea
+          type="text"
+          {...register("description", {
+            required: "Please enter a description.",
+          })}
+        />
         <label>Product Price:</label>
-        <input type="number" {...register("price")} />
+        <input
+          type="number"
+          {...register("price", {
+            required: "Please enter a price",
+          })}
+        />
         <label>Product Material:</label>
-        <input type="text" {...register("material")} />
+        <input
+          type="text"
+          {...register("material", {
+            required: "Please enter a material",
+          })}
+        />
         <label>Category:</label>
         <select {...register("categoryId")}>
           <option value="null">--Please select a Collection--</option>
@@ -94,6 +112,10 @@ const AddProduct = () => {
           />
         </div>
         {errors.productImage && <p>{errors.productImage.message}</p>}
+        {errors.name && <p>{errors.name.message}</p>}
+        {errors.description && <p>{errors.description.message}</p>}
+        {errors.price && <p>{errors.price.message}</p>}
+        {errors.material && <p>{errors.material.message}</p>}
 
         <button type="submit">Add product</button>
       </form>
