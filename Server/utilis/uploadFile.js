@@ -15,7 +15,8 @@ function getFileName(file) {
 }
  
 function getPath(req) {
-    return req.uploadPath;
+ 
+    return req.uploadPath.replace("/public", "");
 }
 exports.setUploadPath = (uploadPath) => {
   return (req, res, next) => {
@@ -60,7 +61,7 @@ const storage = multer.diskStorage({
         cb(null, getFileName(file));
     }
   })
-  function checkFileType(file, cb){
+  function checkFileType(req, file, cb){
     
     // Allowed ext
     const filetypes = /jpeg|jpg|png/;
@@ -70,17 +71,24 @@ const storage = multer.diskStorage({
     const mimetype = filetypes.test(file.mimetype);
   
     if(mimetype && extname){
-      return cb(null,true);
+      req.isUploaded = true;
+       cb(null,true);
     } else {
+      req.isUploaded = false;   
       cb(null, false);
-      return cb(new AppError('Only .png, .jpg and .jpeg format allowed!', 400, false));
 
     }
   }
      
-  const uploadOnDisk = multer({ storage: storage,    fileFilter: (req, file, cb) => {checkFileType(file, cb) } });
-  const uploadOnMemory = multer({ storage: multer.memoryStorage(),    fileFilter: (req, file, cb) => {checkFileType(file, cb) } });
+  const uploadOnDisk = multer({ storage: storage,    fileFilter: checkFileType });
+  const uploadOnMemory = multer({ storage: multer.memoryStorage(),    fileFilter: checkFileType});
 
   exports.uploadOnDisk = uploadOnDisk;
  exports.uploadOnMemory = uploadOnMemory;
+ exports.checkUploadingStatus = (req,res,next) => {
+    if (!req.isUploaded) {
+      return next(new AppError('Only .png, .jpg and .jpeg format allowed!',400,true));
+    }
+    next();
+ }
  exports.getFileName = getFileName;
