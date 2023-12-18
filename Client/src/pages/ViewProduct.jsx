@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import img from "../assets/images/product.jpg";
 import "./page-style/viewprods.css";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useShoppingCart } from "../contexts/ShoppingCartContext";
 import { Carousel } from "react-responsive-carousel";
 
@@ -32,6 +32,7 @@ export default function ViewProduct() {
   const { setIsOpen } = useShoppingCart();
   const [productData, setProductData] = useState({});
   let { id } = useParams();
+  const history = useNavigate();
 
   const onSizeChange = (e) => {
     setSize(e.target.value);
@@ -53,10 +54,13 @@ export default function ViewProduct() {
     const getProduct = async () => {
       const res = await fetch(`${baseUrl}/api/v1/product/${id}`);
       const data = await res.json();
+      if (data.status.toLowerCase() === "Failed") {
+        history("pagenotfound");
+      }
       setProductData(data.data);
     };
     getProduct();
-  }, [id]);
+  }, [id, history]);
   console.log(size);
   console.log(length);
   return (
