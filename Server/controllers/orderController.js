@@ -18,11 +18,12 @@ const AppError = require("../utilis/AppError");
 exports.createOrder = catchAsync(async (req, res, next) => {
     const addressInfo = req.body.addressInfo;
     const promoCode = req.body.promoCode;
+    const size = req.body.size;
+    const length = req.body.length;
     const shipmentData = {
 
         address: addressInfo.address,
         city: addressInfo.city,
-        shippingDate: addressInfo.shippingDate,
         zipCode: addressInfo.zipCode,
         country: addressInfo.country
     };
@@ -37,8 +38,8 @@ exports.createOrder = catchAsync(async (req, res, next) => {
         obj.productId = v.id;
         productsId.push(obj.productId);
         obj.quantity = v.quantity;
-        obj.size = 6;
-        obj.length = 7;
+        obj.size = v.size;
+        obj.length = v.length;
 
         orderedProductsData.push(obj);
     });
@@ -53,16 +54,13 @@ exports.createOrder = catchAsync(async (req, res, next) => {
         totalPrice += price.dataValues.price * obj.quantity;
     }
     
-    console.log("kkkkkkkk"+totalPrice);
+ 
     if(totalPrice <= 0){
         return(next (new AppError("We don't have some of those products here", 400, true)));
     }
     let discountPart  = 0;
-    if (promoCode !== ""){
+    if (promoCode && promoCode !== ""){
         const promoPercent = await DiscountModel.findOne({
-            // attributes:[
-            //     discountPercentage
-            // ],
             where: {
                 discountCode : promoCode,
                 expiryDate:{
@@ -70,11 +68,11 @@ exports.createOrder = catchAsync(async (req, res, next) => {
                          }  
             }
         });
-
+        
         if (!promoPercent) {
             return(next (new AppError("Discount code is not valid", 400, true)));
         }else {
-            discountPart += parseInt(parseFloat((promoPercent.dataValues.discountPercentage/100 * totalPrice).toFixed(2)));
+            discountPart  = parseInt(parseFloat((promoPercent.dataValues.discountPercentage/100 * totalPrice).toFixed(2)));
         }
     } 
     // else {
@@ -85,27 +83,31 @@ exports.createOrder = catchAsync(async (req, res, next) => {
     const createdOrder = await sequelize.transaction(async (t) => {
         const order = await OrderModel.create({
             orderDate: (new Date(Date.now())).toISOString(),
-            totalPrice: totalPrice
+            totalPrice: totalPrice,
+            discount:discountPart
+     
         });
         orderedProductsData.forEach(v => {
+      
             v.orderId = order.id;
         });
         shipmentData.orderId = order.id;
-        const orderedProducts = OrderProductModel.bulkCreate(orderedProductsData);
+        const orderedProducts = OrderProductModel.bulkCreate(orderedProductsData, {validate: true});
         const shipment = ShipmentModel.create(shipmentData);
         await Promise.all([orderedProducts, shipment]);
         return order;
     });
 
     const orderId = createdOrder.dataValues.id.toString();
-    const cancel_url_base = "http://localhost:3006/api/v1/order/delete/" + orderId;
+    console.log(req.get("host"));
+    const cancel_url_base = "http://16.171.42.226:3000/failed";
     const currentTimestampSeconds = Math.floor(Date.now() / 1000);
     // Calculate the timestamp for 30 minutes from now in seconds
     const thirtyMinutesLaterSeconds = currentTimestampSeconds + 30 * 60;
     console.log(thirtyMinutesLaterSeconds);
 
     const session = await stripe.checkout.sessions.create({
-        success_url: 'https://www.google.com',
+        success_url: 'http://16.171.42.226:3000/success',
         cancel_url: cancel_url_base, 
         line_items: [
           {
@@ -137,7 +139,6 @@ exports.createOrder = catchAsync(async (req, res, next) => {
             res.status(202).json({
                     data:{
                     orderId : orderId
-                    ,id : session.id
                     },
                     status:"success",
                     checkOutPage : session.url
@@ -441,7 +442,11 @@ exports.stripeWebhookController = catchAsync(async (request, response, next) => 
         break;
     }
     case "charge.succeeded":{
+<<<<<<< HEAD
         response.status(202).json({
+=======
+	response.status(202).json({
+>>>>>>> origin/MostafaBranch
             status:"success"
         });
         console.log("Charge on Stripe Succeeded");
@@ -451,14 +456,22 @@ exports.stripeWebhookController = catchAsync(async (request, response, next) => 
         response.status(202).json({
             status:"success"
         });
+<<<<<<< HEAD
         console.log("payment intent on Stripe Succeeded");
+=======
+	console.log("payment intent on Stripe Succeeded");
+>>>>>>> origin/MostafaBranch
         break;
     }
     case "payment_intent.created":{
         response.status(202).json({
             status:"success"
         });
+<<<<<<< HEAD
         console.log("payment intent on Stripe created");
+=======
+	console.log("payment intent on Stripe created");
+>>>>>>> origin/MostafaBranch
         break;
     }
       default:

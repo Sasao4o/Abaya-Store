@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import "./addcollection.css";
 import baseUrl from "../constants/baseUrl";
@@ -8,15 +8,23 @@ export default function AddCollection() {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [msg, setMsg] = useState("");
-
+  console.log(uploadedFiles);
   const handleFileUpload = (e) => {
     setUploadedFiles([...uploadedFiles, ...e.target.files]);
   };
 
+  useEffect(() => {
+    setTimeout(() => {
+      setMsg("");
+    }, 2000);
+  }, [msg]);
+
   const onSubmit = async (data) => {
+    console.log(data);
     // Include file uploads in data to be submitted
     const formData = new FormData();
     formData.append("name", data.name);
@@ -35,11 +43,15 @@ export default function AddCollection() {
       setMsg(response.message);
     } else {
       setMsg("Collection Added");
+      reset();
+      setUploadedFiles([]);
     }
   };
 
   return (
     <div className="add-collection container">
+      <h1>Add a Collection</h1>
+      {msg && <p style={{ color: "red" }}>{msg}</p>}
       <form onSubmit={handleSubmit(onSubmit)}>
         <label htmlFor="name">Name:</label>
         <input
@@ -65,7 +77,6 @@ export default function AddCollection() {
 
         <button type="submit">Add Collection</button>
       </form>
-      {msg && <p style={{ color: "red" }}>{msg}</p>}
     </div>
   );
 }

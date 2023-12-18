@@ -1,29 +1,41 @@
 const multer = require("multer");
 const path = require('path');
+const AppError = require("./AppError");
+const fs = require("fs");
 function getFileName(file) {
-    const parts = file.originalname.split(".");
+    let parts = file.originalname.split(".");
     const extension = parts[parts.length - 1];
-    let fileName = file.fieldname + '-' + parts[0];
+    parts.pop();
+    parts = parts.join(".");
+    let fileName = parts;
     if (extension === 'png' || extension === 'jpeg' || extension === 'jpg') {
         fileName += '.' + extension;
     }
     return fileName;
 }
  
-function getPath() {
-    return "./public";
+function getPath(req) {
+    return req.uploadPath;
 }
+exports.setUploadPath = (uploadPath) => {
+  return (req, res, next) => {
+      req.uploadPath = uploadPath;
+      next();
+  }
+};
+
 exports.injectFileNameAndPath = function ()  {
-   
+ 
     return (req, res, next) => {
-        
+ 
         if (req.file) {
-            req.file.filePath = getPath();
+             req.file.filePath = getPath(req);
             req.file.fileName = getFileName(req.file);
         } else if (req.files) {
            req.files.forEach(v => {
             v.fileName = getFileName(v);
-            v.filePath = getPath();
+            v.filePath = getPath(req);
+
            });
 
         }
@@ -34,7 +46,12 @@ exports.injectFileNameAndPath = function ()  {
 }
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, getPath());
+      const destPath = getPath(req);
+      console.log(destPath);
+      if (!fs.existsSync(destPath)) {
+      fs.mkdirSync(destPath, {recursive:true});
+      }
+      cb(null, destPath);
      
     },
     filename: function (req, file, cb) {
@@ -55,7 +72,9 @@ const storage = multer.diskStorage({
     if(mimetype && extname){
       return cb(null,true);
     } else {
-      cb("Error: File upload only supports the following filetypes - " + filetypes);
+      cb(null, false);
+      return cb(new AppError('Only .png, .jpg and .jpeg format allowed!', 400, false));
+
     }
   }
      

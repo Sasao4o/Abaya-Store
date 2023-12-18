@@ -17,6 +17,9 @@ exports.createProduct = catchAsync(async (req, res, next) => {
     if (!req.files.length) {
         return next(new AppError("You Must enter at least one image !", 400, true));
     }
+    if (!req.uploadPath) {
+        return next(new AppError("You Must enter at least one image !", 400, true));
+    }
     const productData = {
         name: req.body.name,
         price: req.body.price,
@@ -25,7 +28,7 @@ exports.createProduct = catchAsync(async (req, res, next) => {
         categoryId: req.body.categoryId,
         material: req.body.material
     };
-
+ 
     const result = await sequelize.transaction(async (t) => {
 
         const product = await ProductModel.create(productData, {
@@ -37,9 +40,12 @@ exports.createProduct = catchAsync(async (req, res, next) => {
             const filePath = v.filePath;
             imagesResult.push({
                 fileName,
-                filePath
+                filePath:filePath
             });
-            const imageToDisk = util.promisify(fs.writeFile)(`${filePath}/${fileName}`, v.buffer);
+         const x = `../${req.uploadPath}/${fileName}`;
+         console.log(x);
+            
+            const imageToDisk = util.promisify(fs.writeFile)(`${req.uploadPath}/${fileName}`, v.buffer);
             const productImage = ProductImageModel.create({
                 productId: product.id,
                 fileName,
@@ -79,7 +85,7 @@ exports.addProductImage = catchAsync(async (req, res, next) => {
                 fileName,
                 filePath
             });
-            const contents = util.promisify(fs.writeFile)(`${filePath}/${fileName}`, v.buffer);
+            const contents = util.promisify(fs.writeFile)(req.uploadPath, v.buffer);
             const productImage = ProductImageModel.create({
                 productId: req.body.productId,
                 fileName,
