@@ -442,11 +442,7 @@ exports.stripeWebhookController = catchAsync(async (request, response, next) => 
         break;
     }
     case "charge.succeeded":{
-<<<<<<< HEAD
-        response.status(202).json({
-=======
 	response.status(202).json({
->>>>>>> origin/MostafaBranch
             status:"success"
         });
         console.log("Charge on Stripe Succeeded");
@@ -456,22 +452,14 @@ exports.stripeWebhookController = catchAsync(async (request, response, next) => 
         response.status(202).json({
             status:"success"
         });
-<<<<<<< HEAD
-        console.log("payment intent on Stripe Succeeded");
-=======
 	console.log("payment intent on Stripe Succeeded");
->>>>>>> origin/MostafaBranch
         break;
     }
     case "payment_intent.created":{
         response.status(202).json({
             status:"success"
         });
-<<<<<<< HEAD
-        console.log("payment intent on Stripe created");
-=======
 	console.log("payment intent on Stripe created");
->>>>>>> origin/MostafaBranch
         break;
     }
       default:
