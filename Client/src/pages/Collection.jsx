@@ -4,7 +4,6 @@ import "react-loading-skeleton/dist/skeleton.css";
 import Product from "../components/Product";
 import Paginate from "../components/Paginate";
 import ProductSkeleton from "../components/ProductSkeleton";
-import img from "../assets/images/wallpapertest.jpg";
 import { useParams } from "react-router-dom";
 import baseUrl from "../constants/baseUrl";
 import img2 from "../assets/images/PB_05195.jpg";
@@ -68,7 +67,12 @@ export default function Collection() {
   ));
   return (
     <>
-      <div className="intro-pic" style={{ backgroundImage: `url(${img})` }}>
+      <div
+        className="intro-pic"
+        style={{
+          backgroundImage: `url(${baseUrl}/${collectionData.filePath}/${collectionData.fileName})`,
+        }}
+      >
         <h1>{collectionData.name}</h1>
         <p>{collectionData.description}</p>
       </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import "./adddiscount.css";
 import baseUrl from "../constants/baseUrl";
@@ -11,8 +11,6 @@ export default function AddDiscount() {
     formState: { errors },
     reset,
   } = useForm();
-
- 
 
   const onSubmit = async (data) => {
     console.log(data);
