@@ -51,6 +51,7 @@ exports.createOrder = catchAsync(async (req, res, next) => {
                 id: obj.productId
             }
         });
+        if (!price) return next(new AppError("This Product is not found", 400));
         totalPrice += price.dataValues.price * obj.quantity;
     }
     
