@@ -84,6 +84,10 @@ const AddProduct = () => {
           type="number"
           {...register("price", {
             required: "Please enter a price",
+            min: {
+              value: 0,
+              message: "The number must be positive.",
+            },
           })}
         />
         <label>Product Material:</label>
