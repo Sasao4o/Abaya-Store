@@ -4,6 +4,15 @@ const globalErrorHandler = require("./controllers/errorController");
 const path = require('path');
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const helmet = require("helmet");
+const xss = require("xss-clean");
+const hpp = require('hpp');
+const compression = require('compression');
+
+ 
+
+const rateLimit = require('express-rate-limit');
+
 const dotenv = require("dotenv").config({ path: "./config.env" });
 var cors = require("cors");
 process.on("uncaughtException", (err) => {
@@ -23,6 +32,40 @@ process.on('unhandledRejection', err => {
 
  
 const app = express();
+
+app.use(cors());
+app.options('*', cors());
+app.use("/dashboard",  express.static("../dashboard/build"));
+app.use(express.static(path.join(__dirname, '../Client/build')));
+app.use(express.static("public"));
+app.use(helmet());
+
+const limiter = rateLimit({
+  max: 100,
+  windowMs: 60 * 60 * 1000,
+  message: 'Too many requests from this IP, please try again in an hour!'
+});
+app.use('/api', limiter);
+
+app.use(
+  hpp({
+    whitelist: [
+      'duration',
+      'ratingsQuantity',
+      'ratingsAverage',
+      'maxGroupSize',
+      'difficulty',
+      'price'
+    ]
+  })
+);
+app.use(compression());
+
+app.use(xss());
+
+app.use(bodyParser.json({limit: '10kb' }));
+app.use(cookieParser());
+
 const userRoute = require("./routes/userRoute");
 const orderRoute = require("./routes/orderRoute");
 const productRoute = require("./routes/productRoute");
@@ -39,18 +82,19 @@ app.post(
 );
 
   // app.use(express.static("../Client/build"));
-  app.use("/dashboard",  express.static("../dashboard/build"));
+   
 
-  app.use(express.static(path.join(__dirname, '../Client/build')));
+ 
 
 // Serve the Dashboard build under the /dashboard route
  
 // app.use('/dashboard', express.static(path.join(__dirname, '../dashboard/build')));
 
-app.use(express.static("public"));
-app.use(bodyParser.json());
-app.use(cookieParser());
-app.use(cors());
+ 
+ 
+ 
+ 
+ 
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/order", orderRoute);
 app.use("/api/v1/product", productRoute);

@@ -80,14 +80,14 @@ const storage = multer.diskStorage({
     }
   }
      
-  const uploadOnDisk = multer({ storage: storage,    fileFilter: checkFileType });
-  const uploadOnMemory = multer({ storage: multer.memoryStorage(),    fileFilter: checkFileType});
+  const uploadOnDisk = multer({ storage: storage,    fileFilter: checkFileType, limits: { fileSize: 10485760 } });
+  const uploadOnMemory = multer({ storage: multer.memoryStorage(),    fileFilter: checkFileType, limits: { fileSize: 10485760 }});
 
   exports.uploadOnDisk = uploadOnDisk;
  exports.uploadOnMemory = uploadOnMemory;
  exports.checkUploadingStatus = (req,res,next) => {
     if (!req.isUploaded) {
-      return next(new AppError('Only .png, .jpg and .jpeg format allowed!',400,true));
+      return next(new AppError('Please enter a correct image',400,true));
     }
     next();
  }

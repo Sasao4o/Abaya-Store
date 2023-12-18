@@ -68,7 +68,7 @@ export default function Collection() {
   ));
   return (
     <>
-      <div className="intro-pic" style={{ backgroundImage: `url(${img})` }}>
+      <div className="intro-pic" style={{ backgroundImage: `url(${baseUrl}/${collectionData.filePath}/${collectionData.fileName})` }}>
         <h1>{collectionData.name}</h1>
         <p>{collectionData.description}</p>
       </div>
