@@ -18,6 +18,7 @@ export default function CartItem({ id, size, length, price }) {
     const getProduct = async () => {
       const res = await fetch(`${baseUrl}/api/v1/product/${id}`);
       const data = await res.json();
+      console.log(data);
       if (data.status.toLowerCase() === "failed") {
         clearCart();
       } else setProductData(data.data);
@@ -30,7 +31,7 @@ export default function CartItem({ id, size, length, price }) {
         <img
           src={
             productData.productImages &&
-            productData.productImages[0] !== undefined
+            productData.productImages[0] != undefined
               ? `${baseUrl}/${productData.productImages[0].filePath}/${productData.productImages[0].fileName}`
               : img
           }
