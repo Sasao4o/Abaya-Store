@@ -57,9 +57,9 @@ app.use("/api/v1/discount", discountRoute);
  
 
 app.use(globalErrorHandler);
-console.log("Printing ... " + path.join(__dirname, '../Client/build/index.html'));
+ 
 app.use("/dashboard", (req, res, next) => {
-  console.log("ABYOO")
+ 
   res.sendFile(path.join(__dirname, '../dashboard/build/index.html'));
 });
 app.use((req, res, next) => {
