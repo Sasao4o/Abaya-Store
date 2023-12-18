@@ -42,8 +42,7 @@ exports.createProduct = catchAsync(async (req, res, next) => {
                 fileName,
                 filePath:filePath
             });
-         const x = `../${req.uploadPath}/${fileName}`;
-         console.log(x);
+ 
             
             const imageToDisk = util.promisify(fs.writeFile)(`${req.uploadPath}/${fileName}`, v.buffer);
             const productImage = ProductImageModel.create({
@@ -246,15 +245,13 @@ exports.deleteProductById = catchAsync(async (req, res, next) => {
         await ProductImageModel.destroy({
             where: {
                 productId
-            }
-        }, {
+            },
             transaction: t
         })
         numberOfProductsDeleted = await ProductModel.destroy({
             where: {
                 id: productId
-            }
-        }, {
+            },
             transaction: t
         });
     });
