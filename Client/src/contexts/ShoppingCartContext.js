@@ -84,7 +84,8 @@ export function ShoppingCartProvider({ children }) {
   function removeFromCart(id, size, length) {
     setCartItems((currItems) => {
       return currItems.filter(
-        (item) => item.id !== id && item.size !== size && item.length !== length
+        (item) =>
+          !(item.id === id && item.size === size && item.length === length)
       );
     });
   }
