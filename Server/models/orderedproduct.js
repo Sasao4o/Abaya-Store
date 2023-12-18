@@ -26,15 +26,27 @@ module.exports = (sequelize, DataTypes) => {
     },
     quantity: {
       type: DataTypes.INTEGER,
-      allowNull : false
+      allowNull : false,
+      validate:{
+        min:1
+      }
     } ,
     length: {
       type: DataTypes.INTEGER,
-      allowNull:false
+      allowNull:false,
+      validate:{
+        isNumeric:true,
+        min:49,
+        max:62
+   
+      }
     },
     size:{
       type:DataTypes.STRING(4),
-      allowNull:false
+      allowNull:false,
+      validate:{
+        isIn: [["xs", "s", "m", "l", "xl", "2xl", "3xl"]]
+        }
     }
 
   }, {

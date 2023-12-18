@@ -21,11 +21,19 @@ module.exports = (sequelize, DataTypes) => {
     },
     discountPercentage: {
       type : DataTypes.INTEGER,
-      allowNull : false
+      allowNull : false,
+      validate:{
+        min:0,
+        max:99
+      }
     },
     expiryDate: {
       type: DataTypes.DATE,
-      allowNull : false
+      allowNull : false,
+      validate:{
+        isAfter:(new Date()).toString(),
+        isDate:true
+      }
     }
   }, {
     sequelize,

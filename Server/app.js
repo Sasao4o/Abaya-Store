@@ -8,6 +8,7 @@ const dotenv = require("dotenv").config({ path: "./config.env" });
 var cors = require("cors");
 process.on("uncaughtException", (err) => {
   console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
+   
   console.log(err.name, err.message);
   process.exit(1);
 
@@ -33,6 +34,9 @@ app.post(
   express.raw({ type: "application/json" }),
   orderController.stripeWebhookController
 );
+
+app.use(express.static("../build"));
+
 app.use(express.static("public"));
 app.use(bodyParser.json());
 app.use(cookieParser());

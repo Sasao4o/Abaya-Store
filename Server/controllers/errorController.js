@@ -4,6 +4,10 @@ const handleCastErrorDB = err => {
     const message = `Invalid ${err.path}: ${err.value}.`;
     return new AppError(message, 400);
 };
+const handleFileNotFound = err => {
+    const message = `File Not Found ! Please try again later...`;
+    return new AppError(message, 400);
+};
 
 const handleDuplicateFieldsDB = err => {
     const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
@@ -94,13 +98,13 @@ module.exports = (err, req, res, next) => {
         };
         
         error.message = err.message;
-        console.log(error);
+        console.log(err);
         if (error.name === 'CastError') error = handleCastErrorDB(error);
         if (error.code === 11000) error = handleDuplicateFieldsDB(error);
-        if (error.name === 'SequelizeValidationError') error = handleValidationErrorDB(error);
+        if (error.name === 'SequelizeValidationError' || error.name === 'AggregateError') error = handleValidationErrorDB(error);
 
         if (error.name === 'SequelizeUniqueConstraintError') error = handleConstraintErrorDB(error);
- 
+        if (error.errno === -4058) error = handleFileNotFound(error);
      
         if (error.name === 'JsonWebTokenError') error = handleJWTError();
         if (error.name === 'TokenExpiredError') error = handleJWTExpiredError();

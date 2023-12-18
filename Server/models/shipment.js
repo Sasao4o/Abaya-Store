@@ -27,17 +27,32 @@ module.exports = (sequelize, DataTypes) => {
     city: {
     type: DataTypes.STRING,
     allowNull: false,
+    validate:{
+      
+      isIn: [[
+        "Abu Dhabi",
+        "Dubai",
+        "Sharjah",
+        "Ajman",
+        "Umm Al-Quwain",
+        "Fujairah",
+        "Ras Al Khaimah",
+      ]]
+      }
     }, 
     country: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate:{
+        isIn:[['UAE']]
+      }
     },
     zipCode: {
       type: DataTypes.STRING
     },
     shippingDate:{
       type: DataTypes.DATE,
-      allowNull:true
+      defaultValue:new Date((Date.now() + 2 * 24 * 60 * 60 * 1000))
     }
   }, {
     sequelize,
