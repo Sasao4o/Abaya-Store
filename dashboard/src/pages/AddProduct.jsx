@@ -45,12 +45,12 @@ const AddProduct = () => {
         setMsg(res.message);
       } else {
         setMsg("Product Added");
-        reset();
-        setUploadedFiles([]);
       }
     } else {
       setMsg("Please enter a valid Category");
     }
+    reset();
+    setUploadedFiles([]);
   };
 
   useEffect(() => {

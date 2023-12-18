@@ -25,17 +25,33 @@ export function ShoppingCartProvider({ children }) {
     0
   );
 
-  function getItemQuantity(id) {
-    return cartItems.find((item) => item.id === id)?.quantity || 0;
+  function getItemQuantity(id, size, length) {
+    return (
+      cartItems.find(
+        (item) =>
+          (item.id === id) & (item.size === size) && item.length === length
+      )?.quantity || 0
+    );
   }
 
-  function increaseCartQuantity(id) {
+  function increaseCartQuantity(id, size, length, price) {
     setCartItems((currItems) => {
-      if (currItems.find((item) => item.id === id) == null) {
-        return [...currItems, { id, quantity: 1 }];
+      if (
+        currItems.find(
+          (item) =>
+            (item.id === id) & (item.size === size) && item.length === length
+        ) == null
+      ) {
+        return [
+          ...currItems,
+          { id, size: size, length: length, price: price, quantity: 1 },
+        ];
       } else {
         return currItems.map((item) => {
-          if (item.id === id) {
+          if (
+            (item.id === id) & (item.size === size) &&
+            item.length === length
+          ) {
             return { ...item, quantity: item.quantity + 1 };
           } else {
             return item;
@@ -45,13 +61,24 @@ export function ShoppingCartProvider({ children }) {
     });
   }
 
-  function decreaseCartQuantity(id) {
+  function decreaseCartQuantity(id, size, length, price) {
     setCartItems((currItems) => {
-      if (currItems.find((item) => item.id === id)?.quantity === 1) {
-        return currItems.filter((item) => item.id !== id);
+      if (
+        currItems.find(
+          (item) =>
+            (item.id === id) & (item.size === size) && item.length === length
+        ) == null
+      ) {
+        return [
+          ...currItems,
+          { id, size: size, length: length, price: price, quantity: 1 },
+        ];
       } else {
         return currItems.map((item) => {
-          if (item.id === id) {
+          if (
+            (item.id === id) & (item.size === size) &&
+            item.length === length
+          ) {
             return { ...item, quantity: item.quantity - 1 };
           } else {
             return item;
@@ -61,9 +88,12 @@ export function ShoppingCartProvider({ children }) {
     });
   }
 
-  function removeFromCart(id) {
+  function removeFromCart(id, size, length) {
     setCartItems((currItems) => {
-      return currItems.filter((item) => item.id !== id);
+      return currItems.filter(
+        (item) =>
+          (item.id !== id) & (item.size !== size) && item.length !== length
+      );
     });
   }
 
