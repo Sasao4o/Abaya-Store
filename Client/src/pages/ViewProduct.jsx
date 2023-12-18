@@ -168,18 +168,20 @@ export default function ViewProduct() {
           ) : (
             <div className="added-to-cart-section">
               <div className="quantity-number">
-                <button
-                  onClick={() => {
-                    increaseCartQuantity(
-                      productData.id,
-                      size,
-                      length,
-                      productData.price
-                    );
-                  }}
-                >
-                  +
-                </button>
+                {quantity < 20 && (
+                  <button
+                    onClick={() => {
+                      increaseCartQuantity(
+                        productData.id,
+                        size,
+                        length,
+                        productData.price
+                      );
+                    }}
+                  >
+                    +
+                  </button>
+                )}
                 <p>{quantity}</p>
                 <button
                   onClick={() =>
