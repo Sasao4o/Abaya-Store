@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/static/css/main.e4c440ae.css",
+    "main.css": "/static/css/main.bbb013c6.css",
     "main.js": "/static/js/main.6b0b5542.js",
     "static/media/wallpapertest.jpg": "/static/media/wallpapertest.a4832c879a852dbfe878.jpg",
     "static/media/PB_05195.jpg": "/static/media/PB_05195.edde4aaf9aa851c1fbe0.jpg",
@@ -11,11 +11,11 @@
     "static/media/TypeMates - CeraRoundPro-Light.otf": "/static/media/TypeMates - CeraRoundPro-Light.86099afbea61ed93d310.otf",
     "static/media/product.jpg": "/static/media/product.334b9f8c4cdbffb7ab5c.jpg",
     "index.html": "/index.html",
-    "main.e4c440ae.css.map": "/static/css/main.e4c440ae.css.map",
+    "main.bbb013c6.css.map": "/static/css/main.bbb013c6.css.map",
     "main.6b0b5542.js.map": "/static/js/main.6b0b5542.js.map"
   },
   "entrypoints": [
-    "static/css/main.e4c440ae.css",
+    "static/css/main.bbb013c6.css",
     "static/js/main.6b0b5542.js"
   ]
 }
