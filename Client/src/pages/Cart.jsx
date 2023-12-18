@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useShoppingCart } from "../contexts/ShoppingCartContext";
 import "./page-style/cart.css";
 import { useForm } from "react-hook-form";
@@ -9,8 +9,6 @@ import baseUrl from "../constants/baseUrl";
 export default function Cart() {
   const { cartItemsNumber, cartItems, clearCart } = useShoppingCart();
   const [msg, setMsg] = useState("");
-  const [products, setProducts] = useState([]);
-  const [shippingCost] = useState(0);
   const cities = [
     "Abu Dhabi",
     "Dubai",
@@ -25,18 +23,11 @@ export default function Cart() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  useEffect(() => {
-    const getProduct = async () => {
-      const res = await fetch(`${baseUrl}/api/v1/product`);
-      const data = await res.json();
-      setProducts(data.data);
-    };
-    getProduct();
-  }, []);
+
+  console.log(cartItems);
   function calculateTotalCost() {
     return cartItems.reduce((total, cartItem) => {
-      const item = products.find((i) => i.id === cartItem.id);
-      return total + (item?.price || 0) * cartItem.quantity;
+      return total + (cartItem?.price || 0) * cartItem.quantity;
     }, 0);
   }
   const onSubmit = async (data) => {
@@ -89,14 +80,18 @@ export default function Cart() {
           <hr />
           <br />
           {cartItems.map((item, index) => (
-            <CartItem id={item.id} key={index} />
+            <CartItem
+              id={item.id}
+              key={index}
+              size={item.size}
+              length={item.length}
+              price={item.price}
+            />
           ))}
           <hr />
           <div className="total-price">
             <p className="total-cart-price">Total price</p>
-            <strong>
-              {calculateTotalCost() + shippingCost || calculateTotalCost()} AED
-            </strong>
+            <strong>{calculateTotalCost()} AED</strong>
           </div>
           <br />
           <br />
@@ -153,4 +148,3 @@ export default function Cart() {
     </div>
   );
 }
-

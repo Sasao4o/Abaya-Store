@@ -46,7 +46,7 @@ export default function ViewProduct() {
     decreaseCartQuantity,
     removeFromCart,
   } = useShoppingCart();
-  const quantity = getItemQuantity(productData.id);
+  const quantity = getItemQuantity(productData.id, size, length);
   //Fetch the product data by id
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
@@ -151,7 +151,12 @@ export default function ViewProduct() {
               className="buy-button"
               onClick={() => {
                 setIsOpen(true);
-                increaseCartQuantity(productData.id);
+                increaseCartQuantity(
+                  productData.id,
+                  size,
+                  length,
+                  productData.price
+                );
               }}
             >
               Add to cart
@@ -161,13 +166,27 @@ export default function ViewProduct() {
               <div className="quantity-number">
                 <button
                   onClick={() => {
-                    increaseCartQuantity(productData.id);
+                    increaseCartQuantity(
+                      productData.id,
+                      size,
+                      length,
+                      productData.price
+                    );
                   }}
                 >
                   +
                 </button>
                 <p>{quantity}</p>
-                <button onClick={() => decreaseCartQuantity(productData.id)}>
+                <button
+                  onClick={() =>
+                    decreaseCartQuantity(
+                      productData.id,
+                      size,
+                      length,
+                      productData.price
+                    )
+                  }
+                >
                   -
                 </button>
               </div>
