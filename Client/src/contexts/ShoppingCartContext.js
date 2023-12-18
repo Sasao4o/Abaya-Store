@@ -28,8 +28,7 @@ export function ShoppingCartProvider({ children }) {
   function getItemQuantity(id, size, length) {
     return (
       cartItems.find(
-        (item) =>
-          (item.id === id) & (item.size === size) && item.length === length
+        (item) => item.id === id && item.size === size && item.length === length
       )?.quantity || 0
     );
   }
@@ -39,7 +38,7 @@ export function ShoppingCartProvider({ children }) {
       if (
         currItems.find(
           (item) =>
-            (item.id === id) & (item.size === size) && item.length === length
+            item.id === id && item.size === size && item.length === length
         ) == null
       ) {
         return [
@@ -48,10 +47,7 @@ export function ShoppingCartProvider({ children }) {
         ];
       } else {
         return currItems.map((item) => {
-          if (
-            (item.id === id) & (item.size === size) &&
-            item.length === length
-          ) {
+          if (item.id === id && item.size === size && item.length === length) {
             return { ...item, quantity: item.quantity + 1 };
           } else {
             return item;
@@ -66,7 +62,7 @@ export function ShoppingCartProvider({ children }) {
       if (
         currItems.find(
           (item) =>
-            (item.id === id) & (item.size === size) && item.length === length
+            item.id === id && item.size === size && item.length === length
         ) == null
       ) {
         return [
@@ -75,10 +71,7 @@ export function ShoppingCartProvider({ children }) {
         ];
       } else {
         return currItems.map((item) => {
-          if (
-            (item.id === id) & (item.size === size) &&
-            item.length === length
-          ) {
+          if (item.id === id && item.size === size && item.length === length) {
             return { ...item, quantity: item.quantity - 1 };
           } else {
             return item;
@@ -91,8 +84,7 @@ export function ShoppingCartProvider({ children }) {
   function removeFromCart(id, size, length) {
     setCartItems((currItems) => {
       return currItems.filter(
-        (item) =>
-          (item.id !== id) & (item.size !== size) && item.length !== length
+        (item) => item.id !== id && item.size !== size && item.length !== length
       );
     });
   }
