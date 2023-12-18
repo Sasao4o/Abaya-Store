@@ -51,6 +51,7 @@ exports.createOrder = catchAsync(async (req, res, next) => {
                 id: obj.productId
             }
         });
+        if (!price) return next(new AppError("This Product is not found", 400));
         totalPrice += price.dataValues.price * obj.quantity;
     }
     
@@ -86,14 +87,14 @@ exports.createOrder = catchAsync(async (req, res, next) => {
             totalPrice: totalPrice,
             discount:discountPart
      
-        });
+        }, {transaction:t});
         orderedProductsData.forEach(v => {
       
             v.orderId = order.id;
         });
         shipmentData.orderId = order.id;
-        const orderedProducts = OrderProductModel.bulkCreate(orderedProductsData, {validate: true});
-        const shipment = ShipmentModel.create(shipmentData);
+        const orderedProducts = OrderProductModel.bulkCreate(orderedProductsData, {transaction:t, validate: true});
+        const shipment = ShipmentModel.create(shipmentData, {transaction:t});
         await Promise.all([orderedProducts, shipment]);
         return order;
     });
@@ -146,53 +147,29 @@ exports.createOrder = catchAsync(async (req, res, next) => {
                 
 });
 
-exports.deleteOrder = catchAsync(async (req, res, next) => {
-    const orderId = req.params.orderId;
-    const deletedOrderedProduct = await OrderProductModel.destroy({
-        where: {
-            orderId: orderId
-        }
-    });
-    const deletedShipment = await ShipmentModel.destroy({
-        where: {
-            orderId: orderId
-        }
-    });
-    const deletedOrder = await OrderModel.destroy({
-        where: {
-            id: orderId
-        }
-    });
-    res.status(202).json({
-        status: "success"
-    })
+// exports.deleteOrder = catchAsync(async (req, res, next) => {
+//     const orderId = req.params.orderId;
+//     const deletedOrderedProduct = await OrderProductModel.destroy({
+//         where: {
+//             orderId: orderId
+//         }
+//     });
+//     const deletedShipment = await ShipmentModel.destroy({
+//         where: {
+//             orderId: orderId
+//         }
+//     });
+//     const deletedOrder = await OrderModel.destroy({
+//         where: {
+//             id: orderId
+//         }
+//     });
+//     res.status(202).json({
+//         status: "success"
+//     })
 
-});
-exports.getDeleteOrder = catchAsync(async (req, res, next) => {
-    const orderId = req.params.orderId;
-    const deletedOrderedProduct = await OrderProductModel.destroy({
-        where: {
-            orderId: orderId
-        }
-    },
-    {transaction:t});
-    const deletedShipment = await ShipmentModel.destroy({
-        where: {
-            orderId: orderId
-        }
-    },
-    {transaction:t});
-    const deletedOrder = await OrderModel.destroy({
-        where: {
-            id: orderId
-        }
-    },
-    {transaction:t});
-    res.status(202).json({
-        status: "success"
-    })
-
-});
+// });
+ 
 // exports.getOrder = catchAsync(async (req, res, next) => {
 //     const orderId = parseInt(req.params.orderId);
 
@@ -360,23 +337,24 @@ exports.stripeWebhookController = catchAsync(async (request, response, next) => 
             const deletedOrderedProduct = await OrderProductModel.destroy({
                 where: {
                     orderId: parseInt(failedOrderId)
-                }
-            },
-            {transaction:t}
+                },
+                transaction:t
+            }
             );
             const deletedShipment = await ShipmentModel.destroy({
                 where: {
                     orderId: parseInt(failedOrderId)
-                }
-            },
-             {transaction:t}
+                },
+                transaction:t
+            }
             );
             const deletedOrder = await OrderModel.destroy({
                 where: {
                     id: parseInt(failedOrderId)
-                }
-            }, 
-            {transaction:t}
+                },
+                transaction:t
+            },
+           
             );
         });
         response.status(202).json({
@@ -390,23 +368,23 @@ exports.stripeWebhookController = catchAsync(async (request, response, next) => 
                 const deletedOrderedProduct = await OrderProductModel.destroy({
                     where: {
                         orderId: parseInt(failedOrderId)
-                    }
-                },
-                {transaction:t}
+                    },
+                    transaction:t
+                }
                 );
                 const deletedShipment = await ShipmentModel.destroy({
                     where: {
                         orderId: parseInt(failedOrderId)
-                    }
-                },
-                 {transaction:t}
+                    },
+                    transaction:t
+                }
                 );
                 const deletedOrder = await OrderModel.destroy({
                     where: {
                         id: parseInt(failedOrderId)
-                    }
-                }, 
-                {transaction:t}
+                    },
+                    transaction:t
+                }
                 );
             });
             response.status(202).json({
@@ -420,23 +398,23 @@ exports.stripeWebhookController = catchAsync(async (request, response, next) => 
             const deletedOrderedProduct = await OrderProductModel.destroy({
                 where: {
                     orderId: parseInt(failedOrderId)
-                }
-            },
-            {transaction:t}
+                },
+                transaction:t
+            }
             );
             const deletedShipment = await ShipmentModel.destroy({
                 where: {
                     orderId: parseInt(failedOrderId)
-                }
-            },
-             {transaction:t}
+                },
+                transaction:t
+            }
             );
             const deletedOrder = await OrderModel.destroy({
                 where: {
                     id: parseInt(failedOrderId)
-                }
-            }, 
-            {transaction:t}
+                },
+                transaction:t
+            }
             );
         });
         response.status(202).json({

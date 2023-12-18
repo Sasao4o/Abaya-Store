@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import img from "../assets/images/product.jpg";
 import "./page-style/viewprods.css";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useShoppingCart } from "../contexts/ShoppingCartContext";
 import { Carousel } from "react-responsive-carousel";
 
@@ -32,6 +32,7 @@ export default function ViewProduct() {
   const { setIsOpen } = useShoppingCart();
   const [productData, setProductData] = useState({});
   let { id } = useParams();
+  const history = useNavigate();
 
   const onSizeChange = (e) => {
     setSize(e.target.value);
@@ -53,10 +54,13 @@ export default function ViewProduct() {
     const getProduct = async () => {
       const res = await fetch(`${baseUrl}/api/v1/product/${id}`);
       const data = await res.json();
+      if (data.status.toLowerCase() === "Failed") {
+        history("pagenotfound");
+      }
       setProductData(data.data);
     };
     getProduct();
-  }, [id]);
+  }, [id, history]);
   console.log(size);
   console.log(length);
   return (
@@ -91,7 +95,7 @@ export default function ViewProduct() {
         <div className="product-text">
           <h1 className="product-title">{productData.name}</h1>
           <h1 className="seller-name">Material: {productData.material}</h1>
-          <h2 className="price">{productData.price} L.E</h2>
+          <h2 className="price">{productData.price} AED</h2>
           <p className="desc">{productData.description}</p>
           <form>
             <div className="size-variants">
@@ -164,18 +168,20 @@ export default function ViewProduct() {
           ) : (
             <div className="added-to-cart-section">
               <div className="quantity-number">
-                <button
-                  onClick={() => {
-                    increaseCartQuantity(
-                      productData.id,
-                      size,
-                      length,
-                      productData.price
-                    );
-                  }}
-                >
-                  +
-                </button>
+                {quantity < 20 && (
+                  <button
+                    onClick={() => {
+                      increaseCartQuantity(
+                        productData.id,
+                        size,
+                        length,
+                        productData.price
+                      );
+                    }}
+                  >
+                    +
+                  </button>
+                )}
                 <p>{quantity}</p>
                 <button
                   onClick={() =>

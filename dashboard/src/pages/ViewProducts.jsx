@@ -35,7 +35,12 @@ export default function ViewProducts() {
         {products.map((product, index) => (
           <div key={index} className="product">
             <p>#{index + 1}</p>
-            <img src={product.productImages[0]} alt="" />
+            {product.productImages[0] != undefined && (
+              <img
+                src={`${baseUrl}/${product.productImages[0].filePath}/${product.productImages[0].fileName}`}
+                alt=""
+              />
+            )}
             <p>{product.name}</p>
             <p>Category id: {product.categoryId}</p>
             <p>{product.price} AED</p>
