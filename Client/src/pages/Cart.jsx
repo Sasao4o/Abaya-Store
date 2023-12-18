@@ -131,6 +131,10 @@ export default function Cart() {
                 type="text"
                 {...register("zipCode", {
                   required: "ZIP code is required.",
+                  pattern: {
+                    value: /^[0-9]*$/,
+                    message: "Please enter a valid ZIP code",
+                  },
                 })}
               />
               <label>
@@ -138,10 +142,10 @@ export default function Cart() {
               </label>
               <input type="text" {...register("discount")} />
               <p className="err">{errors.zipCode?.message}</p>{" "}
+              {msg && <p style={{ color: "red" }}>{msg}</p>}
               <button type="submit">Checkout</button>
             </form>
             <br />
-            {msg && <p style={{ color: "red" }}>{msg}</p>}
           </div>
         </>
       )}

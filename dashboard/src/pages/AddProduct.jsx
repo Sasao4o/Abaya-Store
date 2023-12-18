@@ -83,10 +83,14 @@ const AddProduct = () => {
         <input
           type="number"
           {...register("price", {
-            required: "Please enter a price",
+            required: "Please enter a valid price",
             min: {
               value: 0,
               message: "The number must be positive.",
+            },
+            max: {
+              value: 1000000,
+              message: "The price is too large. Maximum price is a million.",
             },
           })}
         />

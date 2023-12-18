@@ -2,7 +2,7 @@
   padding: 50px 30px;
   display: flex;
   justify-content: space-evenly;
-  align-items: center;
+  align-items: flex-start;
   position: relative;
   min-height: 80vh;
 }
@@ -70,6 +70,33 @@
   color: white;
   background-color: red;
 }
+.view-product .product-text form .size-variants {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.view-product .product-text form input[type="radio"] {
+  display: none;
+}
+.view-product .product-text form input[type="radio"]:checked + label {
+  background-color: black;
+  color: white;
+}
+.view-product .product-text form label {
+  width: 35px;
+  padding: 5px 10px;
+  font-size: 20px;
+  border: 1px solid black;
+  transition: 0.3s;
+}
+.view-product .product-text form label:hover {
+  background-color: black;
+  color: white;
+  cursor: pointer;
+}
+
 .added-to-cart-section {
   display: flex;
   flex-direction: column;

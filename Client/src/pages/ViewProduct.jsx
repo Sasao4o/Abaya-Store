@@ -10,7 +10,6 @@ import baseUrl from "../constants/baseUrl";
 
 const sizeVariants = ["s", "m", "l", "xl", "2xl", "3xl"];
 const lengthVariants = [
-  "49",
   "50",
   "51",
   "52",
@@ -79,7 +78,7 @@ export default function ViewProduct() {
             >
               {productData.productImages.map((product, index) => (
                 <img
-                  key={index}
+                  key={index + 80080}
                   src={`${baseUrl}/${product.filePath}/${product.fileName}`}
                   alt={`img-[${index}]`}
                 />
@@ -98,58 +97,65 @@ export default function ViewProduct() {
           <h2 className="price">{productData.price} AED</h2>
           <p className="desc">{productData.description}</p>
           <form>
+            <p>Sizes:</p>
+            <br />
             <div className="size-variants">
-              <p>Sizes:</p>
-              <label>
-                XS
-                <input
-                  type="radio"
-                  name="size"
-                  value="xs"
-                  checked={size === "xs"}
-                  onChange={onSizeChange}
-                />
-              </label>
+              <input
+                id="xs"
+                type="radio"
+                name="size"
+                value="xs"
+                checked={size === "xs"}
+                onChange={onSizeChange}
+              />
+              <label htmlFor="xs">XS</label>
               {sizeVariants.map((variant, index) => (
-                <label key={index}>
-                  {variant.toUpperCase()}
+                <>
                   <input
+                    key={index + 1000}
+                    id={variant}
                     type="radio"
                     name="size"
                     value={variant}
                     onChange={onSizeChange}
                   />
-                </label>
+                  <label htmlFor={variant} key={index}>
+                    {variant.toUpperCase()}
+                  </label>
+                </>
               ))}
             </div>
+            <br />
+            <p>Length:</p>
+            <br />
             <div className="size-variants">
-              <p>Length:</p>
-              <label>
-                49
-                <input
-                  type="radio"
-                  name="length"
-                  value="49"
-                  checked={length === "49"}
-                  onChange={onSizeChange}
-                />
-              </label>
+              <input
+                id="49"
+                type="radio"
+                name="length"
+                value="49"
+                checked={length === "49"}
+                onChange={onSizeChange}
+              />
+              <label htmlFor="49">49</label>
               {lengthVariants.map((variant, index) => (
-                <label key={index}>
-                  {variant.toUpperCase()}
+                <>
                   <input
+                    key={index + 200}
+                    id={variant}
                     type="radio"
                     name="length"
                     value={variant}
                     onChange={onLengthChange}
                   />
-                </label>
+                  <label htmlFor={variant} key={index + 500}>
+                    {variant.toUpperCase()}
+                  </label>
+                </>
               ))}
             </div>
           </form>
-          <div className="length-variants">
-            <p>Lengths:</p>
-          </div>
+          <br />
           {quantity === 0 ? (
             <button
               className="buy-button"

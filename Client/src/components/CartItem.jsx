@@ -43,23 +43,25 @@ export default function CartItem({ id, size, length, price }) {
             &times;<strong>{getItemQuantity(id, size, length)}</strong>
           </p>
           <p className="cart-item-quantity">
-            Size:{" "}
+            Size:
             <strong>
               {typeof size === "string" ? size.toUpperCase() : "NAN"}
             </strong>
           </p>
           <p className="cart-item-quantity">
-            Length:{" "}
+            Length:
             <strong>
               {typeof length === "string" ? length.toUpperCase() : "NAN"}
             </strong>
           </p>
           <div className="buttons">
-            <button
-              onClick={() => increaseCartQuantity(id, size, length, price)}
-            >
-              +
-            </button>
+            {getItemQuantity(id, size, length) < 20 && (
+              <button
+                onClick={() => increaseCartQuantity(id, size, length, price)}
+              >
+                +
+              </button>
+            )}
             <button
               onClick={() => decreaseCartQuantity(id, size, length, price)}
             >
