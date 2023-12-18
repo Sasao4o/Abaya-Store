@@ -174,17 +174,20 @@ exports.getDeleteOrder = catchAsync(async (req, res, next) => {
         where: {
             orderId: orderId
         }
-    });
+    },
+    {transaction:t});
     const deletedShipment = await ShipmentModel.destroy({
         where: {
             orderId: orderId
         }
-    });
+    },
+    {transaction:t});
     const deletedOrder = await OrderModel.destroy({
         where: {
             id: orderId
         }
-    });
+    },
+    {transaction:t});
     res.status(202).json({
         status: "success"
     })
