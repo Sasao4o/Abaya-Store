@@ -43,10 +43,16 @@ export default function CartItem({ id, size, length, price }) {
             &times;<strong>{getItemQuantity(id, size, length)}</strong>
           </p>
           <p className="cart-item-quantity">
-            Size: <strong>{size.toUpperCase()}</strong>
+            Size:{" "}
+            <strong>
+              {typeof size === "string" ? size.toUpperCase() : "NAN"}
+            </strong>
           </p>
           <p className="cart-item-quantity">
-            Length: <strong>{length.toUpperCase()}</strong>
+            Length:{" "}
+            <strong>
+              {typeof length === "string" ? length.toUpperCase() : "NAN"}
+            </strong>
           </p>
           <div className="buttons">
             <button
