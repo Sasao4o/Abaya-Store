@@ -95,7 +95,7 @@ export default function ViewProduct() {
         <div className="product-text">
           <h1 className="product-title">{productData.name}</h1>
           <h1 className="seller-name">Material: {productData.material}</h1>
-          <h2 className="price">{productData.price} L.E</h2>
+          <h2 className="price">{productData.price} AED</h2>
           <p className="desc">{productData.description}</p>
           <form>
             <div className="size-variants">
