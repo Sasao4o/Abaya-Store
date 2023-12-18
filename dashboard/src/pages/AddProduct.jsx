@@ -111,11 +111,11 @@ const AddProduct = () => {
             multiple
           />
         </div>
-        {errors.productImage && <p>{errors.productImage.message}</p>}
-        {errors.name && <p>{errors.name.message}</p>}
-        {errors.description && <p>{errors.description.message}</p>}
-        {errors.price && <p>{errors.price.message}</p>}
-        {errors.material && <p>{errors.material.message}</p>}
+        {errors.productImage && <p style={{color:"red"}}>{errors.productImage.message}</p>}
+        {errors.name && <p style={{color:"red"}}>{errors.name.message}</p>}
+        {errors.description && <p style={{color:"red"}}>{errors.description.message}</p>}
+        {errors.price && <p style={{color:"red"}}>{errors.price.message}</p>}
+        {errors.material && <p style={{color:"red"}}>{errors.material.message}</p>}
 
         <button type="submit">Add product</button>
       </form>
