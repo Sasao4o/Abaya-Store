@@ -71,7 +71,7 @@ export default function AddCollection() {
         )}
 
         <label htmlFor="image">Image:</label>
-        <input type="file" name="categoryImage" onChange={handleFileUpload} />
+        <input type="file" name="categoryImage"  required onChange={handleFileUpload} />
 
         <button type="submit">Add Collection</button>
       </form>
