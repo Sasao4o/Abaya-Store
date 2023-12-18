@@ -12,11 +12,7 @@ const AddProduct = () => {
     setUploadedFiles([...uploadedFiles, ...e.target.files]);
   };
 
-  useEffect(() => {
-    setTimeout(() => {
-      setMsg("");
-    }, 2000);
-  }, [msg]);
+ 
 
   const {
     register,

@@ -17,33 +17,32 @@ export default function AddCollection() {
     setUploadedFile(e.target.files[0]); // Store the first selected file only
   };
 
-  useEffect(() => {
-    setTimeout(() => {
-      setMsg("");
-    }, 2000);
-  }, [msg]);
-
   const onSubmit = async (data) => {
-    // Include file upload in data to be submitted
-    const formData = new FormData();
-    formData.append("name", data.name);
-    formData.append("description", data.description);
+    try {
+      // Include file upload in data to be submitted
+      const formData = new FormData();
+      formData.append("name", data.name);
+      formData.append("description", data.description);
 
-    if (uploadedFile) {
-      formData.append("categoryImage", uploadedFile);
-    }
+      if (uploadedFile) {
+        formData.append("categoryImage", uploadedFile);
+      }
 
-    let response = await fetch(`${baseUrl}/api/v1/category`, {
-      method: "POST",
-      body: formData,
-    });
-    response = await response.json();
-    if (response.status === "Failed") {
-      setMsg(response.message);
-    } else {
-      setMsg("Collection Added");
-      reset();
-      setUploadedFile(null);
+      let response = await fetch(`${baseUrl}/api/v1/category`, {
+        method: "POST",
+        body: formData,
+      });
+      response = await response.json();
+      if (response.status === "Failed") {
+        setMsg(response.message);
+      } else {
+        setMsg("Collection Added");
+        reset();
+        setUploadedFile(null);
+      }
+    } catch (e) {
+      console.log("SERVER IS DOWN");
+      console.log(e);
     }
   };
 

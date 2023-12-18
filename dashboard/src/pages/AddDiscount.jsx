@@ -12,11 +12,7 @@ export default function AddDiscount() {
     reset,
   } = useForm();
 
-  useEffect(() => {
-    setTimeout(() => {
-      setMsg("");
-    }, 2000);
-  }, [msg]);
+ 
 
   const onSubmit = async (data) => {
     console.log(data);

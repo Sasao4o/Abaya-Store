@@ -29,7 +29,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     totalPrice:{
       type:DataTypes.FLOAT,
-      allowNull : false
+      allowNull : false,
+      validate:{
+        isNumeric:true
+      }
     },
     discount:{
       type:DataTypes.INTEGER,

@@ -24,7 +24,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     categoryId:{
       type:DataTypes.INTEGER,
-      allowNull:false
+      allowNull:false,
+      validate:{
+        isNumeric:true
+      }
     },
     name: {
       type: DataTypes.STRING,
@@ -33,6 +36,9 @@ module.exports = (sequelize, DataTypes) => {
   price: {
     type: DataTypes.FLOAT,
     allowNull: false,
+    validate:{
+      min:1
+    }
     },
     material:{
       type:DataTypes.STRING(30),

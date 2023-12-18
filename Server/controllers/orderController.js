@@ -13,27 +13,29 @@ const sequelize = require("../models/index.js").sequelize;
 const catchAsync = require("../utilis/catchAsync");
 const stripe = require('stripe')(process.env.SECRET_TEST_KEY);
 const endpointSecret = process.env.WEBHOOK_ENDPOINT;
-
+const { Op } = require('sequelize');
+const AppError = require("../utilis/AppError");
 exports.createOrder = catchAsync(async (req, res, next) => {
     const addressInfo = req.body.addressInfo;
     const promoCode = req.body.promoCode;
+    const size = req.body.size;
+    const length = req.body.length;
     const shipmentData = {
 
         address: addressInfo.address,
         city: addressInfo.city,
-        shippingDate: addressInfo.shippingDate,
         zipCode: addressInfo.zipCode,
         country: addressInfo.country
     };
     let shipmentPrice = 0;
-    if (shipmentData.city.toString().tolowercase() !== "abu dahbi"){
+    if (shipmentData.city.toString() !== "Abu Dhabi"){
         shipmentPrice += 25;
     }
     const orderedProductsData = [];
     const productsId = [];
     req.body.productsInfo.forEach(v => {
         let obj = {};
-        obj.productId = v.productId;
+        obj.productId = v.id;
         productsId.push(obj.productId);
         obj.quantity = v.quantity;
         obj.size = v.size;
@@ -42,66 +44,70 @@ exports.createOrder = catchAsync(async (req, res, next) => {
         orderedProductsData.push(obj);
     });
     
-    const totalPrice = await ProductModel.findOne({
-        attributes: [
-            [sequelize.fn('SUM', sequelize.col('price')), 'totalPrice']
-        ],
-        where: {
-            id: productsId
-        }
-    });
-    console.log("kkkkkkkk"+totalPrice);
-    if(!totalPrice.dataValues.totalPrice){
-        res.status(404).json({
-            data: "Product Not added in the database"
-        });
-        return;
-    }
-    let discountPart  = 0;
-    if (promoCode !== ""){
-        const promoPercent = await DiscountModel.findOne({
-            // attributes:[
-            //     discountPercentage
-            // ],
+    let totalPrice = 0;
+    for (const obj of orderedProductsData){
+        const price  = await ProductModel.findOne({
             where: {
-                discountCode : promoCode
+                id: obj.productId
             }
         });
-        if (!promoPercent) {
-            res.status(400).send({
-                message : "Invalid Promotion Code!"
-            });
-            return;
-        }else {
-            discountPart += parseInt(parseFloat((promoPercent.dataValues.discountPercentage/100 * totalPrice.dataValues.totalPrice).toFixed(2)));
-        }
+        totalPrice += price.dataValues.price * obj.quantity;
     }
+    
+ 
+    if(totalPrice <= 0){
+        return(next (new AppError("We don't have some of those products here", 400, true)));
+    }
+    let discountPart  = 0;
+    if (promoCode && promoCode !== ""){
+        const promoPercent = await DiscountModel.findOne({
+            where: {
+                discountCode : promoCode,
+                expiryDate:{
+                    [Op.gte] : new Date()
+                         }  
+            }
+        });
+        
+        if (!promoPercent) {
+            return(next (new AppError("Discount code is not valid", 400, true)));
+        }else {
+            discountPart  = parseInt(parseFloat((promoPercent.dataValues.discountPercentage/100 * totalPrice).toFixed(2)));
+        }
+    } 
+    // else {
+    //     return(next (new AppError("You must enter discount code", 400, true)));
+    // }
    // const cardInfo = req.body.cardInfo;
  
     const createdOrder = await sequelize.transaction(async (t) => {
         const order = await OrderModel.create({
             orderDate: (new Date(Date.now())).toISOString(),
-            totalPrice: totalPrice.dataValues.totalPrice
+            totalPrice: totalPrice,
+            discount:discountPart
+     
         });
         orderedProductsData.forEach(v => {
+      
             v.orderId = order.id;
         });
         shipmentData.orderId = order.id;
-        const orderedProducts = OrderProductModel.bulkCreate(orderedProductsData);
+        const orderedProducts = OrderProductModel.bulkCreate(orderedProductsData, {validate: true});
         const shipment = ShipmentModel.create(shipmentData);
         await Promise.all([orderedProducts, shipment]);
         return order;
     });
 
     const orderId = createdOrder.dataValues.id.toString();
-    const cancel_url_base = "http://localhost:3006/api/v1/order/delete/" + orderId;
+    console.log(req.get("host"));
+    const cancel_url_base = "http://16.171.42.226:3000/failed";
     const currentTimestampSeconds = Math.floor(Date.now() / 1000);
     // Calculate the timestamp for 30 minutes from now in seconds
     const thirtyMinutesLaterSeconds = currentTimestampSeconds + 30 * 60;
     console.log(thirtyMinutesLaterSeconds);
 
     const session = await stripe.checkout.sessions.create({
-        success_url: 'https://www.google.com',
+        success_url: 'http://16.171.42.226:3000/success',
         cancel_url: cancel_url_base, 
         line_items: [
           {
@@ -110,7 +116,7 @@ exports.createOrder = catchAsync(async (req, res, next) => {
                 product_data : {
                     name : "Total Order"
                 },
-                unit_amount : parseInt(totalPrice.dataValues.totalPrice - discountPart, 10) * 100
+                unit_amount : parseInt(totalPrice - discountPart, 10) * 100
             },
             quantity : 1
           },
@@ -133,11 +139,11 @@ exports.createOrder = catchAsync(async (req, res, next) => {
             res.status(202).json({
                     data:{
                     orderId : orderId
-                    ,id : session.id
                     },
                     status:"success",
                     checkOutPage : session.url
                 })
+                
 });
 
 exports.deleteOrder = catchAsync(async (req, res, next) => {
@@ -241,10 +247,7 @@ exports.getAllOrders = catchAsync(async (req, res, next) => {
             status: "success"
         })
     } else {
-        res.status(404).json({
-            status: "failed",
-            message: "no orders where found"
-        });
+        return next (new AppError("No Orders Are Available",200 ,true))
     }
 });
 
@@ -279,10 +282,7 @@ exports.getOrderById = catchAsync(async (req, res, next) => {
             status: "success"
         })
     } else {
-        res.status(404).json({
-            status: "failed",
-            message: "no order found with this id"
-        });
+        return next (new AppError("No Order with this Id",200 ,true))
     }
 });
 
@@ -295,16 +295,20 @@ exports.changeOrderStatusById = catchAsync(async (req, res, next) => {
         }
     });
 
+    if (order) {
+        const updatedOrder = await order.update({
+            orderStatus: req.body.status
+        });
+        await order.save();
+        res.status(202).json({
+            data: updatedOrder,
+            status: "success"
+        })
+    } else {
+        return next (new AppError("No Order with this Id",200 ,true))
+    }
 
-    const updatedOrder = await order.update({
-        orderStatus: req.body.status
-    });
-    await order.save();
-    res.status(202).json({
-        data: updatedOrder,
-
-        status: "success"
-    })
+    
 
 });
 
@@ -438,15 +442,24 @@ exports.stripeWebhookController = catchAsync(async (request, response, next) => 
         break;
     }
     case "charge.succeeded":{
+	response.status(202).json({
+            status:"success"
+        });
         console.log("Charge on Stripe Succeeded");
         break;
     }
     case "payment_intent.succeeded":{
-        console.log("payment intent on Stripe Succeeded");
+        response.status(202).json({
+            status:"success"
+        });
+	console.log("payment intent on Stripe Succeeded");
         break;
     }
     case "payment_intent.created":{
-        console.log("payment intent on Stripe created");
+        response.status(202).json({
+            status:"success"
+        });
+	console.log("payment intent on Stripe created");
         break;
     }
       default:
