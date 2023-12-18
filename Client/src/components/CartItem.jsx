@@ -18,7 +18,7 @@ export default function CartItem({ id, size, length, price }) {
     const getProduct = async () => {
       const res = await fetch(`${baseUrl}/api/v1/product/${id}`);
       const data = await res.json();
-      if (data.status === "failed") {
+      if (data.status.toLowerCase() === "failed") {
         clearCart();
       } else setProductData(data.data);
     };
