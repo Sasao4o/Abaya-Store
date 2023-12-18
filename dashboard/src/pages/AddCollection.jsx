@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import "./addcollection.css";
 import baseUrl from "../constants/baseUrl";
 
 export default function AddCollection() {
+  const fileInputRef = useRef(); // Added ref for file input
+
   const {
     register,
     handleSubmit,
@@ -39,6 +41,7 @@ export default function AddCollection() {
         setMsg("Collection Added");
         reset();
         setUploadedFile(null);
+        fileInputRef.current.value = "";
       }
     } catch (e) {
       console.log("SERVER IS DOWN");
@@ -72,6 +75,7 @@ export default function AddCollection() {
 
         <label htmlFor="image">Image:</label>
         <input
+          ref={fileInputRef}
           required
           type="file"
           name="categoryImage"
