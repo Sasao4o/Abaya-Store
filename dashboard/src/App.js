@@ -15,6 +15,7 @@ import AddDiscount from "./pages/AddDiscount";
 import { UserContext } from "./contexts/UserContext";
 import { useContext } from "react";
 import SignIn from "./pages/SignIn";
+import Home from "./pages/Home";
 
 function App() {
   const { userData } = useContext(UserContext);
@@ -26,11 +27,7 @@ function App() {
           <Route
             path="/"
             element={
-              userData.isAuthenticated ? (
-                <p>HELLOOOOOO</p>
-              ) : (
-                <Navigate to="/signin" />
-              )
+              userData.isAuthenticated ? <Home /> : <Navigate to="/signin" />
             }
           />
           <Route path="/signin" element={<SignIn />} />

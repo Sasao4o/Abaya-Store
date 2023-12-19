@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import "./sidebar.css";
 import { NavLink, Link } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
+import baseUrl from "../constants/baseUrl";
 
 export default function Sidebar() {
   const { userData, logOut } = useContext(UserContext);
@@ -29,6 +30,9 @@ export default function Sidebar() {
           <button onClick={logOut}>Logout</button>
         </>
       )}
+      <div>
+        <Link to={baseUrl}>View your website</Link>
+      </div>
     </div>
   );
 }

@@ -72,7 +72,7 @@ export default function CartItem({ id, size, length, price }) {
         </div>
       </div>
       <p className="cart-item-total-price">
-        {price * getItemQuantity(id, size, length)} AED
+        {(price * getItemQuantity(id, size, length)).toFixed(2)} AED
       </p>
     </div>
   );
