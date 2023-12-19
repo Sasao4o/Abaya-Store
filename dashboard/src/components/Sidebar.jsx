@@ -31,7 +31,7 @@ export default function Sidebar() {
         </>
       )}
       <div>
-        <Link to={baseUrl}>View your website</Link>
+        <a href={baseUrl}>View your website</a>
       </div>
     </div>
   );
