@@ -156,6 +156,8 @@ export default function ViewProduct() {
             </div>
           </form>
           <br />
+          <br />
+          <br />
           {quantity === 0 ? (
             <button
               className="buy-button"
