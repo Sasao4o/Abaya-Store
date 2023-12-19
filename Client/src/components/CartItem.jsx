@@ -43,15 +43,11 @@ export default function CartItem({ id, size, length, price }) {
           </p>
           <p className="cart-item-quantity">
             Size:
-            <strong>
-              {typeof size === "string" ? size.toUpperCase() : "NAN"}
-            </strong>
+            <strong>{String(size).toUpperCase()}</strong>
           </p>
           <p className="cart-item-quantity">
             Length:
-            <strong>
-              {typeof length === "string" ? length.toUpperCase() : "NAN"}
-            </strong>
+            <strong>{String(length)}</strong>
           </p>
           <div className="buttons">
             {getItemQuantity(id, size, length) < 20 && (
