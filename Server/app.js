@@ -91,9 +91,10 @@ app.post(
  
  
  
- 
+
 app.use(bodyParser.json({limit: '10kb' }));
 app.use(cookieParser());
+app.use(morgan('tiny'));
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/order", orderRoute);
 app.use("/api/v1/product", productRoute);

@@ -99,12 +99,12 @@ exports.createOrder = catchAsync(async (req, res, next) => {
         return order;
     });
     const orderId = createdOrder.dataValues.id.toString();
-    console.log(req.get("host"));
+    //console.log(req.get("host"));
     const cancel_url_base = "http://"+req.hostname.toString()+":3006/failed";
     const currentTimestampSeconds = Math.floor(Date.now() / 1000);
     // Calculate the timestamp for 30 minutes from now in seconds
     const thirtyMinutesLaterSeconds = currentTimestampSeconds + 30 * 60;
-    console.log(thirtyMinutesLaterSeconds);
+    //console.log(thirtyMinutesLaterSeconds);
 
     const session = await stripe.checkout.sessions.create({
         success_url: "http://"+req.hostname.toString()+":3006/success",
@@ -267,7 +267,7 @@ exports.getOrderById = catchAsync(async (req, res, next) => {
 
 exports.changeOrderStatusById = catchAsync(async (req, res, next) => {
     const orderId = req.params.orderId;
-    console.log(orderId);
+    //console.log(orderId);
     const order = await OrderModel.findOne({
         where: {
             id: orderId
@@ -293,7 +293,7 @@ exports.changeOrderStatusById = catchAsync(async (req, res, next) => {
 
 exports.stripeWebhookController = catchAsync(async (request, response, next) => {
     const sig = request.headers["stripe-signature"];
-    console.log(sig);
+    //console.log(sig);
     let event;
     try {
         event = stripe.webhooks.constructEvent(
@@ -302,7 +302,7 @@ exports.stripeWebhookController = catchAsync(async (request, response, next) => 
             endpointSecret
         );
     } catch (err) {
-        console.log("I am here");
+        //console.log("I am here");
         response.status(400).send(`Webhook Error: ${err.message}`);
         return;
     }
@@ -310,7 +310,7 @@ exports.stripeWebhookController = catchAsync(async (request, response, next) => 
     // Handle the event
     switch (event.type) {
         case "checkout.session.completed": {
-            console.log("Completeddddddddddddddddddddd");
+            console.log("checkout session completed");
             const orderId = event.data.object.metadata.orderId;
             const order = await OrderModel.findOne({
                 where: {
