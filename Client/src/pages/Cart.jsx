@@ -24,14 +24,12 @@ export default function Cart() {
     formState: { errors },
   } = useForm();
 
-  console.log(cartItems);
   function calculateTotalCost() {
     return cartItems.reduce((total, cartItem) => {
       return total + (cartItem?.price || 0) * cartItem.quantity;
     }, 0);
   }
   const onSubmit = async (data) => {
-    console.log(data.city);
     if (data.city !== "null") {
       let request = await fetch(`${baseUrl}/api/v1/order`, {
         method: "POST",
@@ -51,7 +49,6 @@ export default function Cart() {
         }),
       });
       let response = await request.json();
-      console.log(request.body);
       if (response.statusCode === 400) {
         setMsg(response.message);
       } else {

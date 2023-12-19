@@ -28,7 +28,6 @@ export default function Products() {
       );
       const data = await res.json();
       setProducts(data.data);
-      console.log(data);
       setIsLoading(false);
     };
     getProducts();

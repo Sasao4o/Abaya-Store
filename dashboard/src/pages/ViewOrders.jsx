@@ -10,14 +10,12 @@ export default function ViewOrders() {
       const request = await fetch(`${baseUrl}/api/v1/order`);
       const response = await request.json();
       setOrders(response.data);
-      console.log(response.data);
     };
     getOrders();
   }, []);
 
   async function handleSubmit(event, order) {
     event.preventDefault();
-    console.log("order.selectedState:", order.selectedState);
 
     if (!order.selectedState) {
       console.error("Selected state is not set");
@@ -34,7 +32,6 @@ export default function ViewOrders() {
       }),
     });
     let response = await request.json();
-    console.log(response);
     request = await fetch(`${baseUrl}/api/v1/order`);
     response = await request.json();
     setOrders(response.data);

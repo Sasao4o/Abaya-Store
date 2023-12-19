@@ -20,7 +20,6 @@ const AddProduct = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    console.log(data);
     // Include file uploads in data to be submitted
     const formData = new FormData();
     formData.append("name", data.name);
@@ -38,7 +37,6 @@ const AddProduct = () => {
         body: formData,
       });
       const res = await response.json();
-      console.log(res);
       if (res.status === "Failed") {
         setMsg(res.message);
       } else {

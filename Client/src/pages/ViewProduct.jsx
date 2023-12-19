@@ -60,8 +60,7 @@ export default function ViewProduct() {
     };
     getProduct();
   }, [id, history]);
-  console.log(size);
-  console.log(length);
+
   return (
     <>
       <div className="view-product">

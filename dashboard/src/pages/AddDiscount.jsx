@@ -13,7 +13,6 @@ export default function AddDiscount() {
   } = useForm();
 
   const onSubmit = async (data) => {
-    console.log(data);
     let request = await fetch(`${baseUrl}/api/v1/discount`, {
       method: "POST",
       headers: {
